@@ -7,10 +7,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Component
+@SuppressWarnings("unused")
 public class DataSeeder implements CommandLineRunner {
 
     private static final Logger log = LoggerFactory.getLogger(DataSeeder.class);
@@ -84,7 +84,7 @@ public class DataSeeder implements CommandLineRunner {
                 Pasien.builder().userId(19L).nik("3171010909930009").namaLengkap("Indra Bekti").email("pasien9@gmail.com").noTelepon("082100010009").tanggalLahir("1993-09-30").alamat("Jl. Blok M No. 88, Jakarta").jenisKelamin("Laki-laki").golonganDarah("AB").build(),
                 Pasien.builder().userId(20L).nik("3171011010850010").namaLengkap("Joko Widodo").email("pasien10@gmail.com").noTelepon("082100010010").tanggalLahir("1985-10-10").alamat("Jl. Solo No. 1, Surakarta").jenisKelamin("Laki-laki").golonganDarah("O").build()
         );
-        List<Pasien> savedPasiens = pasienRepository.saveAll(pasiens);
+        pasienRepository.saveAll(pasiens);
 
         // 5. Antrian & Rekam Medis (Clean environment - no initial dummy queues)
         /*
