@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Antrian Saya - Sentra Farma</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#F0FDF4', 100: '#DCFCE7', 200: '#BBF7D0', 500: '#10B981',
+                            600: '#059669', 700: '#047857', 800: '#065F46', 900: '#064E3B'
+                        },
+                        surface: '#F8FAFC'
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        html,
+        body {
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 1024px) {
+
+            html,
+            body {
+                height: auto !important;
+                min-height: 100vh;
+                overflow-y: auto !important;
+            }
+
+            body {
+                flex-direction: column !important;
+                padding: 0.75rem !important;
+            }
+
+            aside.left-dock {
+                position: relative !important;
+                top: 0 !important;
+                left: 0 !important;
+                bottom: auto !important;
+                width: 100% !important;
+                height: auto !important;
+                flex-direction: row !important;
+                justify-content: space-between !important;
+                padding: 0.5rem 1rem !important;
+                margin-bottom: 0.75rem !important;
+            }
+
+            aside.left-dock nav,
+            aside.left-dock div {
+                flex-direction: row !important;
+                gap: 0.5rem !important;
+            }
+
+            .main-portal-container {
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                height: auto !important;
+                overflow-y: auto !important;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-gradient-to-br from-emerald-50/60 via-teal-50/40 to-slate-50 font-sans text-slate-800 flex min-h-screen antialiased selection:bg-brand-100 selection:text-brand-800 relative overflow-x-hidden">
+
+    <!-- Ambient Glow Mesh Spheres (Matching Auth Theme) -->
+    <div
+        class="fixed -top-40 -left-40 w-[500px] h-[500px] bg-emerald-300/25 rounded-full blur-[120px] pointer-events-none z-0">
+    </div>
+    <div
+        class="fixed top-1/3 -right-40 w-[450px] h-[450px] bg-teal-200/25 rounded-full blur-[100px] pointer-events-none z-0">
+    </div>
+    <div
+        class="fixed -bottom-40 left-1/3 w-[500px] h-[500px] bg-emerald-200/20 rounded-full blur-[120px] pointer-events-none z-0">
+    </div>
+
+    <!-- LEFT SIDEBAR DOCK (COMPACT FLOATING PILL) -->
+    <aside
+        class="left-dock fixed left-6 top-1/2 -translate-y-1/2 w-20 bg-white/95 backdrop-blur-2xl border border-slate-200/80 shadow-xl shadow-slate-300/40 rounded-3xl z-50 flex flex-col items-center py-5 space-y-4">
+        <!-- Navigation Icons -->
+        <nav class="flex flex-col items-center gap-2">
+            <a href="dashboard.html"
+                class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">grid_view</span>
+                <span
+                    class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Dashboard</span>
+            </a>
+            <a href="antrian.html"
+                class="relative group p-2.5 rounded-2xl bg-brand-50 text-brand-600 font-bold transition-all shadow-2xs">
+                <span class="material-symbols-outlined text-[22px]">confirmation_number</span>
+                <span
+                    class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Antrian
+                    Saya</span>
+            </a>
+            <a href="riwayat-medis.html"
+                class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">medical_information</span>
+                <span
+                    class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Riwayat
+                    Medis</span>
+            </a>
+            <a href="katalog-obat.html"
+                class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">medication</span>
+                <span
+                    class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Katalog
+                    Apotek</span>
+            </a>
+            <button onclick="openPillListModal()"
+                class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">alarm</span>
+                <span
+                    class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Pengingat
+                    Obat</span>
+            </button>
+            <button onclick="window.toggleSentraChatWindow()"
+                class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">support_agent</span>
+                <span
+                    class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Tanya
+                    Dokter (Live Chat)</span>
+            </button>
+        </nav>
+
+        <div class="w-8 h-px bg-slate-200/70"></div>
+
+        <!-- Profile & Logout -->
+        <div class="flex flex-col items-center gap-2">
+            <a href="profil.html"
+                class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">person</span>
+                <span
+                    class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Profil
+                    Saya</span>
+            </a>
+            <button onclick="handleLogout()"
+                class="relative group p-2.5 rounded-2xl text-rose-400 hover:text-rose-600 hover:bg-rose-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">logout</span>
+                <span
+                    class="absolute left-full ml-4 px-3 py-1.5 bg-rose-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <div class="main-portal-container flex-1 ml-32 mr-8 transition-all">
+
+        <!-- TRANSPARENT HEADER BAR (MATCHES PAGE BACKGROUND & MODERATELY ENLARGED LOGO) -->
+        <header
+            class="h-24 flex items-center justify-between px-6 sm:px-10 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100/60 transition-all">
+            <div class="flex items-center gap-4">
+                <!-- Brand Logo Link (Moderately Enlarged) -->
+                <a href="dashboard.html" class="flex items-center gap-3 group cursor-pointer shrink-0" title="Sentra Farma">
+                    <img src="../../assets/logo.png" alt="Sentra Farma" class="h-16 sm:h-20 md:h-22 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform" />
+                </a>
+                <div class="h-10 w-px bg-slate-200/80 hidden sm:block"></div>
+                <div>
+                    <h1 class="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight flex items-center gap-2.5">
+                        <span>Pendaftaran & Status Antrian Online</span>
+                    </h1>
+                    <p class="text-xs text-slate-500 font-medium">Ambil Tiket Pendaftaran Berobat Kapan Saja & Di Mana Saja</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="profil.html" title="Buka Profil Saya"
+                    class="flex items-center gap-3 pl-4 border-l border-slate-200 group cursor-pointer hover:opacity-90 transition-all">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-brand-700 to-emerald-500 text-white flex items-center justify-center font-extrabold text-sm shadow-md group-hover:scale-105 transition-transform"
+                        id="user-avatar-initials">P</div>
+                    <div class="hidden sm:flex flex-col">
+                        <span id="user-name-badge"
+                            class="text-xs font-extrabold text-slate-900 group-hover:text-emerald-700 transition-colors">Pasien</span>
+                        <span class="text-[10px] text-slate-500 font-medium">Pasien Terdaftar</span>
+                    </div>
+                </a>
+            </div>
+        </header>
+
+        <!-- MAIN WORKSPACE -->
+        <main class="p-8 space-y-8 max-w-6xl mx-auto">
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                <!-- AMBIL TIKET & BOOKING KONSULTASI FORM (LEFT) -->
+                <div class="lg:col-span-1 bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-5">
+
+                    <!-- TAB MODE SWITCHER -->
+                    <div class="flex rounded-2xl bg-slate-100 p-1 border border-slate-200/80 text-xs font-bold">
+                        <button type="button" id="tab-mode-today" onclick="switchQueueTab('today')"
+                            class="flex-1 py-2 rounded-xl bg-white text-brand-700 shadow-sm transition-all flex items-center justify-center gap-1">
+                            <span class="material-symbols-outlined text-[16px]">event_available</span>
+                            <span>Hari Ini</span>
+                        </button>
+                        <button type="button" id="tab-mode-booking" onclick="switchQueueTab('booking')"
+                            class="flex-1 py-2 rounded-xl text-slate-500 hover:text-slate-900 transition-all flex items-center justify-center gap-1">
+                            <span class="material-symbols-outlined text-[16px]">calendar_month</span>
+                            <span>Booking Janji</span>
+                        </button>
+                    </div>
+
+                    <div class="border-b border-slate-100 pb-3">
+                        <h3 id="form-mode-title"
+                            class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-brand-600">event_available</span> Ambil Tiket
+                            Antrian Hari Ini
+                        </h3>
+                        <p id="form-mode-desc" class="text-xs text-slate-500 mt-0.5">Pilih Poliklinik & Dokter Jaga
+                            Langsung Berobat Hari Ini</p>
+                    </div>
+
+                    <form id="form-ambil-tiket" class="space-y-4 text-xs">
+
+                        <!-- BOOKING DATE & TIME SLOT (Only shown in Booking Mode) -->
+                        <div id="booking-fields-container" class="space-y-3 hidden">
+                            <div>
+                                <label class="block font-extrabold text-slate-700 uppercase tracking-wider mb-1.5">Pilih
+                                    Tanggal Janji Temu *</label>
+                                <input type="date" id="booking-tanggal-input"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-brand-500" />
+                            </div>
+
+                            <div>
+                                <label class="block font-extrabold text-slate-700 uppercase tracking-wider mb-1.5">Pilih
+                                    Sesi Jam Konsultasi *</label>
+                                <select id="booking-jam-select"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-brand-500">
+                                    <option value="09:00 - 10:00 WIB">Pagi: 09:00 - 10:00 WIB</option>
+                                    <option value="10:00 - 11:00 WIB">Pagi: 10:00 - 11:00 WIB</option>
+                                    <option value="14:00 - 15:00 WIB">Siang: 14:00 - 15:00 WIB</option>
+                                    <option value="16:00 - 17:00 WIB">Sore: 16:00 - 17:00 WIB</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block font-extrabold text-slate-700 uppercase tracking-wider mb-1.5">Pilih
+                                Poliklinik *</label>
+                            <select id="daftar-poli-select" required onchange="onPoliChanged()"
+                                class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3.5 text-xs font-medium text-slate-900 focus:outline-none focus:border-brand-500 focus:bg-white transition-all">
+                                <option value="">-- Pilih Poliklinik --</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block font-extrabold text-slate-700 uppercase tracking-wider mb-1.5">Pilih
+                                Dokter Jaga *</label>
+                            <select id="daftar-dokter-select" disabled required
+                                class="w-full bg-slate-100 border border-slate-200 rounded-2xl p-3.5 text-xs text-slate-500 focus:outline-none cursor-not-allowed transition-all">
+                                <option value="">-- Pilih Poliklinik Terlebih Dahulu --</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block font-extrabold text-slate-700 uppercase tracking-wider mb-1.5">Keluhan
+                                Singkat / Alasan Konsultasi</label>
+                            <textarea id="daftar-keluhan" rows="3"
+                                placeholder="Contoh: Konsultasi demam, batuk pilek..."
+                                class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3.5 text-xs font-medium text-slate-900 focus:outline-none focus:border-brand-500 focus:bg-white transition-all"></textarea>
+                        </div>
+
+                        <button type="submit" id="btn-submit-daftar"
+                            class="w-full py-4 bg-gradient-to-r from-brand-600 to-brand-700 hover:from-brand-500 hover:to-brand-600 text-white font-extrabold text-xs rounded-2xl shadow-lg shadow-brand-600/20 transition-all flex items-center justify-center gap-2">
+                            <span id="btn-submit-text">Ambil Tiket Antrian Now</span>
+                            <span class="material-symbols-outlined text-[18px]">confirmation_number</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- TIKET AKTIF & RIWAYAT ANTRIAN (RIGHT) -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div
+                        class="bg-gradient-to-br from-brand-900 via-brand-800 to-emerald-950 p-6 rounded-3xl text-white shadow-xl space-y-4">
+                        <div class="flex justify-between items-center text-xs text-brand-200">
+                            <span class="font-bold">STATUS TIKET ANTRIAN AKTIF HARI INI</span>
+                            <span id="active-status-badge"
+                                class="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-emerald-300 font-extrabold">LIVE</span>
+                        </div>
+
+                        <div class="flex items-center gap-6">
+                            <div id="active-num-big"
+                                class="text-6xl font-extrabold tracking-tight text-white font-mono bg-white/10 p-4 rounded-3xl border border-white/20">
+                                -
+                            </div>
+                            <div class="space-y-1">
+                                <h3 id="active-poli-big" class="text-xl font-extrabold">Belum Ada Antrian</h3>
+                                <p id="active-dokter-big" class="text-xs text-brand-100/80">Silakan isi formulir di
+                                    sebelah kiri untuk mengambil tiket.</p>
+                                <span id="active-time-big"
+                                    class="text-[10px] text-emerald-300 block pt-1 font-mono">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RIWAYAT TIKET TABLE -->
+                    <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
+                        <h3 class="text-base font-extrabold text-slate-900">Riwayat Antrian Pasien</h3>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs border-collapse">
+                                <thead>
+                                    <tr class="border-b border-slate-100 text-slate-400 font-extrabold uppercase">
+                                        <th class="py-3 px-2">No. Antrian</th>
+                                        <th class="py-3 px-2">Poliklinik & Dokter</th>
+                                        <th class="py-3 px-2">Tanggal</th>
+                                        <th class="py-3 px-2 text-right">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="queue-history-body" class="divide-y divide-slate-100">
+                                    <tr>
+                                        <td colspan="4" class="py-4 text-center text-slate-400 italic">Memuat riwayat
+                                            antrian...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/toast.js"></script>
+    <script src="../../js/auth-guard.js"></script>
+    <script src="../../js/pengingat.js"></script>
+    <script>
+        let currentPasienId = null;
+        let activeTabMode = 'today'; // 'today' | 'booking'
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initUserData();
+            loadPoliList();
+            loadMyQueueHistory();
+            setInterval(loadMyQueueHistory, 3000);
+
+            // Set default date for booking to tomorrow
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const y = tomorrow.getFullYear();
+            const m = String(tomorrow.getMonth() + 1).padStart(2, '0');
+            const d = String(tomorrow.getDate()).padStart(2, '0');
+            document.getElementById('booking-tanggal-input').value = `${y}-${m}-${d}`;
+        });
+
+        function switchQueueTab(mode) {
+            activeTabMode = mode;
+            const btnToday = document.getElementById('tab-mode-today');
+            const btnBooking = document.getElementById('tab-mode-booking');
+            const fieldsContainer = document.getElementById('booking-fields-container');
+            const titleEl = document.getElementById('form-mode-title');
+            const descEl = document.getElementById('form-mode-desc');
+            const submitText = document.getElementById('btn-submit-text');
+
+            if (mode === 'today') {
+                btnToday.className = "flex-1 py-2 rounded-xl bg-white text-brand-700 shadow-sm transition-all flex items-center justify-center gap-1 font-bold";
+                btnBooking.className = "flex-1 py-2 rounded-xl text-slate-500 hover:text-slate-900 transition-all flex items-center justify-center gap-1 font-bold";
+                fieldsContainer.classList.add('hidden');
+                titleEl.innerHTML = `<span class="material-symbols-outlined text-brand-600">event_available</span> Ambil Tiket Antrian Hari Ini`;
+                descEl.innerText = "Pilih Poliklinik & Dokter Jaga Langsung Berobat Hari Ini";
+                submitText.innerText = "Ambil Tiket Antrian Now";
+            } else {
+                btnBooking.className = "flex-1 py-2 rounded-xl bg-white text-brand-700 shadow-sm transition-all flex items-center justify-center gap-1 font-bold";
+                btnToday.className = "flex-1 py-2 rounded-xl text-slate-500 hover:text-slate-900 transition-all flex items-center justify-center gap-1 font-bold";
+                fieldsContainer.classList.remove('hidden');
+                titleEl.innerHTML = `<span class="material-symbols-outlined text-brand-600">calendar_month</span> Booking Janji Temu Dokter`;
+                descEl.innerText = "Pilih Tanggal, Sesi Jam & Dokter Konsultasi Masa Depan";
+                submitText.innerText = "Booking Janji Temu & Dapatkan Pass QR";
+            }
+        }
+
+        function handleLogout() {
+            API.clearSession();
+            Toast.success('Anda telah berhasil logout.', 'Sampai Jumpa');
+            setTimeout(() => window.location.href = '/frontend/html/auth/login.html', 1000);
+        }
+
+        async function ensurePasienId() {
+            if (currentPasienId) return currentPasienId;
+            const user = API.getUser();
+            if (!user) return null;
+
+            try {
+                const p = await API.get(`/clinic/pasien/user/${user.id}`);
+                if (p && p.id) {
+                    currentPasienId = p.id;
+                    return currentPasienId;
+                }
+            } catch (e) { }
+
+            return currentPasienId;
+        }
+
+        async function initUserData() {
+            const user = API.getUser();
+            if (user) {
+                const name = user.namaLengkap || 'Pasien';
+                document.getElementById('user-name-badge').innerText = name;
+                document.getElementById('user-avatar-initials').innerText = name.charAt(0).toUpperCase();
+
+                await ensurePasienId();
+            }
+        }
+
+        async function loadPoliList() {
+            const selPoli = document.getElementById('daftar-poli-select');
+            try {
+                const polis = await API.get('/clinic/poliklinik');
+                selPoli.innerHTML = '<option value="">-- Pilih Poliklinik --</option>';
+                polis.forEach(p => selPoli.innerHTML += `<option value="${p.id}">${p.namaPoli}</option>`);
+            } catch (e) {
+                Toast.error('Gagal memuat daftar poliklinik.');
+            }
+        }
+
+        async function onPoliChanged() {
+            const poliId = document.getElementById('daftar-poli-select').value;
+            const selDokter = document.getElementById('daftar-dokter-select');
+
+            if (!poliId) {
+                selDokter.disabled = true;
+                selDokter.className = "w-full bg-slate-100 border border-slate-200 rounded-2xl p-3.5 text-xs text-slate-500 focus:outline-none cursor-not-allowed";
+                selDokter.innerHTML = '<option value="">-- Pilih Poliklinik Terlebih Dahulu --</option>';
+                return;
+            }
+
+            selDokter.disabled = false;
+            selDokter.className = "w-full bg-slate-50 border border-slate-200 rounded-2xl p-3.5 text-xs font-medium text-slate-900 focus:outline-none focus:border-brand-500 cursor-pointer";
+            selDokter.innerHTML = '<option value="">-- Memuat Dokter Jaga... --</option>';
+
+            try {
+                const dokters = await API.get(`/clinic/dokter?poliId=${poliId}`);
+                selDokter.innerHTML = '<option value="">-- Pilih Dokter Jaga --</option>';
+                dokters.forEach(d => {
+                    selDokter.innerHTML += `<option value="${d.id}">${d.namaDokter}</option>`;
+                });
+            } catch (e) { }
+        }
+
+        async function loadMyQueueHistory() {
+            const tbody = document.getElementById('queue-history-body');
+            const pid = await ensurePasienId();
+            if (!pid) return;
+
+            try {
+                const qList = await API.get(`/clinic/antrian/pasien/${pid}`);
+                if (!qList || qList.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="py-4 text-center text-slate-400 italic">Belum ada riwayat pendaftaran antrian.</td></tr>';
+                    return;
+                }
+
+                qList.sort((a, b) => b.id - a.id);
+
+                const active = qList.find(a => a.status === 'MENUNGGU' || a.status === 'DIPANGGIL' || a.status === 'DIPERIKSA');
+                if (active) {
+                    document.getElementById('active-num-big').innerText = active.nomorAntrian;
+                    document.getElementById('active-poli-big').innerText = active.poliklinik?.namaPoli || 'Poli Klinik';
+                    document.getElementById('active-dokter-big').innerText = `Dokter: ${active.dokter?.namaDokter || '-'}`;
+                    document.getElementById('active-time-big').innerText = `Tanggal: ${active.tanggalAntrian || '-'} | Status: ${active.status}`;
+                    document.getElementById('active-status-badge').innerText = active.status;
+                } else {
+                    document.getElementById('active-num-big').innerText = '-';
+                    document.getElementById('active-poli-big').innerText = 'Tidak Ada Antrian Aktif';
+                    document.getElementById('active-dokter-big').innerText = 'Dokter: -';
+                    document.getElementById('active-time-big').innerText = 'Tanggal: - | Status: Belum / Tidak Ada';
+                    document.getElementById('active-status-badge').innerText = 'KOSONG';
+                }
+
+                tbody.innerHTML = qList.map(a => `
+                    <tr class="hover:bg-slate-50">
+                        <td class="py-3 px-2 font-mono font-extrabold text-brand-700">${a.nomorAntrian}</td>
+                        <td class="py-3 px-2">
+                            <div class="font-bold text-slate-900">${a.poliklinik?.namaPoli || 'Poli'}</div>
+                            <div class="text-[10px] text-slate-400">${a.dokter?.namaDokter || '-'}</div>
+                        </td>
+                        <td class="py-3 px-2 text-slate-500 font-medium">${a.tanggalBerobat || a.tanggalAntrian || a.tanggal || '-'}</td>
+                        <td class="py-3 px-2 text-right">
+                            <span class="px-2.5 py-1 bg-brand-100 text-brand-800 rounded-full font-bold text-[10px]">${a.status}</span>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="4" class="py-4 text-center text-rose-500 italic">Gagal memuat antrian.</td></tr>';
+            }
+        }
+
+        document.getElementById('form-ambil-tiket').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const pid = await ensurePasienId();
+            if (!pid) {
+                Toast.error('Profil pasien gagal diverifikasi.', 'Gagal');
+                return;
+            }
+
+            const btn = document.getElementById('btn-submit-daftar');
+            const submitText = document.getElementById('btn-submit-text');
+            btn.disabled = true;
+            submitText.innerText = 'Memproses Pendaftaran...';
+
+            try {
+                let targetDateStr = '';
+                if (activeTabMode === 'today') {
+                    const now = new Date();
+                    const year = now.getFullYear();
+                    const month = String(now.getMonth() + 1).padStart(2, '0');
+                    const day = String(now.getDate()).padStart(2, '0');
+                    targetDateStr = `${year}-${month}-${day}`;
+                } else {
+                    targetDateStr = document.getElementById('booking-tanggal-input').value;
+                    if (!targetDateStr) {
+                        Toast.error('Silakan pilih tanggal janji temu.');
+                        btn.disabled = false;
+                        submitText.innerText = 'Booking Janji Temu & Dapatkan Pass QR';
+                        return;
+                    }
+                }
+
+                const body = {
+                    pasienId: pid,
+                    poliklinikId: parseInt(document.getElementById('daftar-poli-select').value),
+                    dokterId: parseInt(document.getElementById('daftar-dokter-select').value),
+                    tanggalAntrian: targetDateStr,
+                    keluhan: document.getElementById('daftar-keluhan').value.trim()
+                };
+
+                const res = await API.post('/clinic/antrian', body);
+
+                if (activeTabMode === 'booking') {
+                    const jamSesi = document.getElementById('booking-jam-select').value;
+                    Toast.success(`Janji Temu Konsultasi Dokter Terjadwal pada ${targetDateStr} (${jamSesi})`, 'Booking Temu Dokter Sukses!');
+                } else {
+                    Toast.success(`Nomor Antrian Hari Ini Berhasil Diambil: ${res.nomorAntrian}`, 'Tiket Sukses');
+                }
+
+                loadMyQueueHistory();
+                btn.disabled = false;
+                submitText.innerText = (activeTabMode === 'today') ? 'Ambil Tiket Antrian Now' : 'Booking Janji Temu & Dapatkan Pass QR';
+            } catch (err) {
+                Toast.error(err.message || 'Gagal mendaftar antrian.', 'Gagal');
+                btn.disabled = false;
+                submitText.innerText = (activeTabMode === 'today') ? 'Ambil Tiket Antrian Now' : 'Booking Janji Temu & Dapatkan Pass QR';
+            }
+        });
+    </script>
+    <script src="../../js/chat-widget.js"></script>
+</body>
+
+</html>

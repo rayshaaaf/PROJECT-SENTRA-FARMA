@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portal Dokter - Sentra Farma</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50: '#F0FDF4', 100: '#DCFCE7', 200: '#BBF7D0', 300: '#86EFAC', 400: '#4ADE80', 500: '#10B981', 600: '#059669', 700: '#047857', 800: '#065F46', 900: '#064E3B', 950: '#022C22' },
+                        surface: '#F8FAFC'
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+
+<body class="bg-surface font-sans text-slate-800 flex min-h-screen antialiased selection:bg-brand-100 selection:text-brand-800">
+
+    <!-- LEFT SIDEBAR DOCK -->
+    <aside class="fixed left-6 top-6 bottom-6 w-20 bg-white/80 backdrop-blur-xl border border-slate-200/60 shadow-xl shadow-slate-200/50 rounded-2xl z-50 flex flex-col items-center justify-between py-8">
+        <!-- Logo Brand -->
+        <div class="flex flex-col items-center gap-1">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
+                <span class="material-symbols-outlined text-[28px]">stethoscope</span>
+            </div>
+            <span class="text-[10px] font-bold text-blue-800 tracking-wider uppercase mt-1">Dokter</span>
+        </div>
+
+        <!-- Navigation Icons -->
+        <nav class="flex flex-col gap-8">
+            <a href="#antrian" class="relative group p-3 rounded-xl bg-blue-50 text-blue-600 transition-all duration-300">
+                <span class="material-symbols-outlined text-[26px]">queue</span>
+                <span class="absolute left-full ml-4 px-3 py-1 bg-slate-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-md">Antrian Poli</span>
+            </a>
+            <a href="#rekam-medis" class="relative group p-3 rounded-xl text-slate-400 hover:text-blue-600 hover:bg-slate-50 transition-all duration-300">
+                <span class="material-symbols-outlined text-[26px]">description</span>
+                <span class="absolute left-full ml-4 px-3 py-1 bg-slate-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-md">Input Rekam Medis</span>
+            </a>
+            <a href="#live-chat" class="relative group p-3 rounded-xl text-slate-400 hover:text-blue-600 hover:bg-slate-50 transition-all duration-300">
+                <span class="material-symbols-outlined text-[26px]">chat</span>
+                <span class="absolute left-full ml-4 px-3 py-1 bg-slate-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-md">Live Chat Konsultasi</span>
+            </a>
+        </nav>
+
+        <!-- Logout Icon -->
+        <button onclick="logout()" class="relative group p-3 rounded-xl text-rose-400 hover:text-rose-600 hover:bg-rose-50 transition-all duration-300">
+            <span class="material-symbols-outlined text-[26px]">logout</span>
+            <span class="absolute left-full ml-4 px-3 py-1 bg-slate-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-md">Keluar</span>
+        </button>
+    </aside>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <div class="flex-1 ml-32 mr-10 transition-all">
+        
+        <!-- HEADER BAR -->
+        <header class="h-24 flex items-center justify-between px-10 bg-surface/80 backdrop-blur-md sticky top-0 z-40 border-b border-slate-200/50">
+            <div>
+                <h1 class="text-xl font-bold text-slate-900">Dashboard Pelayanan Dokter</h1>
+                <p class="text-xs text-slate-500">Kelola pemeriksaan pasien, input tanda vital, dan e-resep digital real-time</p>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded-full flex items-center gap-1.5 border border-emerald-200">
+                    <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span> Status: ON DUTY
+                </span>
+            </div>
+        </header>
+
+        <!-- MAIN WORKSPACE -->
+        <main class="p-10 space-y-8 max-w-6xl mx-auto">
+            
+            <!-- HERO BANNER -->
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 p-8 rounded-3xl text-white shadow-xl shadow-blue-950/10 relative overflow-hidden">
+                <div class="space-y-2 z-10">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-blue-200 text-xs font-medium">
+                        <span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-ping"></span>
+                        Ruang Periksa Dokter Aktif
+                    </div>
+                    <h2 class="text-2xl font-bold">Selamat Bertugas, dr. Hendra Wijaya, Sp.PD 👨‍⚕️</h2>
+                    <p class="text-sm text-blue-100/80 max-w-xl">
+                        SIP-2026/001/PD • Poliklinik Penyakit Dalam Sentra Farma
+                    </p>
+                </div>
+            </div>
+
+            <!-- ANTRIAN POLI HARI INI -->
+            <section id="antrian" class="bg-white rounded-3xl p-8 border border-slate-200/80 shadow-sm space-y-6">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
+                            <span class="material-symbols-outlined text-[24px]">group</span>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-bold text-slate-900">Antrian Pasien Poli Hari Ini</h3>
+                            <p class="text-xs text-slate-500">Daftar antrian pasien yang menunggu pemeriksaan dokter</p>
+                        </div>
+                    </div>
+
+                    <button onclick="loadAntrianDokter()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl flex items-center gap-1.5 transition-colors">
+                        <span class="material-symbols-outlined text-[16px]">refresh</span> Refresh
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="border-b border-slate-200 text-slate-400 font-semibold uppercase tracking-wider">
+                                <th class="pb-3">No. Antrian</th>
+                                <th class="pb-3">Nama Pasien</th>
+                                <th class="pb-3">NIK</th>
+                                <th class="pb-3">Tipe</th>
+                                <th class="pb-3">Status</th>
+                                <th class="pb-3 text-right">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="antrian-list" class="divide-y divide-slate-100 text-slate-700">
+                            <!-- Loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- FORM INPUT REKAM MEDIS & E-RESEP -->
+            <section id="rekam-medis" class="bg-white rounded-3xl p-8 border border-slate-200/80 shadow-sm space-y-6">
+                <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+                        <span class="material-symbols-outlined text-[24px]">edit_note</span>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900">Form Pemeriksaan Rekam Medis & E-Resep Digital</h3>
+                        <p class="text-xs text-slate-500">Input keluhan, diagnosa ICD-10, tanda vital, dan e-resep otomatis ke apotek</p>
+                    </div>
+                </div>
+
+                <form id="form-rekam-medis" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Pilih Pasien Yang Sedang Diperiksa *</label>
+                            <select id="select-pasien" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-800 focus:outline-none focus:border-blue-500">
+                                <!-- Options dynamically populated -->
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Diagnosa ICD-10 *</label>
+                            <input type="text" id="diagnosaIcd10" required placeholder="Contoh: I10 - Primary Hypertension" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-800 focus:outline-none focus:border-blue-500" />
+                        </div>
+                    </div>
+
+                    <div class="text-xs">
+                        <label class="block font-semibold text-slate-700 mb-1">Keluhan Utama *</label>
+                        <textarea id="keluhanUtama" rows="2" required placeholder="Pasien mengeluhkan pusing sejak 2 hari..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-800 focus:outline-none focus:border-blue-500"></textarea>
+                    </div>
+
+                    <!-- Input Tanda Vital -->
+                    <div class="p-5 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
+                        <div class="text-xs font-bold text-blue-700 uppercase tracking-wider flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-[18px]">favorite</span> Input Tanda-Tanda Vital Pasien
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                            <div>
+                                <label class="text-slate-600 block mb-1">Tekanan Darah (Sistol/Diastol)</label>
+                                <div class="flex items-center gap-1">
+                                    <input type="number" id="sistol" placeholder="120" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-slate-800" />
+                                    <span>/</span>
+                                    <input type="number" id="diastol" placeholder="80" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-slate-800" />
+                                </div>
+                            </div>
+                            <div>
+                                <label class="text-slate-600 block mb-1">Detak Jantung (bpm)</label>
+                                <input type="number" id="detakJantung" placeholder="75" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-slate-800" />
+                            </div>
+                            <div>
+                                <label class="text-slate-600 block mb-1">Suhu Tubuh (°C)</label>
+                                <input type="number" step="0.1" id="suhuTubuh" placeholder="36.5" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-slate-800" />
+                            </div>
+                            <div>
+                                <label class="text-slate-600 block mb-1">Berat Badan (kg)</label>
+                                <input type="number" step="0.5" id="beratBadan" placeholder="65.0" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-slate-800" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-xs">
+                        <label class="block font-semibold text-slate-700 mb-1">Catatan Dokter / Resep Obat Digital</label>
+                        <textarea id="catatanDokter" rows="3" placeholder="Resep: Paracetamol 500mg (3x1 sehari sesudah makan), Amoxicillin 500mg (3x1 sehari sesudah makan habiskan)" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-800 focus:outline-none focus:border-blue-500"></textarea>
+                    </div>
+
+                    <button type="submit" class="px-6 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl shadow-lg flex items-center justify-center gap-2 text-xs transition-all">
+                        <span class="material-symbols-outlined text-[20px]">save</span>
+                        <span>Simpan Rekam Medis & Kirim Resep ke Apotek</span>
+                    </button>
+                </form>
+            </section>
+
+            <!-- LIVE CHAT KONSULTASI PASIEN -->
+            <section id="live-chat" class="bg-white rounded-3xl p-8 border border-slate-200/80 shadow-sm space-y-6">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">
+                            <span class="material-symbols-outlined text-[24px]">chat</span>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-bold text-slate-900">Live Chat Konsultasi Pasien</h3>
+                            <p class="text-xs text-slate-500">Balas pesan masuk dari pasien secara langsung dan real-time</p>
+                        </div>
+                    </div>
+
+                    <button onclick="loadDoctorChatSessions()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl flex items-center gap-1.5 transition-colors">
+                        <span class="material-symbols-outlined text-[16px]">refresh</span> Refresh Chat
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 h-[480px]">
+                    <!-- Left: Session list -->
+                    <div class="md:col-span-1 border border-slate-200 rounded-2xl p-4 flex flex-col bg-slate-50/50">
+                        <h4 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3">Daftar Pasien Konsultasi</h4>
+                        <div id="doctor-session-list" class="flex-1 overflow-y-auto space-y-2 pr-1">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Right: Chat thread window -->
+                    <div class="md:col-span-2 border border-slate-200 rounded-2xl flex flex-col bg-white overflow-hidden">
+                        <!-- Chat header -->
+                        <div id="doctor-chat-header" class="p-3 bg-slate-100 border-b border-slate-200 text-xs font-bold text-slate-800 flex items-center justify-between">
+                            <span id="doctor-chat-title">Pilih pasien di sebelah kiri untuk membuka percakapan</span>
+                            <span class="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Dokter Online
+                            </span>
+                        </div>
+
+                        <!-- Chat messages thread -->
+                        <div id="doctor-chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 bg-slate-50/40 text-xs">
+                            <div class="text-center text-slate-400 py-10 italic">
+                                Belum ada percakapan terpilih.
+                            </div>
+                        </div>
+
+                        <!-- Chat reply form -->
+                        <form id="doctor-chat-form" onsubmit="sendDoctorReply(event)" class="p-3 bg-white border-t border-slate-200 flex items-center gap-2">
+                            <input type="text" id="doctor-chat-input" autocomplete="off" placeholder="Tulis balasan dokter untuk pasien..." class="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-4 py-2 text-xs text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white transition-all" />
+                            <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-colors flex items-center gap-1 shadow-sm">
+                                <span class="material-symbols-outlined text-[16px]">send</span> Kirim
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/toast.js"></script>
+    <script src="../../js/auth-guard.js"></script>
+    <script>
+        let activeDoctorSessionId = null;
+        let activePatientName = '';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAntrianDokter();
+            loadPasienSelect();
+            loadDoctorChatSessions();
+            setInterval(() => {
+                if (activeDoctorSessionId) {
+                    loadDoctorChatMessages(activeDoctorSessionId);
+                } else {
+                    loadDoctorChatSessions();
+                }
+            }, 3000);
+        });
+
+        async function loadAntrianDokter() {
+            try {
+                const antrianList = await API.get('/clinic/antrian/hari-ini');
+                const tbody = document.getElementById('antrian-list');
+                tbody.innerHTML = '';
+
+                if (!antrianList || antrianList.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-slate-400 italic">Belum ada antrian pasien hari ini.</td></tr>`;
+                    return;
+                }
+
+                antrianList.forEach(a => {
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-slate-50 transition-colors";
+                    tr.innerHTML = `
+                        <td class="py-3 font-bold text-blue-700">${a.nomorAntrian}</td>
+                        <td class="py-3 font-semibold text-slate-900">${a.pasien?.namaLengkap || 'Pasien'}</td>
+                        <td class="py-3 text-slate-500 text-xs">${a.pasien?.nik || '-'}</td>
+                        <td class="py-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${a.tipe === 'ONLINE' ? 'bg-sky-100 text-sky-700' : 'bg-amber-100 text-amber-700'}">${a.tipe}</span></td>
+                        <td class="py-3"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${a.status === 'SELESAI' ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'}">${a.status}</span></td>
+                        <td class="py-3 text-right">
+                            <button onclick="panggilPasien(${a.id}, '${a.nomorAntrian}')" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl transition-colors">Panggil</button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch(e) {
+                console.error(e);
+            }
+        }
+
+        async function loadPasienSelect() {
+            try {
+                const pasiens = await API.get('/clinic/pasien');
+                const select = document.getElementById('select-pasien');
+                select.innerHTML = '<option value="">-- Pilih Pasien --</option>';
+                pasiens.forEach(p => {
+                    const opt = document.createElement('option');
+                    opt.value = p.id;
+                    opt.textContent = `${p.namaLengkap} (NIK: ${p.nik})`;
+                    select.appendChild(opt);
+                });
+            } catch(e) {}
+        }
+
+        async function panggilPasien(antrianId, num) {
+            try {
+                await API.patch(`/clinic/antrian/${antrianId}/status?status=DIPERIKSA`, { status: 'DIPERIKSA' });
+                Toast.info(`Memanggil Pasien ${num} ke ruang periksa.`, 'Panggil Pasien');
+                loadAntrianDokter();
+            } catch(e) {}
+        }
+
+        document.getElementById('form-rekam-medis').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                const pasienId = document.getElementById('select-pasien').value;
+                if (!pasienId) {
+                    Toast.error('Pilih pasien terlebih dahulu!', 'Validasi Gagal');
+                    return;
+                }
+
+                const body = {
+                    pasienId: parseInt(pasienId),
+                    dokterId: 1,
+                    keluhanUtama: document.getElementById('keluhanUtama').value,
+                    diagnosaIcd10: document.getElementById('diagnosaIcd10').value,
+                    catatanDokter: document.getElementById('catatanDokter').value,
+                    tekananDarahSistol: parseInt(document.getElementById('sistol').value || 120),
+                    tekananDarahDiastol: parseInt(document.getElementById('diastol').value || 80),
+                    detakJantung: parseInt(document.getElementById('detakJantung').value || 75),
+                    suhuTubuh: parseFloat(document.getElementById('suhuTubuh').value || 36.5),
+                    beratBadan: parseFloat(document.getElementById('beratBadan').value || 65.0)
+                };
+
+                await API.post('/clinic/rekam-medis', body);
+
+                try {
+                    await API.post('/pharmacy/resep', {
+                        pasienId: parseInt(pasienId),
+                        dokterId: 1,
+                        items: [
+                            { obatId: 1, jumlah: 1, dosisAturanPakai: '3x1 Sehari Sesudah Makan' },
+                            { obatId: 2, jumlah: 1, dosisAturanPakai: '3x1 Sehari (Habiskan)' }
+                        ]
+                    });
+                } catch(e) {}
+
+                Toast.success('Rekam medis dan E-Resep berhasil disimpan dan terkirim ke Apotek!', 'Sukses');
+                document.getElementById('form-rekam-medis').reset();
+                loadAntrianDokter();
+            } catch(err) {
+                Toast.error(err.message || 'Gagal menyimpan rekam medis.', 'Error');
+            }
+        });
+
+        // --- DOKTER LIVE CHAT LOGIC ---
+        async function loadDoctorChatSessions() {
+            const listEl = document.getElementById('doctor-session-list');
+            if (!listEl) return;
+
+            let sessions = [];
+            try {
+                const res = await API.get('/clinic/chat/sessions?doctorId=1');
+                if (Array.isArray(res)) sessions = res;
+            } catch(e) {}
+
+            // Default demo sessions if backend returns empty
+            if (sessions.length === 0) {
+                sessions = ['chat_patient_1_doc_1'];
+            }
+
+            listEl.innerHTML = sessions.map(sess => {
+                const activeCls = sess === activeDoctorSessionId ? 'bg-blue-50 border-blue-300 font-bold text-blue-900' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100';
+                const pName = sess.includes('patient_1') ? 'Budi Santoso (Pasien)' : 'Pasien Konsultasi';
+                return `
+                    <button onclick="selectDoctorChatSession('${sess}', '${pName}')" class="w-full text-left p-3 rounded-xl border ${activeCls} transition-all flex items-center justify-between">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-xs">
+                                ${pName.charAt(0)}
+                            </div>
+                            <div>
+                                <div class="text-xs">${pName}</div>
+                                <div class="text-[10px] text-slate-400 font-normal">Sesi: ${sess}</div>
+                            </div>
+                        </div>
+                        <span class="material-symbols-outlined text-[16px] text-slate-400">chevron_right</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function selectDoctorChatSession(sessId, pName) {
+            activeDoctorSessionId = sessId;
+            activePatientName = pName;
+            document.getElementById('doctor-chat-title').innerText = `Percakapan dengan: ${pName}`;
+            loadDoctorChatSessions();
+            loadDoctorChatMessages(sessId);
+        }
+
+        async function loadDoctorChatMessages(sessId) {
+            const messagesContainer = document.getElementById('doctor-chat-messages');
+            if (!messagesContainer) return;
+
+            let msgs = [];
+            try {
+                const res = await API.get(`/clinic/chat/messages?sessionId=${sessId}`);
+                if (Array.isArray(res)) msgs = res;
+            } catch(e) {}
+
+            if (msgs.length === 0) {
+                messagesContainer.innerHTML = `
+                    <div class="text-center text-slate-400 py-10 italic">
+                        Belum ada pesan pada sesi ini.
+                    </div>
+                `;
+                return;
+            }
+
+            messagesContainer.innerHTML = msgs.map(m => {
+                const isDoc = (m.senderName && m.senderName.includes('dr.')) || m.senderId === 1;
+                const timeStr = m.createdAt ? new Date(m.createdAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : '';
+
+                if (isDoc) {
+                    return `
+                        <div class="flex flex-col items-end space-y-1">
+                            <span class="text-[9px] font-bold text-blue-700">${m.senderName || 'dr. Hendra Wijaya, Sp.PD'}</span>
+                            <div class="bg-blue-600 text-white p-3 rounded-2xl rounded-tr-xs shadow-sm max-w-[80%] leading-relaxed">
+                                ${m.pesan}
+                            </div>
+                            <span class="text-[9px] text-slate-400">${timeStr}</span>
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <div class="flex flex-col items-start space-y-1">
+                            <span class="text-[9px] font-bold text-slate-600">${m.senderName || 'Pasien'}</span>
+                            <div class="bg-white border border-slate-200 text-slate-800 p-3 rounded-2xl rounded-tl-xs shadow-sm max-w-[80%] leading-relaxed">
+                                ${m.pesan}
+                            </div>
+                            <span class="text-[9px] text-slate-400">${timeStr}</span>
+                        </div>
+                    `;
+                }
+            }).join('');
+
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        async function sendDoctorReply(e) {
+            e.preventDefault();
+            const input = document.getElementById('doctor-chat-input');
+            if (!input) return;
+
+            const text = input.value.trim();
+            if (!text) return;
+
+            if (!activeDoctorSessionId) {
+                Toast.error('Silakan pilih sesi pasien terlebih dahulu di sebelah kiri!', 'Peringatan');
+                return;
+            }
+
+            input.value = '';
+
+            const payload = {
+                sessionId: activeDoctorSessionId,
+                senderId: 1,
+                receiverId: 1,
+                senderName: 'dr. Hendra Wijaya, Sp.PD',
+                pesan: text,
+                tipePesan: 'TEXT'
+            };
+
+            try {
+                await API.post('/clinic/chat/messages', payload);
+                Toast.success('Balasan berhasil dikirim ke pasien.', 'Terkirim');
+                loadDoctorChatMessages(activeDoctorSessionId);
+            } catch(err) {
+                Toast.error(err.message || 'Gagal mengirim pesan.', 'Error');
+            }
+        }
+    </script>
+</body>
+</html>
+

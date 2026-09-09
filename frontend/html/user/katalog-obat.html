@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Katalog & Keranjang Obat Apotek - Sentra Farma</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#F0FDF4', 100: '#DCFCE7', 200: '#BBF7D0', 500: '#10B981',
+                            600: '#059669', 700: '#047857', 800: '#065F46', 900: '#064E3B'
+                        },
+                        surface: '#F8FAFC'
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        html,
+        body {
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 1024px) {
+
+            html,
+            body {
+                height: auto !important;
+                min-height: 100vh;
+                overflow-y: auto !important;
+            }
+
+            body {
+                flex-direction: column !important;
+                padding: 0.75rem !important;
+            }
+
+            aside.left-dock {
+                position: relative !important;
+                top: 0 !important;
+                left: 0 !important;
+                bottom: auto !important;
+                width: 100% !important;
+                height: auto !important;
+                flex-direction: row !important;
+                justify-content: space-between !important;
+                padding: 0.5rem 1rem !important;
+                margin-bottom: 0.75rem !important;
+            }
+
+            aside.left-dock nav,
+            aside.left-dock div {
+                flex-direction: row !important;
+                gap: 0.5rem !important;
+            }
+
+            .main-portal-container {
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                height: auto !important;
+                overflow-y: auto !important;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #modal-struk-bukti,
+            #modal-struk-bukti * {
+                visibility: visible;
+            }
+
+            #modal-struk-bukti {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body
+    class="bg-gradient-to-br from-emerald-50/60 via-teal-50/40 to-slate-50 font-sans text-slate-800 flex h-screen antialiased selection:bg-brand-100 selection:text-brand-800 relative overflow-hidden">
+
+    <!-- Ambient Glow Mesh Spheres -->
+    <div
+        class="fixed -top-40 -left-40 w-[500px] h-[500px] bg-emerald-300/25 rounded-full blur-[120px] pointer-events-none z-0">
+    </div>
+    <div
+        class="fixed top-1/3 -right-40 w-[450px] h-[450px] bg-teal-200/25 rounded-full blur-[100px] pointer-events-none z-0">
+    </div>
+    <div
+        class="fixed -bottom-40 left-1/3 w-[500px] h-[500px] bg-emerald-200/20 rounded-full blur-[120px] pointer-events-none z-0">
+    </div>
+
+    <!-- LEFT SIDEBAR DOCK (COMPACT FLOATING PILL) -->
+    <aside
+        class="left-dock fixed left-6 top-1/2 -translate-y-1/2 w-20 bg-white/95 backdrop-blur-2xl border border-slate-200/80 shadow-xl shadow-slate-300/40 rounded-3xl z-50 flex flex-col items-center py-5 space-y-4">
+        <!-- Navigation Icons -->
+        <nav class="flex flex-col items-center gap-2">
+            <a href="dashboard.html"
+                class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">grid_view</span>
+                <span
+                    class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Dashboard</span>
+            </a>
+            <a href="antrian.html"
+                class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">confirmation_number</span>
+                <span
+                    class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Antrian
+                    Saya</span>
+            </a>
+            <a href="riwayat-medis.html"
+                class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">medical_information</span>
+                <span
+                    class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Riwayat
+                    Medis</span>
+            </a>
+            <a href="katalog-obat.html"
+                class="relative group p-2.5 rounded-2xl bg-brand-50 text-brand-600 font-bold transition-all shadow-2xs">
+                <span class="material-symbols-outlined text-[22px]">medication</span>
+                <span
+                    class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Katalog
+                    Apotek</span>
+            </a>
+            <button onclick="openPillListModal()"
+                class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">alarm</span>
+                <span
+                    class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Pengingat
+                    Obat</span>
+            </button>
+            <button onclick="window.toggleSentraChatWindow()"
+                class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">support_agent</span>
+                <span
+                    class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Tanya
+                    Dokter (Live Chat)</span>
+            </button>
+        </nav>
+
+        <div class="w-8 h-px bg-slate-200/70"></div>
+
+        <!-- Profile & Logout -->
+        <div class="flex flex-col items-center gap-2">
+            <a href="profil.html"
+                class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">person</span>
+                <span
+                    class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Profil
+                    Saya</span>
+            </a>
+            <button onclick="handleLogout()"
+                class="relative group p-2.5 rounded-2xl text-rose-400 hover:text-rose-600 hover:bg-rose-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">logout</span>
+                <span
+                    class="absolute left-full ml-4 px-3 py-1.5 bg-rose-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT CONTAINER (FIXED SCREEN HEIGHT ON DESKTOP, RESPONSIVE ON TABLET/MOBILE) -->
+    <div class="main-portal-container flex-1 ml-32 mr-4 flex flex-col h-screen overflow-hidden">
+
+        <!-- TRANSPARENT HEADER BAR WITH INTEGRATED BRANDING -->
+        <header
+            class="h-20 flex items-center justify-between px-6 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100/60 transition-all shrink-0">
+            <div class="flex items-center gap-3">
+                <!-- Brand Logo Link (Moderately Enlarged) -->
+                <a href="dashboard.html" class="flex items-center gap-2 group cursor-pointer shrink-0" title="Sentra Farma">
+                    <img src="../../assets/logo.png" alt="Sentra Farma" class="h-14 sm:h-16 md:h-18 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform" />
+                </a>
+                <div class="h-8 w-px bg-slate-200/80 hidden sm:block"></div>
+                <div>
+                    <h1 class="text-base font-extrabold text-slate-900 tracking-tight">Katalog Apotek & Reservasi Obat</h1>
+                    <p class="text-[10px] text-slate-500 font-medium">Ketersediaan Stok Real-Time Terhubung Dengan Kasir Apotek</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2.5">
+                <button onclick="openModalKeranjang()"
+                    class="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs rounded-xl shadow-sm transition-all flex items-center gap-1.5 relative">
+                    <span class="material-symbols-outlined text-[16px]">shopping_cart</span>
+                    <span>Keranjang Saya</span>
+                    <span id="badge-count-cart"
+                        class="px-2 py-0.2 bg-white text-brand-800 rounded-full text-[10px] font-black">0</span>
+                </button>
+
+                <!-- Button Lihat Struk Reservasi Saya -->
+                <button onclick="openModalDaftarStruk()"
+                    class="px-3 py-1.5 bg-white hover:bg-slate-50 text-slate-800 font-extrabold text-xs rounded-xl border border-slate-200 transition-all flex items-center gap-1.5 shadow-sm">
+                    <span class="material-symbols-outlined text-[16px] text-brand-600">receipt</span>
+                    <span>Struk Saya</span>
+                    <span id="badge-count-struk"
+                        class="px-2 py-0.2 bg-brand-100 text-brand-800 rounded-full text-[10px] font-extrabold">0</span>
+                </button>
+
+                <a href="profil.html" title="Buka Profil Saya"
+                    class="flex items-center gap-2 pl-2 border-l border-slate-200 group cursor-pointer">
+                    <div class="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold text-xs group-hover:scale-105 transition-transform"
+                        id="user-avatar-initials">P</div>
+                    <span id="user-name-badge"
+                        class="text-xs font-extrabold text-slate-900 hidden sm:inline group-hover:text-emerald-700 transition-colors">Pasien</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- MAIN WORKSPACE CONTAINER (FLEX-1 FULL HEIGHT NO SCROLL) -->
+        <main
+            class="p-5 sm:p-6 space-y-4 flex-1 flex flex-col justify-between overflow-hidden max-w-6xl mx-auto w-full">
+
+            <!-- TOP HORIZONTAL MULTI-FILTER TOOLBAR WITH COMPACT SIDE TITLE -->
+            <div class="bg-white p-3 sm:p-3.5 rounded-2xl border border-slate-200/80 shadow-2xs shrink-0 space-y-2.5">
+                <!-- Top Row: Compact Side Title & Quick Actions -->
+                <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                    <div class="flex items-center gap-2.5">
+                        <div
+                            class="w-7 h-7 rounded-lg bg-brand-100 text-brand-700 flex items-center justify-center font-bold shadow-2xs">
+                            <span class="material-symbols-outlined text-[18px]">medication</span>
+                        </div>
+                        <div>
+                            <h2 class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">Katalog Online &
+                                Reservasi Obat Real-Time</h2>
+                            <p class="text-[10px] text-slate-500 font-medium">Pilih obat, atur jumlah, kumpulkan di
+                                keranjang & dapatkan Struk Digital QR Code</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <button onclick="openModalKeranjang()"
+                            class="px-3 py-1 bg-brand-50 hover:bg-brand-100 text-brand-700 font-bold text-[11px] rounded-lg border border-brand-200 shadow-2xs flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[14px]">shopping_cart</span>
+                            <span>Keranjang (<span id="banner-cart-count">0</span>)</span>
+                        </button>
+                        <button onclick="openModalTebusResep()"
+                            class="px-3 py-1 bg-brand-600 hover:bg-brand-700 text-white font-bold text-[11px] rounded-lg shadow-2xs flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[14px]">receipt_long</span>
+                            <span>Tebus Resep</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Bottom Row: Multi-Filter Suite -->
+                <div class="flex items-center gap-2 text-xs">
+
+                    <!-- Search Input -->
+                    <div class="relative flex-1">
+                        <span
+                            class="material-symbols-outlined absolute left-3 top-2 text-slate-400 text-[16px]">search</span>
+                        <input type="text" id="search-input" onkeyup="applyAllFiltersAndSort()"
+                            placeholder="Cari nama obat, indikasi, kode..."
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl py-1.5 pl-8 pr-3 text-[11px] font-semibold text-slate-800 focus:outline-none focus:border-brand-500" />
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div class="w-40">
+                        <select id="filter-kategori-select" onchange="applyAllFiltersAndSort()"
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl py-1.5 px-2.5 font-bold text-slate-800 text-[11px] focus:outline-none focus:border-brand-500 cursor-pointer">
+                            <option value="">Semua Kategori</option>
+                        </select>
+                    </div>
+
+                    <!-- Stock Status Filter -->
+                    <div class="w-36">
+                        <select id="filter-stok-select" onchange="applyAllFiltersAndSort()"
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl py-1.5 px-2.5 font-bold text-slate-800 text-[11px] focus:outline-none focus:border-brand-500 cursor-pointer">
+                            <option value="">Semua Stok</option>
+                            <option value="TERSEDIA">Stok Ada (>10)</option>
+                            <option value="MENIPIS">Stok Menipis (1-10)</option>
+                            <option value="HABIS">Stok Habis (0)</option>
+                        </select>
+                    </div>
+
+                    <!-- Sorting -->
+                    <div class="w-36">
+                        <select id="sort-select" onchange="applyAllFiltersAndSort()"
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl py-1.5 px-2.5 font-bold text-slate-800 text-[11px] focus:outline-none focus:border-brand-500 cursor-pointer">
+                            <option value="terbaru">Terbaru (ID)</option>
+                            <option value="terlama">Terlama</option>
+                            <option value="az">Nama (A - Z)</option>
+                            <option value="za">Nama (Z - A)</option>
+                            <option value="murah">Harga Termurah</option>
+                            <option value="mahal">Harga Termahal</option>
+                        </select>
+                    </div>
+
+                    <!-- Reset Button -->
+                    <button onclick="resetAllFilters()"
+                        class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] rounded-xl flex items-center gap-1 transition-colors shrink-0">
+                        <span class="material-symbols-outlined text-[14px]">restart_alt</span>
+                        <span>Reset</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- COMPACT CATALOG GRID (FLEX-1 PERFECTLY FIT IN SCREEN HEIGHT) -->
+            <div id="obat-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 flex-1 overflow-hidden">
+                <!-- Dynamically loaded obat cards -->
+            </div>
+
+            <!-- PAGINATION BAR (SHRINK-0 STICKY AT BOTTOM OF MAIN) -->
+            <div
+                class="flex items-center justify-between bg-white px-6 py-3.5 rounded-3xl border border-slate-200/80 shadow-sm text-xs shrink-0">
+                <div class="text-slate-600 font-extrabold text-xs" id="pagination-info">
+                    Halaman 1 dari 1 (Total 100 obat)
+                </div>
+
+                <div class="flex items-center gap-2" id="pagination-controls">
+                    <button id="btn-prev-page" onclick="changePage(-1)"
+                        class="px-3.5 py-1.5 rounded-xl bg-slate-100 text-slate-700 font-extrabold text-xs hover:bg-slate-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[15px]">chevron_left</span> Sebelum
+                    </button>
+                    <div id="page-numbers" class="flex gap-1"></div>
+                    <button id="btn-next-page" onclick="changePage(1)"
+                        class="px-3.5 py-1.5 rounded-xl bg-slate-100 text-slate-700 font-extrabold text-xs hover:bg-slate-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1">
+                        Berikut <span class="material-symbols-outlined text-[15px]">chevron_right</span>
+                    </button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- MODAL 1: KERANJANG SAYA & MULTI-ITEM CHECKOUT -->
+    <div id="modal-keranjang"
+        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div
+            class="bg-white rounded-3xl max-w-xl w-full p-6 shadow-2xl border border-slate-100 space-y-4 max-h-[85vh] flex flex-col">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <div>
+                    <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-brand-600">shopping_cart</span> Keranjang Reservasi
+                        Obat Saya
+                    </h3>
+                    <p class="text-xs text-slate-500">Periksa daftar obat sebelum menerbitkan Struk Bukti Reservasi
+                        Digital</p>
+                </div>
+                <button onclick="closeModal('modal-keranjang')" class="text-slate-400 hover:text-slate-600">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <!-- Item List dalam Keranjang -->
+            <div id="cart-item-list" class="space-y-3 overflow-y-auto p-1 flex-1">
+                <!-- Dynamically loaded -->
+            </div>
+
+            <!-- Footer Total & Checkout -->
+            <div class="pt-3 border-t border-slate-200/80 space-y-3">
+                <div class="flex justify-between items-center p-4 bg-brand-50 border border-brand-200 rounded-2xl">
+                    <span class="font-extrabold text-xs text-brand-900">GRAND TOTAL RESERVASI:</span>
+                    <span id="cart-grand-total" class="text-lg font-black text-brand-700">Rp 0</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="clearCart()"
+                        class="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs rounded-2xl transition-colors">
+                        Kosongkan Keranjang
+                    </button>
+                    <button id="btn-checkout-cart" onclick="checkoutMultiItemCart()"
+                        class="py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs rounded-2xl shadow-md shadow-brand-600/20 transition-all flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">receipt_long</span>
+                        <span>Checkout & Terbitkan Struk</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: DAFTAR STRUK RESERVASI SAYA (ARSIP STRUK) -->
+    <div id="modal-daftar-struk"
+        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div
+            class="bg-white rounded-3xl max-w-xl w-full p-6 shadow-2xl border border-slate-100 space-y-4 max-h-[85vh] flex flex-col">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <div>
+                    <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-brand-600">receipt</span> Daftar Struk Reservasi
+                        Saya
+                    </h3>
+                    <p class="text-xs text-slate-500">Tunjukkan struk ini kepada petugas Kasir Apotek untuk pembayaran &
+                        pengambilan</p>
+                </div>
+                <button onclick="closeModal('modal-daftar-struk')" class="text-slate-400 hover:text-slate-600">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <div id="arsip-struk-list" class="space-y-3 overflow-y-auto p-1 flex-1">
+                <!-- Dynamically loaded -->
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: TEBUS E-RESEP -->
+    <div id="modal-tebus-resep"
+        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div
+            class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 space-y-4 max-h-[85vh] flex flex-col">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-brand-600">receipt_long</span> E-Resep Digital Anda
+                </h3>
+                <button onclick="closeModal('modal-tebus-resep')" class="text-slate-400 hover:text-slate-600">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <div id="resep-pasien-list" class="space-y-3 overflow-y-auto p-1 flex-1">
+                <!-- Dynamically loaded -->
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4: STRUK BUKTI RESERVASI OBAT (DIGITAL INVOICE VOUCHER) -->
+    <div id="modal-struk-bukti"
+        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 hidden">
+        <div
+            class="bg-white rounded-3xl max-w-sm w-full p-5 sm:p-6 shadow-2xl border border-emerald-100 space-y-3.5 relative overflow-hidden max-h-[85vh] flex flex-col justify-between">
+
+            <!-- Header Struk -->
+            <div class="text-center space-y-1 border-b border-slate-100 pb-3">
+                <img src="../../assets/logo.png" alt="Sentra Farma" class="h-8 w-auto object-contain mx-auto" />
+                <h3 class="text-sm font-extrabold text-slate-900 tracking-tight">STRUK RESERVASI OBAT APOTEK</h3>
+                <p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Klinik & Apotek Sentra Farma
+                </p>
+                <div id="struk-invoice-no"
+                    class="px-3 py-0.5 bg-brand-50 border border-brand-200 rounded-full font-mono font-extrabold text-brand-800 text-[10px] inline-block mt-0.5">
+                    INV-20260901...
+                </div>
+            </div>
+
+            <!-- Details -->
+            <div class="space-y-2.5 text-xs overflow-y-auto pr-0.5">
+                <div class="grid grid-cols-2 gap-2 p-2.5 bg-slate-50 rounded-xl text-[11px]">
+                    <div>
+                        <span class="text-[9px] font-extrabold text-slate-400 uppercase block">NAMA PASIEN</span>
+                        <span id="struk-pasien-nama" class="font-bold text-slate-900 truncate block">Ahmad Dahlan</span>
+                    </div>
+                    <div>
+                        <span class="text-[9px] font-extrabold text-slate-400 uppercase block">TANGGAL RESERVASI</span>
+                        <span id="struk-tanggal" class="font-semibold text-slate-700 truncate block">1 Sept 2026</span>
+                    </div>
+                </div>
+
+                <!-- Table Item Obat -->
+                <div class="border border-slate-200/80 rounded-xl p-3 space-y-2 max-h-32 overflow-y-auto">
+                    <div
+                        class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider flex justify-between border-b border-slate-100 pb-1.5">
+                        <span>DAFTAR ITEM OBAT</span>
+                        <span>SUBTOTAL</span>
+                    </div>
+                    <div id="struk-items-container" class="space-y-1.5">
+                        <!-- Rendered items -->
+                    </div>
+                </div>
+
+                <!-- Total -->
+                <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex justify-between items-center">
+                    <span class="font-extrabold text-[11px] text-emerald-900">TOTAL BAYAR DI KASIR:</span>
+                    <span id="struk-total-harga" class="text-base font-black text-emerald-700">Rp 0</span>
+                </div>
+
+                <!-- QR Code Verification -->
+                <div class="text-center pt-1 space-y-0.5">
+                    <img id="struk-qr-code" src="" alt="QR Code Invoice" class="w-20 h-20 mx-auto" />
+                    <span class="text-[9px] font-extrabold text-slate-500 block uppercase tracking-wider">TUNJUKKAN QR
+                        INI KEPADA KASIR APOTEK</span>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="grid grid-cols-2 gap-2.5 pt-1">
+                <button onclick="window.print()"
+                    class="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-extrabold text-xs rounded-xl flex items-center justify-center gap-1.5 transition-colors">
+                    <span class="material-symbols-outlined text-[16px]">print</span>
+                    <span>Cetak Struk</span>
+                </button>
+                <button onclick="closeModal('modal-struk-bukti')"
+                    class="py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs rounded-xl shadow-md shadow-brand-600/20 transition-colors">
+                    Selesai
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/toast.js"></script>
+    <script src="../../js/auth-guard.js"></script>
+    <script src="../../js/pengingat.js"></script>
+    <script>
+        let allObatList = [];
+        let filteredObatList = [];
+        let currentPage = 1;
+        let pageSize = 6;
+        let obatQuantities = {};
+        let cartItems = [];
+
+        const kegunaanMap = {
+            'OBT-001': 'Obat penurun demam & pereda nyeri ringan hingga sedang.',
+            'OBT-002': 'Obat analgetik penurun panas dan pereda sakit kepala.',
+            'OBT-003': 'Obat antiinflamasi pereda nyeri otot, gigi, dan demam.',
+            'OBT-004': 'Obat pereda nyeri sendi, pegal linu, dan peradangan.',
+            'OBT-005': 'Antibiotik spektrum luas untuk infeksi ISPA & saluran kemih.',
+            'OBT-006': 'Antibiotik untuk infeksi kulit, tenggorokan, dan bakteri.',
+            'OBT-007': 'Antibiotik infeksi pernapasan & jaringan lunak.',
+            'OBT-008': 'Antibiotik untuk infeksi saluran kemih & pencernaan.',
+            'OBT-009': 'Suplemen Vitamin C 1000mg untuk daya tahan tubuh harian.',
+            'OBT-010': 'Vitamin D3 1000 IU untuk kesehatan tulang & imunitas.',
+            'OBT-011': 'Vitamin neurotropik pereda kram, kesemutan, & saraf.',
+            'OBT-012': 'Suplemen zat besi penambah darah untuk kurangi anemia.',
+            'OBT-013': 'Antihistamin pereda alergi, gatal-gatal, & bersin-bersin.',
+            'OBT-014': 'Obat anti alergi, gatal biduran, & flu ringan.',
+            'OBT-015': 'Antihistamin non-drowsy pereda gejala alergi harian.',
+            'OBT-016': 'Sirup obat batuk berdahak & pereda flu hidung tersumbat.',
+            'OBT-017': 'Sirup obat batuk kering tidak berdahak & gatal tenggorokan.',
+            'OBT-018': 'Sirup pengencer dahak mukolitik untuk batuk produktif.',
+            'OBT-019': 'Sirup herbal tradisional pereda batuk & kehangatan tenggorokan.',
+            'OBT-020': 'Sirup batuk dahak anak dengan rasa buah segar.',
+            'OBT-021': 'Obat tablet kunyah pereda cepat sakit maag & asam lambung.',
+            'OBT-022': 'Sirup antasida penetral asam lambung tinggi & kembung.',
+            'OBT-023': 'Kapsul penghambat pompa proton untuk asam lambung & GERD.',
+            'OBT-024': 'Obat maag kronis, tukak lambung, & ulu hati nyeri.',
+            'OBT-025': 'Sirup pelindung dinding mukosa lambung dari iritasi asam.',
+            'OBT-026': 'Sirup pereda kembung, mual, & asam lambung berlebih.',
+            'OBT-027': 'Obat hipertensi pengontrol tekanan darah tinggi 5mg.',
+            'OBT-028': 'Obat pemeliharaan tekanan darah tinggi dosis 10mg.',
+            'OBT-029': 'Obat antihipertensi golongan ACE inhibitor 25mg.',
+            'OBT-030': 'Obat pengontrol tekanan darah tinggi ARB 8mg.',
+            'OBT-031': 'Obat penghambat beta untuk hipertensi & penyakit jantung.',
+            'OBT-032': 'Obat peredam tekanan darah tinggi & perlindungan jantung.',
+            'OBT-033': 'Obat lini pertama penurun gula darah pasien diabetes tipe 2.',
+            'OBT-034': 'Obat pemicu sekresi insulin penurun gula darah 2mg.',
+            'OBT-035': 'Obat antidiabetes oral pengontrol gula darah 5mg.',
+            'OBT-036': 'Obat penurun kadar kolesterol jahat (LDL) 10mg.',
+            'OBT-037': 'Obat kolesterol golongan statin potensi tinggi 20mg.',
+            'OBT-038': 'Obat penurun kadar asam urat tinggi dalam darah.',
+            'OBT-039': 'Tetes mata pereda iritasi mata merah, perih, & debu.',
+            'OBT-040': 'Tetes mata steril pencerah & pereda mata lelah.',
+            'OBT-041': 'Salep perangsang penyembuhan luka bakar & kulit terkelupas.',
+            'OBT-042': 'Krim antiinflamasi pereda gatal eksem & iritasi kulit.',
+            'OBT-043': 'Salep anti jamur pereda kurap, panu, & gatal selangkangan.',
+            'OBT-044': 'Salep antiseptik cegah infeksi pada luka terbuka.',
+            'OBT-045': 'Suplemen peningkat imunitas tubuh ekstrak Echinacea.',
+            'OBT-046': 'Gummy vitamin rasa buah favorit anak penambah nafsu makan.',
+            'OBT-047': 'Obat kombinasi cepat pereda sakit kepala mencengkeram.',
+            'OBT-048': 'Sirup herbal sachet praktis pereda batuk & masuk angin.',
+            'OBT-049': 'Sirup sukralfat dosis tinggi pelindung luka lambung.',
+            'OBT-050': 'Sirup temulawak penambah nafsu makan & daya tahan anak.'
+        };
+
+        const iconCategoryMap = {
+            'Analgesik & Antipiretik': { icon: 'pills', color: 'from-amber-400 to-orange-500', text: 'text-amber-600' },
+            'Antibiotik': { icon: 'vaccines', color: 'from-rose-400 to-red-500', text: 'text-rose-600' },
+            'Vitamin & Suplemen': { icon: 'ecg_heart', color: 'from-emerald-400 to-teal-500', text: 'text-emerald-600' },
+            'Antihistamin & Alergi': { icon: 'medication', color: 'from-purple-400 to-indigo-500', text: 'text-purple-600' },
+            'Obat Batuk & Flu': { icon: 'fluid_med', color: 'from-blue-400 to-cyan-500', text: 'text-blue-600' }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initUserData();
+            loadCategories();
+            loadObatData();
+            updateStrukBadgeCount();
+            loadCartFromStorage();
+        });
+
+        function handleLogout() {
+            API.clearSession();
+            Toast.success('Anda telah berhasil logout.', 'Sampai Jumpa');
+            setTimeout(() => window.location.href = '/frontend/html/auth/login.html', 1000);
+        }
+
+        function initUserData() {
+            const user = API.getUser();
+            if (user) {
+                const name = user.namaLengkap || 'Pasien';
+                document.getElementById('user-name-badge').innerText = name;
+                document.getElementById('user-avatar-initials').innerText = name.charAt(0).toUpperCase();
+            }
+        }
+
+        function getStorageKey(suffix) {
+            const user = API.getUser();
+            return `sentra_${suffix}_${user ? user.id : 1}`;
+        }
+
+        function getMySavedStrukList() {
+            return JSON.parse(localStorage.getItem(getStorageKey('struk')) || '[]');
+        }
+
+        function saveStrukToHistory(strukObj) {
+            const list = getMySavedStrukList();
+            list.unshift(strukObj);
+            localStorage.setItem(getStorageKey('struk'), JSON.stringify(list));
+            updateStrukBadgeCount();
+        }
+
+        function updateStrukBadgeCount() {
+            const list = getMySavedStrukList();
+            document.getElementById('badge-count-struk').innerText = list.length;
+        }
+
+        function loadCartFromStorage() {
+            cartItems = JSON.parse(localStorage.getItem(getStorageKey('cart')) || '[]');
+            updateCartBadges();
+        }
+
+        function saveCartToStorage() {
+            localStorage.setItem(getStorageKey('cart'), JSON.stringify(cartItems));
+            updateCartBadges();
+        }
+
+        function updateCartBadges() {
+            const count = cartItems.reduce((sum, item) => sum + item.qty, 0);
+            document.getElementById('badge-count-cart').innerText = count;
+            document.getElementById('banner-cart-count').innerText = count;
+        }
+
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+
+        function setPageSize(val) {
+            pageSize = parseInt(val) || 6;
+            currentPage = 1;
+            renderObatGrid();
+        }
+
+        async function loadCategories() {
+            try {
+                const cats = await API.get('/pharmacy/kategori');
+                const sel = document.getElementById('filter-kategori-select');
+                cats.forEach(c => {
+                    sel.innerHTML += `<option value="${c.id}">${c.namaKategori}</option>`;
+                });
+            } catch (e) { }
+        }
+
+        async function loadObatData() {
+            try {
+                const res = await API.get('/pharmacy/obat?page=1&limit=100');
+                allObatList = Array.isArray(res) ? res : (res.content || []);
+
+                allObatList.forEach(o => {
+                    if (!obatQuantities[o.id]) obatQuantities[o.id] = 1;
+                });
+
+                applyAllFiltersAndSort();
+            } catch (e) {
+                Toast.error('Gagal memuat katalog obat dari apotek.');
+            }
+        }
+
+        function resetAllFilters() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('filter-kategori-select').value = '';
+            document.getElementById('filter-stok-select').value = '';
+            document.getElementById('sort-select').value = 'terbaru';
+            document.getElementById('page-size-select').value = '6';
+            setPageSize(6);
+        }
+
+        function applyAllFiltersAndSort() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
+            const catFilter = document.getElementById('filter-kategori-select').value;
+            const stokFilter = document.getElementById('filter-stok-select').value;
+            const sortVal = document.getElementById('sort-select').value;
+
+            filteredObatList = allObatList.filter(o => {
+                const matchCat = catFilter ? (o.kategori && o.kategori.id == catFilter) : true;
+
+                let matchStok = true;
+                if (stokFilter === 'TERSEDIA') matchStok = (o.stok > 10);
+                else if (stokFilter === 'MENIPIS') matchStok = (o.stok > 0 && o.stok <= 10);
+                else if (stokFilter === 'HABIS') matchStok = (o.stok === 0);
+
+                const kegunaan = kegunaanMap[o.kodeObat] || o.kategori?.deskripsi || '';
+                const matchQuery = query ? (
+                    o.namaObat.toLowerCase().includes(query) ||
+                    o.kodeObat.toLowerCase().includes(query) ||
+                    kegunaan.toLowerCase().includes(query) ||
+                    (o.kategori && o.kategori.namaKategori.toLowerCase().includes(query))
+                ) : true;
+
+                return matchCat && matchStok && matchQuery;
+            });
+
+            if (sortVal === 'terbaru') {
+                filteredObatList.sort((a, b) => b.id - a.id);
+            } else if (sortVal === 'terlama') {
+                filteredObatList.sort((a, b) => a.id - b.id);
+            } else if (sortVal === 'az') {
+                filteredObatList.sort((a, b) => a.namaObat.localeCompare(b.namaObat));
+            } else if (sortVal === 'za') {
+                filteredObatList.sort((a, b) => b.namaObat.localeCompare(a.namaObat));
+            } else if (sortVal === 'murah') {
+                filteredObatList.sort((a, b) => a.harga - b.harga);
+            } else if (sortVal === 'mahal') {
+                filteredObatList.sort((a, b) => b.harga - a.harga);
+            }
+
+            renderObatGrid();
+        }
+
+        function changeQty(obatId, delta, maxStock) {
+            let current = obatQuantities[obatId] || 1;
+            current += delta;
+            if (current < 1) current = 1;
+            if (current > maxStock) {
+                current = maxStock;
+                Toast.error(`Jumlah melebihi stok yang tersedia (${maxStock}).`, 'Batas Stok');
+            }
+            obatQuantities[obatId] = current;
+
+            const inputEl = document.getElementById(`qty-input-${obatId}`);
+            if (inputEl) inputEl.value = current;
+
+            const priceEl = document.getElementById(`total-price-${obatId}`);
+            const obatObj = allObatList.find(o => o.id === obatId);
+            if (priceEl && obatObj) {
+                priceEl.innerText = `Rp ${Number(obatObj.harga * current).toLocaleString('id-ID')}`;
+            }
+        }
+
+        function renderObatGrid() {
+            const grid = document.getElementById('obat-grid');
+            const total = filteredObatList.length;
+            const totalPages = Math.ceil(total / pageSize) || 1;
+
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            const start = (currentPage - 1) * pageSize;
+            const end = start + pageSize;
+            const pageItems = filteredObatList.slice(start, end);
+
+            document.getElementById('pagination-info').innerText = `Halaman ${currentPage} dari ${totalPages} (Total ${total} obat)`;
+
+            if (pageItems.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full bg-white p-6 rounded-2xl text-center border border-slate-200/80 space-y-1">
+                        <span class="material-symbols-outlined text-[36px] text-slate-300">medication_liquid</span>
+                        <h4 class="text-xs font-bold text-slate-800">Obat Tidak Ditemukan</h4>
+                        <p class="text-[10px] text-slate-500">Coba ubah kombinasi filter atau kata kunci pencarian Anda.</p>
+                    </div>
+                `;
+            } else {
+                grid.innerHTML = pageItems.map(o => {
+                    const kegunaan = kegunaanMap[o.kodeObat] || o.kategori?.deskripsi || 'Obat terdaftar resmi di Apotek Sentra Farma.';
+                    const catName = o.kategori?.namaKategori || 'Obat Apotek';
+                    const iconConfig = iconCategoryMap[catName] || { icon: 'medication', color: 'from-emerald-400 to-teal-500', text: 'text-emerald-600' };
+
+                    let stockBadge = '';
+                    if (o.stok > 10) {
+                        stockBadge = `<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Stok: ${o.stok}</span>`;
+                    } else if (o.stok > 0) {
+                        stockBadge = `<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-extrabold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Menipis: ${o.stok}</span>`;
+                    } else {
+                        stockBadge = `<span class="px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[10px] font-extrabold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Habis</span>`;
+                    }
+
+                    const qty = obatQuantities[o.id] || 1;
+                    const subtotal = o.harga * qty;
+
+                    return `
+                        <div class="bg-white rounded-2xl p-3 border border-slate-200/80 shadow-2xs hover:shadow-sm hover:border-brand-400 transition-all flex flex-col justify-between space-y-2 group overflow-hidden">
+                            <div class="space-y-1.5">
+                                <!-- HEADER & VISUAL THUMBNAIL -->
+                                <div class="flex items-start gap-2.5">
+                                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br ${iconConfig.color} text-white flex items-center justify-center font-bold shadow-2xs shrink-0 group-hover:scale-105 transition-transform">
+                                        <span class="material-symbols-outlined text-[20px]">${iconConfig.icon}</span>
+                                    </div>
+                                    <div class="min-w-0 flex-1 space-y-0.5">
+                                        <div class="flex items-center justify-between gap-1">
+                                            <span class="px-1.5 py-0.2 bg-slate-100 text-slate-600 font-extrabold rounded text-[9px] uppercase tracking-wider truncate max-w-[100px]" title="${catName}">${catName}</span>
+                                            <div class="shrink-0">${stockBadge}</div>
+                                        </div>
+                                        <h3 class="text-xs font-bold text-slate-900 group-hover:text-brand-600 transition-colors leading-tight truncate" title="${o.namaObat}">${o.namaObat}</h3>
+                                        <div class="text-[10px] font-mono text-slate-400 font-medium">${o.kodeObat} • ${o.satuan}</div>
+                                    </div>
+                                </div>
+
+                                <!-- INDIKASI / KEGUNAAN BOX -->
+                                <div class="p-2 bg-slate-50 border border-slate-100 rounded-xl space-y-0.5">
+                                    <div class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-[12px] text-brand-600">info</span> Indikasi Medis:
+                                    </div>
+                                    <p class="text-[10px] text-slate-600 font-medium leading-snug line-clamp-1">${kegunaan}</p>
+                                </div>
+                            </div>
+
+                            <!-- QUANTITY STEPPER & DUAL ACTIONS -->
+                            <div class="space-y-1.5 pt-1.5 border-t border-slate-100">
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">JUMLAH:</span>
+                                    <div class="flex items-center border border-slate-200 rounded-lg overflow-hidden bg-slate-50">
+                                        <button onclick="changeQty(${o.id}, -1, ${o.stok})" ${o.stok === 0 ? 'disabled' : ''} class="w-5 h-5 flex items-center justify-center font-bold text-slate-700 hover:bg-slate-200 transition-colors text-[10px] disabled:opacity-50">-</button>
+                                        <input type="text" id="qty-input-${o.id}" readonly value="${qty}" class="w-6 text-center font-black text-[11px] text-slate-900 bg-transparent" />
+                                        <button onclick="changeQty(${o.id}, 1, ${o.stok})" ${o.stok === 0 ? 'disabled' : ''} class="w-5 h-5 flex items-center justify-center font-bold text-slate-700 hover:bg-slate-200 transition-colors text-[10px] disabled:opacity-50">+</button>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between gap-1.5">
+                                    <div>
+                                        <span class="text-[8px] text-slate-400 font-extrabold uppercase tracking-wider block">SUBTOTAL</span>
+                                        <span id="total-price-${o.id}" class="text-xs font-extrabold text-brand-700">Rp ${Number(subtotal).toLocaleString('id-ID')}</span>
+                                    </div>
+
+                                    <div class="flex items-center gap-1">
+                                        <!-- Add to Cart Button -->
+                                        <button onclick="addToCart(${o.id}, '${o.namaObat}', ${o.harga}, ${o.stok}, '${o.kodeObat}', '${o.satuan}')" ${o.stok === 0 ? 'disabled' : ''} class="px-2 py-1 bg-brand-50 hover:bg-brand-100 text-brand-700 font-bold text-[10px] rounded-lg border border-brand-200 transition-all shadow-2xs flex items-center gap-0.5 disabled:opacity-50">
+                                            <span class="material-symbols-outlined text-[13px]">add_shopping_cart</span>
+                                            <span>+Keranjang</span>
+                                        </button>
+
+                                        <!-- Direct Buy Button -->
+                                        <button id="btn-buy-${o.id}" onclick="beliObatDirect(${o.id}, '${o.namaObat}', ${o.harga}, ${o.stok})" ${o.stok === 0 ? 'disabled' : ''} class="px-2.5 py-1 bg-brand-600 hover:bg-brand-700 disabled:bg-slate-200 disabled:text-slate-400 text-white font-bold text-[10px] rounded-lg shadow-2xs transition-all flex items-center gap-0.5">
+                                            <span class="material-symbols-outlined text-[13px]">storefront</span>
+                                            <span>Ambil</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            document.getElementById('btn-prev-page').disabled = (currentPage === 1);
+            document.getElementById('btn-next-page').disabled = (currentPage === totalPages);
+
+            const pageNums = document.getElementById('page-numbers');
+            pageNums.innerHTML = '';
+            for (let i = 1; i <= totalPages; i++) {
+                pageNums.innerHTML += `
+                    <button onclick="goToPage(${i})" class="w-7 h-7 rounded-xl font-extrabold text-xs transition-all ${i === currentPage ? 'bg-brand-600 text-white shadow-sm scale-105' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
+                        ${i}
+                    </button>
+                `;
+            }
+        }
+
+        function changePage(delta) {
+            currentPage += delta;
+            renderObatGrid();
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            renderObatGrid();
+        }
+
+        // CART LOGIC
+        function addToCart(obatId, namaObat, harga, maxStock, kodeObat, satuan) {
+            const qtyAdd = obatQuantities[obatId] || 1;
+            const existing = cartItems.find(item => item.obatId === obatId);
+
+            if (existing) {
+                if (existing.qty + qtyAdd > maxStock) {
+                    Toast.error(`Jumlah di keranjang (${existing.qty + qtyAdd}) melebihi stok yang ada (${maxStock}).`, 'Batas Stok');
+                    return;
+                }
+                existing.qty += qtyAdd;
+            } else {
+                if (qtyAdd > maxStock) {
+                    Toast.error(`Stok tidak mencukupi (${maxStock}).`, 'Stok Terbatas');
+                    return;
+                }
+                cartItems.push({
+                    obatId, namaObat, harga, qty: qtyAdd, maxStock, kodeObat, satuan
+                });
+            }
+
+            saveCartToStorage();
+            Toast.success(`${qtyAdd} ${namaObat} ditambahkan ke Keranjang Saya!`, 'Keranjang Diperbarui');
+        }
+
+        function openModalKeranjang() {
+            renderCartModal();
+            openModal('modal-keranjang');
+        }
+
+        function updateCartItemQty(obatId, delta) {
+            const item = cartItems.find(x => x.obatId === obatId);
+            if (!item) return;
+
+            item.qty += delta;
+            if (item.qty <= 0) {
+                cartItems = cartItems.filter(x => x.obatId !== obatId);
+            } else if (item.qty > item.maxStock) {
+                item.qty = item.maxStock;
+                Toast.error(`Jumlah melebihi stok yang ada (${item.maxStock}).`);
+            }
+
+            saveCartToStorage();
+            renderCartModal();
+        }
+
+        function removeCartItem(obatId) {
+            cartItems = cartItems.filter(x => x.obatId !== obatId);
+            saveCartToStorage();
+            renderCartModal();
+        }
+
+        function clearCart() {
+            cartItems = [];
+            saveCartToStorage();
+            renderCartModal();
+            Toast.info('Keranjang reservasi telah dikosongkan.');
+        }
+
+        function renderCartModal() {
+            const listEl = document.getElementById('cart-item-list');
+            const totalEl = document.getElementById('cart-grand-total');
+            const btnCheckout = document.getElementById('btn-checkout-cart');
+
+            if (cartItems.length === 0) {
+                listEl.innerHTML = `
+                    <div class="p-8 text-center text-slate-400 space-y-2">
+                        <span class="material-symbols-outlined text-[40px]">shopping_cart</span>
+                        <h4 class="text-xs font-bold text-slate-700">Keranjang Masih Kosong</h4>
+                        <p class="text-[11px]">Silakan pilih obat dari katalog dan klik tombol (+ Tambah ke Keranjang).</p>
+                    </div>
+                `;
+                totalEl.innerText = 'Rp 0';
+                btnCheckout.disabled = true;
+                btnCheckout.classList.add('opacity-50', 'cursor-not-allowed');
+                return;
+            }
+
+            btnCheckout.disabled = false;
+            btnCheckout.classList.remove('opacity-50', 'cursor-not-allowed');
+
+            let grandTotal = 0;
+            listEl.innerHTML = cartItems.map(item => {
+                const subtotal = item.harga * item.qty;
+                grandTotal += subtotal;
+                return `
+                    <div class="p-3.5 bg-slate-50 border border-slate-200/80 rounded-2xl flex items-center justify-between gap-3">
+                        <div class="space-y-0.5 flex-1 min-w-0">
+                            <span class="text-[10px] font-mono text-brand-700 font-bold">${item.kodeObat}</span>
+                            <h4 class="text-xs font-extrabold text-slate-900 truncate">${item.namaObat}</h4>
+                            <div class="text-xs font-bold text-slate-600">Rp ${Number(item.harga).toLocaleString('id-ID')} / ${item.satuan}</div>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <div class="flex items-center border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                                <button onclick="updateCartItemQty(${item.obatId}, -1)" class="w-6 h-6 flex items-center justify-center font-bold text-slate-700 hover:bg-slate-100 text-xs">-</button>
+                                <span class="w-7 text-center font-extrabold text-xs text-slate-900">${item.qty}</span>
+                                <button onclick="updateCartItemQty(${item.obatId}, 1)" class="w-6 h-6 flex items-center justify-center font-bold text-slate-700 hover:bg-slate-100 text-xs">+</button>
+                            </div>
+
+                            <div class="text-right min-w-[80px]">
+                                <div class="text-xs font-extrabold text-brand-700">Rp ${Number(subtotal).toLocaleString('id-ID')}</div>
+                            </div>
+
+                            <button onclick="removeCartItem(${item.obatId})" class="text-rose-400 hover:text-rose-600 p-1">
+                                <span class="material-symbols-outlined text-[18px]">delete</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            totalEl.innerText = `Rp ${Number(grandTotal).toLocaleString('id-ID')}`;
+        }
+
+        async function checkoutMultiItemCart() {
+            if (cartItems.length === 0) return;
+
+            const user = API.getUser();
+            const btn = document.getElementById('btn-checkout-cart');
+            btn.disabled = true;
+            btn.innerHTML = `<span class="inline-block animate-spin font-bold">↻</span> Memproses Checkout...`;
+
+            try {
+                const checkoutItems = cartItems.map(i => ({ obatId: i.obatId, jumlah: i.qty }));
+                const res = await API.post('/pharmacy/transaksi/checkout', {
+                    pasienId: user ? user.id : 1,
+                    kasirId: 1,
+                    metodePembayaran: 'CASH',
+                    items: checkoutItems
+                });
+
+                const now = new Date();
+                const dateStr = `${now.getDate()} Sept ${now.getFullYear()}, ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')} WIB`;
+
+                let totalBayar = 0;
+                const itemsReport = cartItems.map(i => {
+                    const sub = i.harga * i.qty;
+                    totalBayar += sub;
+                    return {
+                        namaObat: i.namaObat,
+                        jumlah: i.qty,
+                        harga: i.harga,
+                        subtotal: sub
+                    };
+                });
+
+                const strukData = {
+                    invoiceNo: res.nomorInvoice || (`INV-${Date.now()}`),
+                    pasienNama: user ? user.namaLengkap : 'Ahmad Dahlan',
+                    tanggal: dateStr,
+                    items: itemsReport,
+                    totalHarga: totalBayar
+                };
+
+                saveStrukToHistory(strukData);
+
+                Toast.success(`Reservasi ${cartItems.length} jenis obat berhasil! Struk Bukti Digital terbit.`, 'Checkout Multi-Item Sukses');
+
+                closeModal('modal-keranjang');
+                clearCart();
+                showDigitalInvoiceStruk(strukData);
+
+                await loadObatData();
+            } catch (e) {
+                Toast.error(e.message || 'Gagal checkout keranjang obat.', 'Checkout Gagal');
+                btn.disabled = false;
+                btn.innerHTML = `<span class="material-symbols-outlined text-[18px]">receipt_long</span> <span>Checkout & Terbitkan Struk</span>`;
+            }
+        }
+
+        async function beliObatDirect(obatId, namaObat, hargaSatuan, stokAvailable) {
+            const user = API.getUser();
+            const qty = obatQuantities[obatId] || 1;
+
+            if (qty > stokAvailable) {
+                Toast.error(`Jumlah beli (${qty}) melebihi stok yang tersedia (${stokAvailable}).`, 'Stok Tidak Cukup');
+                return;
+            }
+
+            const btn = document.getElementById(`btn-buy-${obatId}`);
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `<span class="inline-block animate-spin font-bold">↻</span>`;
+            }
+
+            try {
+                const res = await API.post('/pharmacy/transaksi/checkout', {
+                    pasienId: user ? user.id : 1,
+                    kasirId: 1,
+                    metodePembayaran: 'CASH',
+                    items: [
+                        { obatId: obatId, jumlah: qty }
+                    ]
+                });
+
+                const now = new Date();
+                const dateStr = `${now.getDate()} Sept ${now.getFullYear()}, ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')} WIB`;
+                const grandTotal = hargaSatuan * qty;
+
+                const strukData = {
+                    invoiceNo: res.nomorInvoice || (`INV-${Date.now()}`),
+                    pasienNama: user ? user.namaLengkap : 'Ahmad Dahlan',
+                    tanggal: dateStr,
+                    items: [
+                        { namaObat, jumlah: qty, harga: hargaSatuan, subtotal: grandTotal }
+                    ],
+                    totalHarga: grandTotal
+                };
+
+                saveStrukToHistory(strukData);
+                Toast.success(`Reservasi ${qty} item ${namaObat} berhasil! Struk Bukti Digital terbit.`, 'Reservasi Sukses');
+                showDigitalInvoiceStruk(strukData);
+
+                obatQuantities[obatId] = 1;
+                await loadObatData();
+            } catch (e) {
+                Toast.error(e.message || 'Gagal mereservasi obat.', 'Gagal');
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = `<span class="material-symbols-outlined text-[14px]">storefront</span> <span>Ambil</span>`;
+                }
+            }
+        }
+
+        function showDigitalInvoiceStruk(strukData) {
+            document.getElementById('struk-invoice-no').innerText = strukData.invoiceNo;
+            document.getElementById('struk-pasien-nama').innerText = strukData.pasienNama;
+            document.getElementById('struk-tanggal').innerText = strukData.tanggal;
+
+            const container = document.getElementById('struk-items-container');
+            const items = strukData.items || [
+                { namaObat: strukData.namaObat, jumlah: strukData.jumlah || 1, subtotal: strukData.totalHarga }
+            ];
+
+            container.innerHTML = items.map(i => {
+                const qty = i.jumlah || 1;
+                const unitPrice = i.harga || (i.subtotal / qty);
+                return `
+                    <div class="p-2.5 bg-slate-50 border border-slate-200/60 rounded-2xl flex justify-between items-center text-xs">
+                        <div class="space-y-0.5">
+                            <div class="font-extrabold text-slate-900">${i.namaObat}</div>
+                            <div class="text-[11px] font-bold text-brand-700 flex items-center gap-1.5">
+                                <span class="px-2 py-0.5 bg-brand-100 text-brand-900 rounded-md font-black text-[10px]">${qty} Pcs / Botol</span>
+                                <span class="text-slate-400 font-normal">×</span>
+                                <span>Rp ${Number(unitPrice).toLocaleString('id-ID')}</span>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider block">SUBTOTAL</span>
+                            <span class="font-black text-slate-900 text-sm">Rp ${Number(i.subtotal).toLocaleString('id-ID')}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('struk-total-harga').innerText = `Rp ${Number(strukData.totalHarga).toLocaleString('id-ID')}`;
+
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(strukData.invoiceNo)}`;
+            document.getElementById('struk-qr-code').src = qrUrl;
+
+            openModal('modal-struk-bukti');
+        }
+
+        function openModalDaftarStruk() {
+            const list = getMySavedStrukList();
+            const container = document.getElementById('arsip-struk-list');
+
+            if (list.length === 0) {
+                container.innerHTML = `
+                    <div class="p-8 text-center text-slate-400 space-y-2">
+                        <span class="material-symbols-outlined text-[40px]">receipt</span>
+                        <h4 class="text-xs font-bold text-slate-700">Belum Ada Struk Reservasi</h4>
+                        <p class="text-[11px]">Silakan reservasi obat melalui katalog untuk mendapatkan struk bukti digital.</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = list.map((s, idx) => `
+                    <div class="p-4 bg-slate-50 hover:bg-brand-50/40 border border-slate-200/80 rounded-2xl flex items-center justify-between transition-colors group">
+                        <div class="space-y-1">
+                            <div class="flex items-center gap-2">
+                                <span class="px-2.5 py-0.5 bg-brand-100 font-mono text-brand-800 font-bold rounded-lg text-[10px]">${s.invoiceNo}</span>
+                                <span class="text-[10px] text-slate-400">${s.tanggal}</span>
+                            </div>
+                            <div class="text-xs font-extrabold text-slate-900">
+                                ${s.items ? s.items.map(i => i.namaObat).join(', ') : s.namaObat}
+                            </div>
+                            <div class="text-xs text-brand-700 font-bold">Total: Rp ${Number(s.totalHarga).toLocaleString('id-ID')}</div>
+                        </div>
+
+                        <button onclick='reopenStruk(${JSON.stringify(s)})' class="px-3.5 py-2 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl shadow-sm flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-[16px]">qr_code_2</span>
+                            <span>Buka Struk</span>
+                        </button>
+                    </div>
+                `).join('');
+            }
+
+            openModal('modal-daftar-struk');
+        }
+
+        function reopenStruk(strukData) {
+            closeModal('modal-daftar-struk');
+            showDigitalInvoiceStruk(strukData);
+        }
+
+        async function openModalTebusResep() {
+            openModal('modal-tebus-resep');
+            const listContainer = document.getElementById('resep-pasien-list');
+            listContainer.innerHTML = '<p class="text-xs text-slate-400 italic p-3">Memuat data resep digital Anda...</p>';
+
+            const user = API.getUser();
+            if (!user) return;
+
+            try {
+                const reseps = await API.get(`/pharmacy/resep`);
+                const userReseps = Array.isArray(reseps) ? reseps.filter(r => r.pasien && r.pasien.email && r.pasien.email.toLowerCase() === user.email.toLowerCase()) : [];
+
+                if (userReseps.length === 0) {
+                    listContainer.innerHTML = `
+                        <div class="p-6 text-center text-slate-400 space-y-2">
+                            <span class="material-symbols-outlined text-[36px]">receipt_long</span>
+                            <p class="text-xs font-semibold">Belum ada e-resep aktif dari dokter.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                listContainer.innerHTML = userReseps.map(r => `
+                    <div class="p-4 bg-slate-50 border border-slate-200/80 rounded-2xl space-y-2">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="text-[10px] font-mono text-brand-700 font-bold uppercase">${r.nomorResep || 'RSP-001'}</span>
+                                <h4 class="text-xs font-bold text-slate-900">${r.dokter?.namaDokter || 'Dokter Spesialis'}</h4>
+                            </div>
+                            <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full text-[10px] font-bold">${r.status || 'SIAP_DIAMBIL'}</span>
+                        </div>
+                        <p class="text-xs text-slate-700 font-medium">${r.catatanResep || 'Resep pemeriksaan klinik.'}</p>
+                        <button onclick="Toast.success('Permintaan tebus resep telah dikirim ke Apoteker!')" class="w-full py-2 bg-brand-600 text-white font-bold text-xs rounded-xl shadow-sm hover:bg-brand-700">Tebus Resep Ke Apotek</button>
+                    </div>
+                `).join('');
+            } catch (e) {
+                listContainer.innerHTML = '<p class="text-xs text-rose-500 italic p-3">Gagal memuat resep digital.</p>';
+            }
+        }
+    </script>
+    <script src="../../js/chat-widget.js"></script>
+</body>
+
+</html>

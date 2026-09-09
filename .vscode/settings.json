@@ -1,0 +1,5 @@
+{
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "boot-java.validation.boot-version.check": "off",
+    "boot-java.validation.java.boot3": "OFF"
+}

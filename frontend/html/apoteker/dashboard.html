@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portal Apoteker & Kasir - Sentra Farma</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50: '#F0FDF4', 100: '#DCFCE7', 200: '#BBF7D0', 300: '#86EFAC', 400: '#4ADE80', 500: '#10B981', 600: '#059669', 700: '#047857', 800: '#065F46', 900: '#064E3B', 950: '#022C22' },
+                        surface: '#F8FAFC'
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+
+<body class="bg-surface font-sans text-slate-800 flex min-h-screen antialiased selection:bg-brand-100 selection:text-brand-800">
+
+    <!-- LEFT SIDEBAR DOCK -->
+    <aside class="fixed left-6 top-6 bottom-6 w-20 bg-white/80 backdrop-blur-xl border border-slate-200/60 shadow-xl shadow-slate-200/50 rounded-2xl z-50 flex flex-col items-center justify-between py-8">
+        <!-- Logo Brand -->
+        <div class="flex flex-col items-center gap-1">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/30">
+                <span class="material-symbols-outlined text-[28px]">medication</span>
+            </div>
+            <span class="text-[10px] font-bold text-emerald-800 tracking-wider uppercase mt-1">Apotek</span>
+        </div>
+
+        <!-- Navigation Icons -->
+        <nav class="flex flex-col gap-8">
+            <a href="#resep" class="relative group p-3 rounded-xl bg-emerald-50 text-emerald-600 transition-all duration-300">
+                <span class="material-symbols-outlined text-[26px]">receipt_long</span>
+                <span class="absolute left-full ml-4 px-3 py-1 bg-slate-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-md">Penebusan Resep</span>
+            </a>
+            <a href="#inventory" class="relative group p-3 rounded-xl text-slate-400 hover:text-emerald-600 hover:bg-slate-50 transition-all duration-300">
+                <span class="material-symbols-outlined text-[26px]">inventory_2</span>
+                <span class="absolute left-full ml-4 px-3 py-1 bg-slate-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-md">Katalog Obat</span>
+            </a>
+        </nav>
+
+        <!-- Logout Icon -->
+        <button onclick="logout()" class="relative group p-3 rounded-xl text-rose-400 hover:text-rose-600 hover:bg-rose-50 transition-all duration-300">
+            <span class="material-symbols-outlined text-[26px]">logout</span>
+            <span class="absolute left-full ml-4 px-3 py-1 bg-slate-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-md">Keluar</span>
+        </button>
+    </aside>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <div class="flex-1 ml-32 mr-10 transition-all">
+        
+        <!-- HEADER BAR -->
+        <header class="h-24 flex items-center justify-between px-10 bg-surface/80 backdrop-blur-md sticky top-0 z-40 border-b border-slate-200/50">
+            <div>
+                <h1 class="text-xl font-bold text-slate-900">Dashboard Apotek & Kasir Obat</h1>
+                <p class="text-xs text-slate-500">Penebusan resep dokter, kasir penjualan obat, dan pengelolaan stok obat</p>
+            </div>
+            
+            <div id="low-stock-badge" class="hidden px-3.5 py-1.5 bg-amber-50 text-amber-700 border border-amber-200 text-xs font-semibold rounded-full flex items-center gap-1.5 cursor-pointer shadow-sm" onclick="loadLowStock()">
+                <span class="material-symbols-outlined text-[18px]">warning</span> <span id="low-stock-count">0</span> Obat Stok Kritis!
+            </div>
+        </header>
+
+        <!-- MAIN WORKSPACE -->
+        <main class="p-10 space-y-8 max-w-6xl mx-auto">
+            
+            <!-- HERO BANNER -->
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 p-8 rounded-3xl text-white shadow-xl shadow-emerald-950/10 relative overflow-hidden">
+                <div class="space-y-2 z-10">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-emerald-200 text-xs font-medium">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                        Loket Apotek Sentra Farma
+                    </div>
+                    <h2 class="text-2xl font-bold">apt. Bambang Sugianto, S.Farm 💊</h2>
+                    <p class="text-sm text-emerald-100/80 max-w-xl">
+                        STRA: 1988/001/APO • Kelola Stok & Penebusan E-Resep Digital
+                    </p>
+                </div>
+            </div>
+
+            <!-- PENEBUSAN RESEP MEDIS MASUK -->
+            <section id="resep" class="bg-white rounded-3xl p-8 border border-slate-200/80 shadow-sm space-y-6">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+                            <span class="material-symbols-outlined text-[24px]">receipt_long</span>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-bold text-slate-900">Antrian Resep Medis Masuk</h3>
+                            <p class="text-xs text-slate-500">Resep elektronik yang terkirim dari ruang periksa dokter</p>
+                        </div>
+                    </div>
+
+                    <button onclick="loadResepPending()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl flex items-center gap-1.5 transition-colors">
+                        <span class="material-symbols-outlined text-[16px]">refresh</span> Refresh
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="border-b border-slate-200 text-slate-400 font-semibold uppercase tracking-wider">
+                                <th class="pb-3">ID Resep</th>
+                                <th class="pb-3">Tanggal</th>
+                                <th class="pb-3">Status</th>
+                                <th class="pb-3">Jumlah Item</th>
+                                <th class="pb-3 text-right">Aksi Penebusan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resep-list" class="divide-y divide-slate-100 text-slate-700">
+                            <!-- Loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- MANAJEMEN INVENTORY OBAT -->
+            <section id="inventory" class="bg-white rounded-3xl p-8 border border-slate-200/80 shadow-sm space-y-6">
+                <div class="flex flex-wrap justify-between items-center gap-4 border-b border-slate-100 pb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold">
+                            <span class="material-symbols-outlined text-[24px]">inventory_2</span>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-bold text-slate-900">Manajemen Inventory & Stok Obat</h3>
+                            <p class="text-xs text-slate-500">Kelola katalog, harga, stok minimal, dan tanggal kadaluarsa</p>
+                        </div>
+                    </div>
+
+                    <button onclick="openModalObat()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl shadow-md flex items-center gap-1.5 transition-all">
+                        <span class="material-symbols-outlined text-[18px]">add</span> Tambah Obat Baru
+                    </button>
+                </div>
+
+                <!-- Controls: Search, Filter, Sort -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3 top-3 text-slate-400 text-[18px]">search</span>
+                        <input type="text" id="search-obat" placeholder="Cari nama obat..." oninput="filterObat()" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 pl-9 pr-4 text-slate-800 focus:outline-none focus:border-emerald-500" />
+                    </div>
+                    <div>
+                        <select id="filter-kategori" onchange="filterObat()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800 focus:outline-none focus:border-emerald-500">
+                            <option value="">Semua Kategori</option>
+                            <option value="1">Obat Bebas</option>
+                            <option value="2">Obat Bebas Terbatas</option>
+                            <option value="3">Obat Keras</option>
+                            <option value="4">Vitamin & Suplemen</option>
+                            <option value="5">Alat Kesehatan</option>
+                        </select>
+                    </div>
+                    <div>
+                        <select id="sort-obat" onchange="filterObat()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800 focus:outline-none focus:border-emerald-500">
+                            <option value="terbaru">Urutkan: Terbaru</option>
+                            <option value="terlama">Urutkan: Terlama</option>
+                            <option value="a-z">Urutkan: Nama A-Z</option>
+                            <option value="z-a">Urutkan: Nama Z-A</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="border-b border-slate-200 text-slate-400 font-semibold uppercase tracking-wider">
+                                <th class="pb-3">Kode</th>
+                                <th class="pb-3">Nama Obat</th>
+                                <th class="pb-3">Kategori</th>
+                                <th class="pb-3">Harga</th>
+                                <th class="pb-3">Stok</th>
+                                <th class="pb-3">Kadaluarsa</th>
+                                <th class="pb-3 text-right">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="obat-list" class="divide-y divide-slate-100 text-slate-700">
+                            <!-- Loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="flex justify-between items-center text-xs text-slate-500 pt-4 border-t border-slate-100">
+                    <span id="page-info">Menampilkan halaman 1</span>
+                    <div class="flex gap-2">
+                        <button onclick="prevPage()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-slate-700 font-medium">Previous</button>
+                        <button onclick="nextPage()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-slate-700 font-medium">Next</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/toast.js"></script>
+    <script src="../../js/auth-guard.js"></script>
+    <script>
+        let currentPage = 1;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadResepPending();
+            filterObat();
+            checkLowStock();
+        });
+
+        async function checkLowStock() {
+            try {
+                const low = await API.get('/pharmacy/obat/low-stock');
+                if (low && low.length > 0) {
+                    document.getElementById('low-stock-count').innerText = low.length;
+                    document.getElementById('low-stock-badge').classList.remove('hidden');
+                }
+            } catch(e) {}
+        }
+
+        async function loadResepPending() {
+            try {
+                const reseps = await API.get('/pharmacy/resep/status/PENDING');
+                const tbody = document.getElementById('resep-list');
+                tbody.innerHTML = '';
+
+                if (!reseps || reseps.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-slate-400 italic">Tidak ada resep pending untuk ditebus.</td></tr>`;
+                    return;
+                }
+
+                reseps.forEach(r => {
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-slate-50 transition-colors";
+                    tr.innerHTML = `
+                        <td class="py-3 font-bold text-emerald-700">RSP-#${r.id}</td>
+                        <td class="py-3 text-slate-500 text-xs">${new Date(r.createdAt).toLocaleString('id-ID')}</td>
+                        <td class="py-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-700">${r.status}</span></td>
+                        <td class="py-3 font-bold text-slate-800">${r.items ? r.items.length : 0} Obat</td>
+                        <td class="py-3 text-right">
+                            <button onclick="tebusResep(${r.id})" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl transition-colors">Tebus & Potong Stok</button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch(e) {}
+        }
+
+        async function tebusResep(id) {
+            try {
+                await API.patch(`/pharmacy/resep/${id}/status`, { status: 'SELESAI' });
+                Toast.success(`Resep RSP-#${id} berhasil ditebus & stok obat otomatis dipotong!`, 'Resep Selesai');
+                loadResepPending();
+                filterObat();
+            } catch(err) {
+                Toast.error(err.message || 'Gagal menebus resep.', 'Error');
+            }
+        }
+
+        async function filterObat() {
+            try {
+                const search = document.getElementById('search-obat').value;
+                const cat = document.getElementById('filter-kategori').value;
+                const sort = document.getElementById('sort-obat').value;
+
+                const res = await API.get(`/pharmacy/obat?page=${currentPage}&limit=8&search=${search}&categoryId=${cat}&sort=${sort}`);
+                const tbody = document.getElementById('obat-list');
+                tbody.innerHTML = '';
+
+                if (!res.content || res.content.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-slate-400 italic">Obat tidak ditemukan.</td></tr>`;
+                    return;
+                }
+
+                res.content.forEach(o => {
+                    const isLow = o.stok <= o.minStok;
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-slate-50 transition-colors";
+                    tr.innerHTML = `
+                        <td class="py-3 font-bold text-slate-600 text-xs">${o.kodeObat}</td>
+                        <td class="py-3 font-semibold text-slate-900">${o.namaObat}</td>
+                        <td class="py-3 text-xs text-slate-500">${o.kategori ? o.kategori.namaKategori : '-'}</td>
+                        <td class="py-3 font-bold text-emerald-700">Rp ${o.harga.toLocaleString('id-ID')}</td>
+                        <td class="py-3"><span class="px-2 py-0.5 rounded text-xs font-bold ${isLow ? 'bg-rose-100 text-rose-700 border border-rose-200' : 'bg-slate-100 text-slate-700'}">${o.stok} ${o.satuan} ${isLow ? '⚠️ Kritis' : ''}</span></td>
+                        <td class="py-3 text-xs text-slate-500">${o.tanggalKadaluarsa || '-'}</td>
+                        <td class="py-3 text-right">
+                            <button onclick="deleteObat(${o.id})" class="px-2.5 py-1 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-lg text-xs font-semibold transition-all">Hapus</button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                document.getElementById('page-info').innerText = `Halaman ${res.number + 1} dari ${res.totalPages || 1} (Total: ${res.totalElements || 0} Obat)`;
+            } catch(e) {}
+        }
+
+        function prevPage() { if (currentPage > 1) { currentPage--; filterObat(); } }
+        function nextPage() { currentPage++; filterObat(); }
+
+        async function deleteObat(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus data obat ini (soft delete)?')) {
+                try {
+                    await API.delete(`/pharmacy/obat/${id}`);
+                    Toast.success('Obat berhasil dihapus.', 'Soft Delete');
+                    filterObat();
+                } catch(e) {}
+            }
+        }
+
+        function openModalObat() {
+            const nama = prompt('Masukkan Nama Obat Baru:');
+            if (nama) {
+                API.post('/pharmacy/obat', {
+                    namaObat: nama,
+                    kodeObat: 'OBT-' + Date.now().toString().slice(-4),
+                    satuan: 'Strip',
+                    harga: 10000.0,
+                    stok: 50,
+                    minStok: 10,
+                    tanggalKadaluarsa: '2028-12-31',
+                    kategori: { id: 1 }
+                }).then(() => {
+                    Toast.success('Obat berhasil ditambahkan!', 'Sukses');
+                    filterObat();
+                }).catch(err => Toast.error(err.message));
+            }
+        }
+    </script>
+</body>
+</html>

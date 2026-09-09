@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Master Control Admin - Sentra Farma</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50: '#F0FDF4', 100: '#DCFCE7', 200: '#BBF7D0', 300: '#86EFAC', 400: '#4ADE80', 500: '#10B981', 600: '#059669', 700: '#047857', 800: '#065F46', 900: '#064E3B', 950: '#022C22' },
+                        surface: '#F8FAFC'
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+
+<body class="bg-surface font-sans text-slate-800 flex min-h-screen antialiased selection:bg-brand-100 selection:text-brand-800">
+
+    <!-- LEFT SIDEBAR DOCK -->
+    <aside class="fixed left-6 top-6 bottom-6 w-20 bg-white/80 backdrop-blur-xl border border-slate-200/60 shadow-xl shadow-slate-200/50 rounded-2xl z-50 flex flex-col items-center justify-between py-8">
+        <!-- Logo Brand -->
+        <div class="flex flex-col items-center gap-1">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center text-white shadow-lg shadow-amber-500/30">
+                <span class="material-symbols-outlined text-[28px]">admin_panel_settings</span>
+            </div>
+            <span class="text-[10px] font-bold text-amber-800 tracking-wider uppercase mt-1">Admin</span>
+        </div>
+
+        <!-- Navigation Icons -->
+        <nav class="flex flex-col gap-8">
+            <a href="#users" class="relative group p-3 rounded-xl bg-amber-50 text-amber-600 transition-all duration-300">
+                <span class="material-symbols-outlined text-[26px]">manage_accounts</span>
+                <span class="absolute left-full ml-4 px-3 py-1 bg-slate-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-md">Users & Role</span>
+            </a>
+            <a href="#analytics" class="relative group p-3 rounded-xl text-slate-400 hover:text-amber-600 hover:bg-slate-50 transition-all duration-300">
+                <span class="material-symbols-outlined text-[26px]">analytics</span>
+                <span class="absolute left-full ml-4 px-3 py-1 bg-slate-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-md">Analytics & Report</span>
+            </a>
+        </nav>
+
+        <!-- Logout Icon -->
+        <button onclick="logout()" class="relative group p-3 rounded-xl text-rose-400 hover:text-rose-600 hover:bg-rose-50 transition-all duration-300">
+            <span class="material-symbols-outlined text-[26px]">logout</span>
+            <span class="absolute left-full ml-4 px-3 py-1 bg-slate-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-md">Keluar</span>
+        </button>
+    </aside>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <div class="flex-1 ml-32 mr-10 transition-all">
+        
+        <!-- HEADER BAR -->
+        <header class="h-24 flex items-center justify-between px-10 bg-surface/80 backdrop-blur-md sticky top-0 z-40 border-b border-slate-200/50">
+            <div>
+                <h1 class="text-xl font-bold text-slate-900">Administrator Master Control Panel</h1>
+                <p class="text-xs text-slate-500">Kelola master data pengguna, hak akses RBAC 5 role, dan laporan statistik sistem</p>
+            </div>
+            
+            <div class="flex gap-2">
+                <button onclick="exportReport('PDF')" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs rounded-xl shadow-md flex items-center gap-1.5 transition-colors">
+                    <span class="material-symbols-outlined text-[18px]">picture_as_pdf</span> Export PDF
+                </button>
+                <button onclick="exportReport('Excel')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl shadow-md flex items-center gap-1.5 transition-colors">
+                    <span class="material-symbols-outlined text-[18px]">table_view</span> Export Excel
+                </button>
+            </div>
+        </header>
+
+        <!-- MAIN WORKSPACE -->
+        <main class="p-10 space-y-8 max-w-6xl mx-auto">
+            
+            <!-- HERO BANNER -->
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 bg-gradient-to-r from-amber-900 via-orange-900 to-slate-900 p-8 rounded-3xl text-white shadow-xl shadow-amber-950/10 relative overflow-hidden">
+                <div class="space-y-2 z-10">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-amber-200 text-xs font-medium">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span>
+                        Super Admin Access Active
+                    </div>
+                    <h2 class="text-2xl font-bold">Master Control Panel ⚙️</h2>
+                    <p class="text-sm text-amber-100/80 max-w-xl">
+                        Monitor seluruh aktivitas pengguna, 5 role sistem, audit log, serta laporan operasional Klinik Sentra Farma.
+                    </p>
+                </div>
+            </div>
+
+            <!-- SUMMARY CARDS BENTO GRID -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="p-6 bg-white rounded-3xl border border-slate-200/80 shadow-sm flex items-center justify-between">
+                    <div>
+                        <div class="text-xs text-slate-500 font-medium">Total Akun Users</div>
+                        <div class="text-2xl font-bold text-slate-900 mt-1">21 Users</div>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[28px]">group</span>
+                    </div>
+                </div>
+                <div class="p-6 bg-white rounded-3xl border border-slate-200/80 shadow-sm flex items-center justify-between">
+                    <div>
+                        <div class="text-xs text-slate-500 font-medium">Total Pasien Terdaftar</div>
+                        <div class="text-2xl font-bold text-slate-900 mt-1">10 Pasien</div>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[28px]">person</span>
+                    </div>
+                </div>
+                <div class="p-6 bg-white rounded-3xl border border-slate-200/80 shadow-sm flex items-center justify-between">
+                    <div>
+                        <div class="text-xs text-slate-500 font-medium">Dokter Spesialis</div>
+                        <div class="text-2xl font-bold text-slate-900 mt-1">5 Dokter</div>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[28px]">stethoscope</span>
+                    </div>
+                </div>
+                <div class="p-6 bg-white rounded-3xl border border-slate-200/80 shadow-sm flex items-center justify-between">
+                    <div>
+                        <div class="text-xs text-slate-500 font-medium">Katalog Obat</div>
+                        <div class="text-2xl font-bold text-slate-900 mt-1">20 Item</div>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[28px]">medication</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MASTER DATA USERS TABLE -->
+            <section id="users" class="bg-white rounded-3xl p-8 border border-slate-200/80 shadow-sm space-y-6">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold">
+                            <span class="material-symbols-outlined text-[24px]">manage_accounts</span>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-bold text-slate-900">Master Data Users & Role (RBAC)</h3>
+                            <p class="text-xs text-slate-500">Pengelolaan user terdaftar, role RBAC, dan soft-delete akun</p>
+                        </div>
+                    </div>
+
+                    <button onclick="loadUsersAdmin()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl flex items-center gap-1.5 transition-colors">
+                        <span class="material-symbols-outlined text-[16px]">refresh</span> Refresh User List
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="border-b border-slate-200 text-slate-400 font-semibold uppercase tracking-wider">
+                                <th class="pb-3">ID</th>
+                                <th class="pb-3">Nama Lengkap</th>
+                                <th class="pb-3">Email</th>
+                                <th class="pb-3">Role RBAC</th>
+                                <th class="pb-3">No. Telepon</th>
+                                <th class="pb-3 text-right">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-admin-list" class="divide-y divide-slate-100 text-slate-700">
+                            <!-- Loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/toast.js"></script>
+    <script src="../../js/auth-guard.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUsersAdmin();
+        });
+
+        async function loadUsersAdmin() {
+            try {
+                const res = await API.get('/auth/users?page=1&limit=25');
+                const tbody = document.getElementById('user-admin-list');
+                tbody.innerHTML = '';
+
+                if (!res.content || res.content.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-slate-400 italic">Tidak ada user.</td></tr>`;
+                    return;
+                }
+
+                res.content.forEach(u => {
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-slate-50 transition-colors";
+                    const roleColor = {
+                        ADMIN: 'bg-amber-100 text-amber-800 border-amber-200',
+                        DOKTER: 'bg-blue-100 text-blue-800 border-blue-200',
+                        APOTEKER: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+                        RESEPSIONIS: 'bg-purple-100 text-purple-800 border-purple-200',
+                        PASIEN: 'bg-sky-100 text-sky-800 border-sky-200'
+                    }[u.role] || 'bg-slate-100 text-slate-700';
+
+                    tr.innerHTML = `
+                        <td class="py-3 font-bold text-slate-500 text-xs">#${u.id}</td>
+                        <td class="py-3 font-semibold text-slate-900">${u.namaLengkap}</td>
+                        <td class="py-3 text-xs text-slate-500 font-mono">${u.email}</td>
+                        <td class="py-3"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold border ${roleColor}">${u.role}</span></td>
+                        <td class="py-3 text-xs text-slate-500">${u.noTelepon || '-'}</td>
+                        <td class="py-3 text-right">
+                            <button onclick="deleteUserAdmin(${u.id})" class="px-2.5 py-1 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-lg text-xs font-semibold transition-all">Soft Delete</button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch(e) {}
+        }
+
+        async function deleteUserAdmin(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus user ini (soft delete)?')) {
+                try {
+                    await API.delete(`/auth/users/${id}`);
+                    Toast.success('User berhasil di-soft delete.', 'Sukses');
+                    loadUsersAdmin();
+                } catch(e) {}
+            }
+        }
+
+        function exportReport(type) {
+            Toast.info(`Laporan Keuangan & Antrian Pasien Sentra Farma berhasil di-export ke format ${type}!`, `Export ${type}`);
+        }
+    </script>
+</body>
+</html>

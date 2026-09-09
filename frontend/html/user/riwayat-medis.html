@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Riwayat Rekam Medis - Sentra Farma</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#F0FDF4', 100: '#DCFCE7', 200: '#BBF7D0', 500: '#10B981',
+                            600: '#059669', 700: '#047857', 800: '#065F46', 900: '#064E3B'
+                        },
+                        surface: '#F8FAFC'
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        html,
+        body {
+            min-height: 100vh;
+            overflow-y: auto !important;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 9999px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+
+        @media (max-width: 1024px) {
+            body {
+                flex-direction: column !important;
+                padding: 0.75rem !important;
+            }
+
+            aside.left-dock {
+                position: relative !important;
+                top: 0 !important;
+                left: 0 !important;
+                bottom: auto !important;
+                width: 100% !important;
+                height: auto !important;
+                flex-direction: row !important;
+                justify-content: space-between !important;
+                padding: 0.5rem 1rem !important;
+                margin-bottom: 0.75rem !important;
+            }
+
+            aside.left-dock nav,
+            aside.left-dock div {
+                flex-direction: row !important;
+                gap: 0.5rem !important;
+            }
+
+            .main-portal-container {
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                height: auto !important;
+                overflow-y: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body
+    class="bg-gradient-to-br from-emerald-50/60 via-teal-50/40 to-slate-50 font-sans text-slate-800 flex min-h-screen antialiased selection:bg-brand-100 selection:text-brand-800 relative overflow-x-hidden">
+
+    <!-- Ambient Glow Mesh Spheres (Matching Auth Theme) -->
+    <div
+        class="fixed -top-40 -left-40 w-[500px] h-[500px] bg-emerald-300/25 rounded-full blur-[120px] pointer-events-none z-0">
+    </div>
+    <div
+        class="fixed top-1/3 -right-40 w-[450px] h-[450px] bg-teal-200/25 rounded-full blur-[100px] pointer-events-none z-0">
+    </div>
+    <div
+        class="fixed -bottom-40 left-1/3 w-[500px] h-[500px] bg-emerald-200/20 rounded-full blur-[120px] pointer-events-none z-0">
+    </div>
+
+    <!-- LEFT SIDEBAR DOCK (COMPACT FLOATING PILL) -->
+    <aside
+        class="left-dock fixed left-6 top-1/2 -translate-y-1/2 w-20 bg-white/95 backdrop-blur-2xl border border-slate-200/80 shadow-xl shadow-slate-300/40 rounded-3xl z-50 flex flex-col items-center py-5 space-y-4">
+        <!-- Navigation Icons -->
+        <nav class="flex flex-col items-center gap-2">
+            <a href="dashboard.html"
+                class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">grid_view</span>
+                <span
+                    class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Dashboard</span>
+            </a>
+            <a href="antrian.html"
+                class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">confirmation_number</span>
+                <span
+                    class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Antrian
+                    Saya</span>
+            </a>
+            <a href="riwayat-medis.html"
+                class="relative group p-2.5 rounded-2xl bg-brand-50 text-brand-600 font-bold transition-all shadow-2xs">
+                <span class="material-symbols-outlined text-[22px]">medical_information</span>
+                <span
+                    class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Riwayat
+                    Medis</span>
+            </a>
+            <a href="katalog-obat.html"
+                class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">medication</span>
+                <span
+                    class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Katalog
+                    Apotek</span>
+            </a>
+            <button onclick="openPillListModal()"
+                class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">alarm</span>
+                <span
+                    class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Pengingat
+                    Obat</span>
+            </button>
+            <button onclick="window.toggleSentraChatWindow()"
+                class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">support_agent</span>
+                <span
+                    class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Tanya
+                    Dokter (Live Chat)</span>
+            </button>
+        </nav>
+
+        <div class="w-8 h-px bg-slate-200/70"></div>
+
+        <!-- Profile & Logout -->
+        <div class="flex flex-col items-center gap-2">
+            <a href="profil.html"
+                class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">person</span>
+                <span
+                    class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Profil
+                    Saya</span>
+            </a>
+            <button onclick="handleLogout()"
+                class="relative group p-2.5 rounded-2xl text-rose-400 hover:text-rose-600 hover:bg-rose-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">logout</span>
+                <span
+                    class="absolute left-full ml-4 px-3 py-1.5 bg-rose-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <div class="main-portal-container flex-1 ml-32 mr-8 transition-all">
+
+        <!-- TRANSPARENT HEADER BAR (MATCHES PAGE BACKGROUND & MODERATELY ENLARGED LOGO) -->
+        <header
+            class="h-24 flex items-center justify-between px-6 sm:px-10 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100/60 transition-all">
+            <div class="flex items-center gap-4">
+                <!-- Brand Logo Link (Moderately Enlarged) -->
+                <a href="dashboard.html" class="flex items-center gap-3 group cursor-pointer shrink-0" title="Sentra Farma">
+                    <img src="../../assets/logo.png" alt="Sentra Farma" class="h-16 sm:h-20 md:h-22 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform" />
+                </a>
+                <div class="h-10 w-px bg-slate-200/80 hidden sm:block"></div>
+                <div>
+                    <h1 class="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight flex items-center gap-2.5">
+                        <span>Riwayat Rekam Medis Digital</span>
+                    </h1>
+                    <p class="text-xs text-slate-500 font-medium">Arsip Diagnosa ICD-10, Catatan Dokter, & E-Resep Obat Pasien</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="profil.html" title="Buka Profil Saya"
+                    class="flex items-center gap-3 pl-4 border-l border-slate-200 group cursor-pointer hover:opacity-90 transition-all">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-brand-700 to-emerald-500 text-white flex items-center justify-center font-extrabold text-sm shadow-md group-hover:scale-105 transition-transform"
+                        id="user-avatar-initials">P</div>
+                    <div class="hidden sm:flex flex-col">
+                        <span id="user-name-badge"
+                            class="text-xs font-extrabold text-slate-900 group-hover:text-emerald-700 transition-colors">Pasien</span>
+                        <span class="text-[10px] text-slate-500 font-medium">Pasien Terdaftar</span>
+                    </div>
+                </a>
+            </div>
+        </header>
+
+        <!-- MAIN WORKSPACE -->
+        <main class="p-8 space-y-8 max-w-6xl mx-auto">
+
+            <!-- VITAL SIGNS SUMMARY BANNER -->
+            <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <div>
+                        <h3 class="text-base font-extrabold text-slate-900">Ringkasan Tanda Vital Historis</h3>
+                        <p class="text-xs text-slate-500">Hasil pengukuran terakhir saat pemeriksaan di Poliklinik</p>
+                    </div>
+                    <button onclick="window.print()"
+                        class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors">
+                        <span class="material-symbols-outlined text-[16px]">print</span>
+                        <span>Cetak Rekam Medis</span>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
+                    <div class="p-4 bg-brand-50/60 rounded-2xl border border-brand-100">
+                        <span class="text-[10px] font-extrabold text-brand-800 uppercase block">TEKANAN DARAH</span>
+                        <span class="text-xl font-extrabold text-slate-900 mt-1 block">120 / 80 <span
+                                class="text-xs font-normal text-slate-500">mmHg</span></span>
+                        <span class="text-[10px] text-emerald-600 font-extrabold">● Normal (Sehat)</span>
+                    </div>
+
+                    <div class="p-4 bg-rose-50/60 rounded-2xl border border-rose-100">
+                        <span class="text-[10px] font-extrabold text-rose-800 uppercase block">DETAK JANTUNG</span>
+                        <span class="text-xl font-extrabold text-slate-900 mt-1 block">78 <span
+                                class="text-xs font-normal text-slate-500">bpm</span></span>
+                        <span class="text-[10px] text-rose-600 font-extrabold">● Normal</span>
+                    </div>
+
+                    <div class="p-4 bg-amber-50/60 rounded-2xl border border-amber-100">
+                        <span class="text-[10px] font-extrabold text-amber-800 uppercase block">SUHU TUBUH</span>
+                        <span class="text-xl font-extrabold text-slate-900 mt-1 block">36.6 <span
+                                class="text-xs font-normal text-slate-500">°C</span></span>
+                        <span class="text-[10px] text-amber-600 font-extrabold">● Optimal</span>
+                    </div>
+
+                    <div class="p-4 bg-blue-50/60 rounded-2xl border border-blue-100">
+                        <span class="text-[10px] font-extrabold text-blue-800 uppercase block">BERAT BADAN</span>
+                        <span class="text-xl font-extrabold text-slate-900 mt-1 block">65.0 <span
+                                class="text-xs font-normal text-slate-500">kg</span></span>
+                        <span class="text-[10px] text-blue-600 font-extrabold">● Ideal</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MEDICAL RECORDS LIST -->
+            <section class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-extrabold text-slate-900">Daftar Riwayat Rekam Medis Pasien</h3>
+                </div>
+
+                <div id="medical-records-list" class="space-y-6">
+                    <!-- Dynamically populated -->
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/toast.js"></script>
+    <script src="../../js/auth-guard.js"></script>
+    <script src="../../js/pengingat.js"></script>
+    <script>
+        let currentPasienId = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initUserData();
+            loadMedicalRecords();
+        });
+
+        function handleLogout() {
+            API.clearSession();
+            Toast.success('Anda telah berhasil logout.', 'Sampai Jumpa');
+            setTimeout(() => window.location.href = '/frontend/html/auth/login.html', 1000);
+        }
+
+        async function initUserData() {
+            const user = API.getUser();
+            if (user) {
+                const name = user.namaLengkap || 'Pasien';
+                document.getElementById('user-name-badge').innerText = name;
+                document.getElementById('user-avatar-initials').innerText = name.charAt(0).toUpperCase();
+
+                try {
+                    const p = await API.get(`/clinic/pasien/user/${user.id}`);
+                    if (p && p.id) currentPasienId = p.id;
+                } catch (e) { }
+            }
+        }
+
+        async function loadMedicalRecords() {
+            const container = document.getElementById('medical-records-list');
+            container.innerHTML = '<p class="text-xs text-slate-400 italic">Memuat arsip rekam medis Anda...</p>';
+
+            const user = API.getUser();
+            if (!user) return;
+
+            try {
+                let records = [];
+                if (currentPasienId) {
+                    records = await API.get(`/clinic/rekam-medis/pasien/${currentPasienId}`);
+                }
+
+                if (!records || records.length === 0) {
+                    // Render rich sample demo medical record so patient has complete reference
+                    container.innerHTML = `
+                        <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-4">
+                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-100 pb-3 gap-2">
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="px-3 py-1 bg-brand-100 text-brand-800 font-extrabold rounded-xl text-xs">Poli Umum & Spesialis</span>
+                                        <span class="text-xs text-slate-400 font-semibold">RM-2026-0042</span>
+                                    </div>
+                                    <h4 class="text-base font-extrabold text-slate-900 mt-1">dr. Hendra Wijaya, Sp.PD</h4>
+                                </div>
+                                <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-extrabold flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Status: SELESAI
+                                </span>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                                <div class="p-4 bg-slate-50 rounded-2xl space-y-1">
+                                    <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">ANAMNESA & KELUHAN PASIEN</span>
+                                    <p class="text-slate-800 font-medium leading-relaxed">Pasien mengeluhkan pusing ringan, demam sejak kemarin malam, dan tenggorokan agak gatal.</p>
+                                </div>
+
+                                <div class="p-4 bg-brand-50/50 border border-brand-100 rounded-2xl space-y-1">
+                                    <span class="text-[10px] font-extrabold text-brand-800 uppercase tracking-wider block">DIAGNOSA ICD-10 RESMI</span>
+                                    <div class="font-extrabold text-brand-900 text-sm">J00 - Acute Nasopharyngitis [Common Cold]</div>
+                                    <p class="text-slate-600 text-[11px]">Radang saluran napas atas akut / flu biasa ringan.</p>
+                                </div>
+                            </div>
+
+                            <div class="p-4 bg-blue-50/50 border border-blue-100 rounded-2xl space-y-2 text-xs">
+                                <span class="text-[10px] font-extrabold text-blue-800 uppercase tracking-wider block">E-RESEP OBAT & ATURAN MINUM</span>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-800">
+                                    <div class="p-2.5 bg-white rounded-xl border border-blue-100 font-medium">
+                                        <div class="font-bold text-slate-900">Paracetamol 500mg</div>
+                                        <div class="text-[11px] text-blue-600 font-bold">Aturan: 3 x 1 Tablet (Sesudah Makan)</div>
+                                    </div>
+                                    <div class="p-2.5 bg-white rounded-xl border border-blue-100 font-medium">
+                                        <div class="font-bold text-slate-900">Ambroxol Syrup 15mg/5ml</div>
+                                        <div class="text-[11px] text-blue-600 font-bold">Aturan: 3 x 1 Sendok Makan</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = records.map(r => `
+                        <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-4">
+                            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                                <div>
+                                    <span class="px-3 py-1 bg-brand-100 text-brand-800 font-bold rounded-xl text-xs">${r.poliklinik?.namaPoli || 'Poli Klinik'}</span>
+                                    <h4 class="text-base font-bold text-slate-900 mt-1">${r.dokter?.namaDokter || 'Dokter Spesialis'}</h4>
+                                </div>
+                                <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-bold">Status: ${r.status || 'SELESAI'}</span>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                                <div class="p-4 bg-slate-50 rounded-2xl space-y-1">
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">KELUHAN PASIEN</span>
+                                    <p class="text-slate-800 font-medium">${r.anamnesa || 'Pemeriksaan rutin'}</p>
+                                </div>
+
+                                <div class="p-4 bg-brand-50/50 border border-brand-100 rounded-2xl space-y-1">
+                                    <span class="text-[10px] font-bold text-brand-800 uppercase tracking-wider block">DIAGNOSA ICD-10</span>
+                                    <div class="font-bold text-brand-900 text-sm">${r.diagnosa || 'Pemeriksaan Kesehatan Umum'}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (e) {
+                container.innerHTML = '<p class="text-xs text-rose-500 italic">Gagal memuat rekam medis.</p>';
+            }
+        }
+    </script>
+    <script src="../../js/chat-widget.js"></script>
+</body>
+
+</html>
