@@ -450,7 +450,7 @@
                                     Darah (Sistolik / Diastolik)</span>
                                 <div class="flex items-baseline gap-2 mt-2">
                                     <span id="vital-bp-val"
-                                        class="text-5xl font-extrabold text-slate-900 tracking-tight">120 / 80</span>
+                                        class="text-5xl font-extrabold text-slate-900 tracking-tight">- / -</span>
                                     <span class="text-sm font-semibold text-slate-400">mmHg</span>
                                 </div>
                             </div>
@@ -462,11 +462,10 @@
 
                         <div class="mt-8 z-10 relative flex items-center gap-2">
                             <span id="vital-bp-status"
-                                class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-extrabold flex items-center gap-1">
-                                <span class="material-symbols-outlined text-[14px]">check_circle</span> Normal (Sehat)
+                                class="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-extrabold flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[14px]">info</span> Belum Ada Data
                             </span>
-                            <span id="vital-bp-time" class="text-xs text-slate-400 font-medium">Terakhir diperbarui hari
-                                ini</span>
+                            <span id="vital-bp-time" class="text-xs text-slate-400 font-medium">Belum ada pemeriksaan medis</span>
                         </div>
 
                         <!-- Sparkline Animation -->
@@ -489,7 +488,7 @@
                                 <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Detak
                                     Jantung</span>
                                 <div class="flex items-baseline gap-1 mt-0.5">
-                                    <span id="vital-hr-val" class="text-2xl font-extrabold text-slate-900">78</span>
+                                    <span id="vital-hr-val" class="text-2xl font-extrabold text-slate-900">-</span>
                                     <span class="text-xs text-slate-400 font-medium">bpm</span>
                                 </div>
                             </div>
@@ -505,7 +504,7 @@
                                 <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Suhu
                                     Tubuh</span>
                                 <div class="flex items-baseline gap-1 mt-0.5">
-                                    <span id="vital-temp-val" class="text-2xl font-extrabold text-slate-900">36.6</span>
+                                    <span id="vital-temp-val" class="text-2xl font-extrabold text-slate-900">-</span>
                                     <span class="text-xs text-slate-400 font-medium">°C</span>
                                 </div>
                             </div>
@@ -522,7 +521,7 @@
                                     Badan</span>
                                 <div class="flex items-baseline gap-1 mt-0.5">
                                     <span id="vital-weight-val"
-                                        class="text-2xl font-extrabold text-slate-900">65.0</span>
+                                        class="text-2xl font-extrabold text-slate-900">-</span>
                                     <span class="text-xs text-slate-400 font-medium">kg</span>
                                 </div>
                             </div>
@@ -745,9 +744,8 @@
                             class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 font-black text-xs flex items-center justify-center shrink-0">
                             1</div>
                         <div>
-                            <h4 class="text-xs font-bold text-slate-900">Booking Antrian Online</h4>
-                            <p class="text-[11px] text-slate-500 leading-snug mt-0.5 font-medium">Pilih poli & dokter
-                                untuk mendapatkan tiket nomor antrian resmi.</p>
+                            <h4 class="text-xs font-bold text-slate-900">Booking Antrian (Online & Walk-in Offline)</h4>
+                            <p class="text-[11px] text-slate-500 leading-snug mt-0.5 font-medium">Daftar online via web atau langsung walk-in di klinik via resepsionis.</p>
                         </div>
                     </div>
 
@@ -947,8 +945,7 @@
             <div class="space-y-2.5 flex-1 min-h-0 flex flex-col overflow-hidden">
                 <div class="flex justify-between items-center shrink-0">
                     <h3 class="text-sm font-extrabold text-slate-900">Dokter Jaga Hari Ini</h3>
-                    <span class="text-[9px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">Database
-                        API</span>
+                    <span id="doctor-shift-badge" class="text-[9px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">● REALTIME 24H</span>
                 </div>
 
                 <div id="doctor-list-container" class="space-y-2 flex-1 overflow-y-auto pr-1 custom-scrollbar">
@@ -995,6 +992,7 @@
             loadRealtimeQueue();
             loadDashboardSummariesAndLogs();
             loadDokterJagaRealtime();
+            loadLatestVitals();
             setInterval(loadRealtimeQueue, 3000);
         });
 
@@ -1047,7 +1045,7 @@
             }
         }
 
-        // FETCH REAL DOCTORS DIRECTLY FROM CLINIC SERVICE DB API
+        // FETCH REAL DOCTORS DIRECTLY FROM CLINIC SERVICE DB API (24-HOUR REALTIME SHIFT)
         async function loadDokterJagaRealtime() {
             const container = document.getElementById('doctor-list-container');
             try {
@@ -1057,16 +1055,37 @@
                     return;
                 }
 
+                const currentHour = new Date().getHours();
+                let currentShift = 'Pagi';
+                let shiftTime = '07:00 - 15:00 WIB';
+
+                if (currentHour >= 15 && currentHour < 23) {
+                    currentShift = 'Sore';
+                    shiftTime = '15:00 - 23:00 WIB';
+                } else if (currentHour >= 23 || currentHour < 7) {
+                    currentShift = 'Malam';
+                    shiftTime = '23:00 - 07:00 WIB';
+                }
+
+                // Update section header subtitle badge if available
+                const shiftHeader = document.getElementById('doctor-shift-badge');
+                if (shiftHeader) {
+                    shiftHeader.innerText = `● SHIFT ${currentShift.toUpperCase()} ACTIVE (${shiftTime})`;
+                }
+
                 // Render real doctor cards from clinic DB
                 container.innerHTML = dokters.map(d => `
                     <div class="p-3.5 bg-slate-50 hover:bg-brand-50/40 border border-slate-200/60 rounded-2xl flex items-center gap-3 transition-colors">
-                        <div class="w-11 h-11 rounded-2xl bg-brand-100 text-brand-800 font-extrabold flex items-center justify-center text-sm shadow-sm">
-                            ${d.namaDokter ? d.namaDokter.replace('dr. ', '').charAt(0) : 'D'}
+                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-brand-500 to-emerald-700 text-white font-extrabold flex items-center justify-center text-sm shadow-md">
+                            ${d.namaDokter ? d.namaDokter.replace('dr. ', '').replace('drg. ', '').charAt(0) : 'D'}
                         </div>
                         <div class="flex-1 min-w-0">
                             <div class="text-xs font-extrabold text-slate-900 truncate">${d.namaDokter}</div>
-                            <div class="text-[10px] text-slate-500 font-medium">${d.spesialisasi || 'Spesialis Medis'}</div>
-                            <div class="text-[10px] text-emerald-600 font-extrabold mt-0.5">● ${d.poliklinik?.namaPoli || 'Poli Klinik'} (Aktif Jaga)</div>
+                            <div class="text-[10px] text-slate-500 font-medium">${d.spesialisasi || 'Dokter Medis'}</div>
+                            <div class="text-[10px] text-emerald-600 font-extrabold mt-0.5 flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                <span>${d.poliklinik?.ruangan || 'Ruang 01 (Lantai 1)'}</span>
+                            </div>
                         </div>
                     </div>
                 `).join('');
@@ -1172,6 +1191,38 @@
             document.getElementById('sum-total-antrian').innerText = totalAntrian;
             document.getElementById('sum-total-medis').innerText = totalMedis;
             document.getElementById('sum-total-resep').innerText = totalResep;
+        }
+
+        async function loadLatestVitals() {
+            try {
+                const pid = await ensurePasienId();
+                if (!pid) return;
+
+                const rmList = await API.get(`/clinic/rekam-medis/pasien/${pid}`);
+                if (!rmList || !Array.isArray(rmList) || rmList.length === 0) {
+                    document.getElementById('vital-bp-val').innerText = '- / -';
+                    document.getElementById('vital-bp-status').innerHTML = `<span class="material-symbols-outlined text-[14px]">info</span> Belum Ada Data`;
+                    document.getElementById('vital-bp-status').className = 'px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-extrabold flex items-center gap-1';
+                    document.getElementById('vital-bp-time').innerText = 'Belum pernah diperiksa dokter';
+                    document.getElementById('vital-hr-val').innerText = '-';
+                    document.getElementById('vital-temp-val').innerText = '-';
+                    document.getElementById('vital-weight-val').innerText = '-';
+                    return;
+                }
+
+                const latestRM = rmList[0];
+                const tv = await API.get(`/clinic/rekam-medis/${latestRM.id}/tanda-vital`);
+
+                if (tv && tv.tekananDarahSistol) {
+                    document.getElementById('vital-bp-val').innerText = `${tv.tekananDarahSistol} / ${tv.tekananDarahDiastol}`;
+                    document.getElementById('vital-bp-status').innerHTML = `<span class="material-symbols-outlined text-[14px]">check_circle</span> Normal (Sehat)`;
+                    document.getElementById('vital-bp-status').className = 'px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-extrabold flex items-center gap-1';
+                    document.getElementById('vital-bp-time').innerText = `Terakhir diperbarui ${latestRM.createdAt ? new Date(latestRM.createdAt).toLocaleDateString('id-ID') : 'hari ini'}`;
+                    document.getElementById('vital-hr-val').innerText = tv.detakJantung || '-';
+                    document.getElementById('vital-temp-val').innerText = tv.suhuTubuh || '-';
+                    document.getElementById('vital-weight-val').innerText = tv.beratBadan || '-';
+                }
+            } catch (e) {}
         }
     </script>
     <script src="../../js/chat-widget.js"></script>

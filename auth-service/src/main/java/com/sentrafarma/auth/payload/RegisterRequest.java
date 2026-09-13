@@ -1,9 +1,7 @@
 package com.sentrafarma.auth.payload;
 
 import com.sentrafarma.auth.entity.Role;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 public class RegisterRequest {
 
@@ -22,8 +20,13 @@ public class RegisterRequest {
     private String namaLengkap;
 
     private Role role = Role.PASIEN;
+
+    @Pattern(regexp = "^(08|628)[0-9]{8,11}$", message = "Nomor telepon harus diawali 08/628 (10-13 digit)")
     private String noTelepon;
+
+    @Pattern(regexp = "^(?!(\\d)\\1{15}$)\\d{16}$", message = "NIK harus 16 digit angka valid (tidak boleh angka berulang semua)")
     private String nik;
+
     private String tanggalLahir;
     private String alamat;
     private String jenisKelamin;

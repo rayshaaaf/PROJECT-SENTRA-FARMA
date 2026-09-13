@@ -7,35 +7,7 @@ const STORAGE_KEY = 'sentra_farma_pill_reminders';
 const TAKEN_LOG_KEY = 'sentra_farma_pill_taken_logs';
 let lastTriggeredMinute = '';
 
-const DEFAULT_REMINDERS = [
-    {
-        id: 'rem-1',
-        namaObat: 'Paracetamol 500 mg',
-        dosis: '1 Tablet (Sesudah Makan)',
-        kategori: 'Obat Bebas / Anti Nyeri',
-        waktu: ['08:00', '13:00', '19:00'],
-        catatan: 'Diminum jika terasa pusing atau demam.',
-        aktif: true
-    },
-    {
-        id: 'rem-2',
-        namaObat: 'Vitamin C & Zinc 1000 mg',
-        dosis: '1 Kapsul (Pagi Hari)',
-        kategori: 'Suplemen Imunitas',
-        waktu: ['07:30', '14:00'],
-        catatan: 'Diminum bersama air putih hangat.',
-        aktif: true
-    },
-    {
-        id: 'rem-3',
-        namaObat: 'Amoxicillin 500 mg',
-        dosis: '1 Kaplet (Tiap 8 Jam)',
-        kategori: 'Antibiotik (Resep Dokter)',
-        waktu: ['06:00', '14:00', '22:00'],
-        catatan: 'Wajib dihabiskan sesuai petunjuk resep.',
-        aktif: true
-    }
-];
+const DEFAULT_REMINDERS = [];
 
 // WEB AUDIO API REAL ALARM CHIME SOUND GENERATOR
 function playAlarmChimeSound() {
@@ -426,7 +398,7 @@ function renderPillListModalContent() {
 // SINGLE UNIFIED ALARM BANNER (No duplicate Toast calls)
 function triggerTestAlarm(timeLabel = '02:00') {
     const reminders = getPillReminders();
-    const rem = reminders[0] || { namaObat: 'Paracetamol 500 mg', dosis: '1 Tablet (Sesudah Makan)' };
+    const rem = reminders[0] || { namaObat: 'Obat Pasien', dosis: 'Sesuai Dosis Resep' };
 
     // Play real Web Audio API chime sound
     playAlarmChimeSound();

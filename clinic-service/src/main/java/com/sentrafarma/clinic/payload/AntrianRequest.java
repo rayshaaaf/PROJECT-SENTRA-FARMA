@@ -27,6 +27,8 @@ public class AntrianRequest {
     public void setPoliklinikId(Long poliklinikId) { this.poliklinikId = poliklinikId; }
     public String getTanggalBerobat() { return tanggalBerobat; }
     public void setTanggalBerobat(String tanggalBerobat) { this.tanggalBerobat = tanggalBerobat; }
+    public String getTanggalAntrian() { return tanggalBerobat; }
+    public void setTanggalAntrian(String tanggalAntrian) { this.tanggalBerobat = tanggalAntrian; }
     public String getTipe() { return tipe; }
     public void setTipe(String tipe) { this.tipe = tipe; }
 }

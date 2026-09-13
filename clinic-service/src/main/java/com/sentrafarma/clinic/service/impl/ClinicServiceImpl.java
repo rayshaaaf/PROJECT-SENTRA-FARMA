@@ -110,6 +110,16 @@ public class ClinicServiceImpl implements ClinicService {
 
     @Override
     public Pasien savePasien(Pasien pasien) {
+        if (pasien.getTanggalLahir() != null && !pasien.getTanggalLahir().trim().isEmpty()) {
+            try {
+                java.time.LocalDate dob = java.time.LocalDate.parse(pasien.getTanggalLahir().trim());
+                if (dob.isAfter(java.time.LocalDate.now())) {
+                    throw new IllegalArgumentException("Tanggal lahir pasien (" + pasien.getTanggalLahir() + ") tidak boleh di masa depan. Silakan pilih tanggal hari ini atau sebelumnya.");
+                }
+            } catch (java.time.format.DateTimeParseException e) {
+                // Ignore parse errors if custom string
+            }
+        }
         return pasienRepository.save(pasien);
     }
 
@@ -128,9 +138,29 @@ public class ClinicServiceImpl implements ClinicService {
         Poliklinik poli = poliklinikRepository.findById(request.getPoliklinikId())
                 .orElseThrow(() -> new IllegalArgumentException("Poliklinik tidak ditemukan"));
 
-        String tgl = request.getTanggalBerobat() != null ? request.getTanggalBerobat() : LocalDate.now().toString();
+        String tgl = (request.getTanggalBerobat() != null && !request.getTanggalBerobat().isBlank())
+                ? request.getTanggalBerobat()
+                : ((request.getTanggalAntrian() != null && !request.getTanggalAntrian().isBlank()) ? request.getTanggalAntrian() : LocalDate.now().toString());
+
+        try {
+            LocalDate bookingDate = LocalDate.parse(tgl);
+            if (bookingDate.isBefore(LocalDate.now())) {
+                throw new IllegalArgumentException("Tanggal berobat (" + tgl + ") tidak boleh di masa lalu. Silakan pilih tanggal hari ini atau mendatang.");
+            }
+        } catch (java.time.format.DateTimeParseException e) {
+            throw new IllegalArgumentException("Format tanggal berobat tidak valid (Gunakan YYYY-MM-DD)");
+        }
+
         long count = antrianRepository.countByTanggalBerobatAndPoliklinikId(tgl, poli.getId());
-        String codePrefix = poli.getNamaPoli().substring(0, 1).toUpperCase();
+        String codePrefix = "A";
+        if (poli.getNamaPoli() != null && !poli.getNamaPoli().isBlank()) {
+            String name = poli.getNamaPoli().trim();
+            if (name.toLowerCase().startsWith("poli ") && name.length() > 5) {
+                codePrefix = name.substring(5, 6).toUpperCase();
+            } else {
+                codePrefix = name.substring(0, 1).toUpperCase();
+            }
+        }
         String queueNum = String.format("%s-%02d", codePrefix, count + 1);
 
         Antrian antrian = Antrian.builder()

@@ -42,10 +42,10 @@ public class AuthController {
     @PostMapping("/forgot-password")
     @Operation(summary = "Pengajuan Lupa Password")
     public ResponseEntity<Map<String, String>> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
-        String resetToken = authService.forgotPassword(request);
+        String token = authService.forgotPassword(request);
         return ResponseEntity.ok(Map.of(
-                "message", "Token reset password berhasil dibuat.",
-                "resetToken", resetToken
+                "token", token,
+                "message", "Token reset password telah dikirimkan ke email Anda. Silakan periksa Kotak Masuk / Inbox email Anda."
         ));
     }
 

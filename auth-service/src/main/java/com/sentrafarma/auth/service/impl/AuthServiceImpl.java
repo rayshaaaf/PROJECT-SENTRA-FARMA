@@ -8,6 +8,7 @@ import com.sentrafarma.auth.repository.PasswordResetTokenRepository;
 import com.sentrafarma.auth.repository.UserRepository;
 import com.sentrafarma.auth.security.JwtUtil;
 import com.sentrafarma.auth.service.AuthService;
+import com.sentrafarma.auth.service.EmailService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,15 +27,18 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordResetTokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final EmailService emailService;
 
     public AuthServiceImpl(UserRepository userRepository,
                            PasswordResetTokenRepository tokenRepository,
                            PasswordEncoder passwordEncoder,
-                           JwtUtil jwtUtil) {
+                           JwtUtil jwtUtil,
+                           EmailService emailService) {
         this.userRepository = userRepository;
         this.tokenRepository = tokenRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
+        this.emailService = emailService;
     }
 
     @Override
@@ -42,6 +46,31 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse register(RegisterRequest request) {
         if (!request.getPassword().equals(request.getPasswordConfirmation())) {
             throw new IllegalArgumentException("Konfirmasi password tidak cocok dengan password");
+        }
+
+        if (request.getNik() != null && !request.getNik().trim().isEmpty()) {
+            String nik = request.getNik().trim();
+            if (!nik.matches("^(?!(\\d)\\1{15}$)\\d{16}$")) {
+                throw new IllegalArgumentException("NIK harus 16 digit angka dan tidak boleh berupa angka berulang sembarangan (contoh: 3333333333333333)");
+            }
+        }
+
+        if (request.getNoTelepon() != null && !request.getNoTelepon().trim().isEmpty()) {
+            String phone = request.getNoTelepon().trim();
+            if (!phone.matches("^(08|628)[0-9]{8,11}$")) {
+                throw new IllegalArgumentException("Nomor telepon tidak valid. Harus diawali 08 atau 628 dengan 10-13 digit angka");
+            }
+        }
+
+        if (request.getTanggalLahir() != null && !request.getTanggalLahir().trim().isEmpty()) {
+            try {
+                java.time.LocalDate dob = java.time.LocalDate.parse(request.getTanggalLahir().trim());
+                if (dob.isAfter(java.time.LocalDate.now())) {
+                    throw new IllegalArgumentException("Tanggal lahir pasien (" + request.getTanggalLahir() + ") tidak boleh di masa depan. Silakan pilih tanggal hari ini atau sebelumnya.");
+                }
+            } catch (java.time.format.DateTimeParseException e) {
+                throw new IllegalArgumentException("Format tanggal lahir tidak valid (Gunakan YYYY-MM-DD)");
+            }
         }
 
         if (userRepository.existsByEmailAndIsDeletedFalse(request.getEmail())) {
@@ -101,6 +130,9 @@ public class AuthServiceImpl implements AuthService {
                 .build();
 
         tokenRepository.save(tokenEntity);
+
+        emailService.sendResetPasswordEmail(user.getEmail(), user.getNamaLengkap(), resetToken);
+
         return resetToken;
     }
 

@@ -235,7 +235,7 @@
                             <div>
                                 <label class="block font-extrabold text-slate-700 uppercase tracking-wider mb-1.5">Pilih
                                     Tanggal Janji Temu *</label>
-                                <input type="date" id="booking-tanggal-input"
+                                <input type="date" id="booking-tanggal-input" onchange="updateBookingJamOptions()"
                                     class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-brand-500" />
                             </div>
 
@@ -243,11 +243,14 @@
                                 <label class="block font-extrabold text-slate-700 uppercase tracking-wider mb-1.5">Pilih
                                     Sesi Jam Konsultasi *</label>
                                 <select id="booking-jam-select"
-                                    class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-brand-500">
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-brand-500 cursor-pointer">
                                     <option value="09:00 - 10:00 WIB">Pagi: 09:00 - 10:00 WIB</option>
                                     <option value="10:00 - 11:00 WIB">Pagi: 10:00 - 11:00 WIB</option>
                                     <option value="14:00 - 15:00 WIB">Siang: 14:00 - 15:00 WIB</option>
                                     <option value="16:00 - 17:00 WIB">Sore: 16:00 - 17:00 WIB</option>
+                                    <option value="19:00 - 20:00 WIB">Malam: 19:00 - 20:00 WIB</option>
+                                    <option value="20:00 - 21:00 WIB">Malam: 20:00 - 21:00 WIB</option>
+                                    <option value="21:00 - 22:00 WIB">Malam: 21:00 - 22:00 WIB</option>
                                 </select>
                             </div>
                         </div>
@@ -256,18 +259,23 @@
                             <label class="block font-extrabold text-slate-700 uppercase tracking-wider mb-1.5">Pilih
                                 Poliklinik *</label>
                             <select id="daftar-poli-select" required onchange="onPoliChanged()"
-                                class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3.5 text-xs font-medium text-slate-900 focus:outline-none focus:border-brand-500 focus:bg-white transition-all">
+                                class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3.5 text-xs font-medium text-slate-900 focus:outline-none focus:border-brand-500 focus:bg-white transition-all cursor-pointer">
                                 <option value="">-- Pilih Poliklinik --</option>
                             </select>
                         </div>
 
-                        <div>
-                            <label class="block font-extrabold text-slate-700 uppercase tracking-wider mb-1.5">Pilih
-                                Dokter Jaga *</label>
-                            <select id="daftar-dokter-select" disabled required
-                                class="w-full bg-slate-100 border border-slate-200 rounded-2xl p-3.5 text-xs text-slate-500 focus:outline-none cursor-not-allowed transition-all">
-                                <option value="">-- Pilih Poliklinik Terlebih Dahulu --</option>
-                            </select>
+                        <!-- AUTO-ASSIGNED DOKTER JAGA CARD BADGE -->
+                        <div id="dokter-assigned-container" class="hidden">
+                            <label class="block font-extrabold text-slate-700 uppercase tracking-wider mb-1.5">Dokter Jaga Bertugas</label>
+                            <div class="p-3.5 bg-emerald-50/80 border border-emerald-200 rounded-2xl flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold shrink-0 shadow-sm">
+                                    <span class="material-symbols-outlined text-[20px]">stethoscope</span>
+                                </div>
+                                <div>
+                                    <div id="dokter-assigned-name" class="font-extrabold text-slate-900 text-xs">dr. Arisandy Pratama, M.Ked</div>
+                                    <div id="dokter-assigned-spec" class="text-[10px] text-slate-500 font-medium">Dokter Umum • Poli Umum</div>
+                                </div>
+                            </div>
                         </div>
 
                         <div>
@@ -354,6 +362,9 @@
             loadPoliList();
             loadMyQueueHistory();
             setInterval(loadMyQueueHistory, 3000);
+
+            const todayStr = new Date().toISOString().split('T')[0];
+            document.getElementById('booking-tanggal-input').setAttribute('min', todayStr);
 
             // Set default date for booking to tomorrow
             const tomorrow = new Date();
@@ -534,12 +545,38 @@
                         submitText.innerText = 'Booking Janji Temu & Dapatkan Pass QR';
                         return;
                     }
+                    const nowStr = new Date().toISOString().split('T')[0];
+                    if (targetDateStr < nowStr) {
+                        Toast.error('Tanggal booking (' + targetDateStr + ') tidak boleh di masa lalu. Silakan pilih hari ini atau tanggal mendatang.', 'Validasi Tanggal Gagal');
+                        btn.disabled = false;
+                        submitText.innerText = 'Booking Janji Temu & Dapatkan Pass QR';
+                        return;
+                    }
+
+                    // VALIDASI JAM / SESI APABILA BOOKING UNTUK HARI INI
+                    if (targetDateStr === nowStr) {
+                        const jamSesi = document.getElementById('booking-jam-select').value;
+                        const match = jamSesi.match(/^(\d{2}):(\d{2})/);
+                        if (match) {
+                            const startHour = parseInt(match[1], 10);
+                            const currentHour = new Date().getHours();
+                            if (currentHour >= startHour) {
+                                const currentMinute = new Date().getMinutes();
+                                const timeNowLabel = `${String(currentHour).padStart(2, '0')}:${String(currentMinute).padStart(2, '0')} WIB`;
+                                Toast.error(`Sesi jam ${jamSesi} sudah berlalu untuk hari ini (Waktu saat ini: ${timeNowLabel}). Silakan pilih sesi jam yang masih mendatang.`, 'Validasi Jam Gagal');
+                                btn.disabled = false;
+                                submitText.innerText = 'Booking Janji Temu & Dapatkan Pass QR';
+                                return;
+                            }
+                        }
+                    }
                 }
 
                 const body = {
                     pasienId: pid,
                     poliklinikId: parseInt(document.getElementById('daftar-poli-select').value),
                     dokterId: parseInt(document.getElementById('daftar-dokter-select').value),
+                    tanggalBerobat: targetDateStr,
                     tanggalAntrian: targetDateStr,
                     keluhan: document.getElementById('daftar-keluhan').value.trim()
                 };
@@ -548,7 +585,7 @@
 
                 if (activeTabMode === 'booking') {
                     const jamSesi = document.getElementById('booking-jam-select').value;
-                    Toast.success(`Janji Temu Konsultasi Dokter Terjadwal pada ${targetDateStr} (${jamSesi})`, 'Booking Temu Dokter Sukses!');
+                    Toast.success(`Janji Temu Konsultasi Dokter Terjadwal pada ${targetDateStr} (${jamSesi}) dengan Nomor Antrian: ${res.nomorAntrian}`, 'Booking Temu Dokter Sukses!');
                 } else {
                     Toast.success(`Nomor Antrian Hari Ini Berhasil Diambil: ${res.nomorAntrian}`, 'Tiket Sukses');
                 }
@@ -562,6 +599,33 @@
                 submitText.innerText = (activeTabMode === 'today') ? 'Ambil Tiket Antrian Now' : 'Booking Janji Temu & Dapatkan Pass QR';
             }
         });
+
+        function updateBookingJamOptions() {
+            const tglVal = document.getElementById('booking-tanggal-input').value;
+            if (!tglVal) return;
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const todayStr = `${year}-${month}-${day}`;
+            
+            const jamSelect = document.getElementById('booking-jam-select');
+            const options = jamSelect.querySelectorAll('option');
+
+            options.forEach(opt => {
+                const match = opt.value.match(/^(\d{2}):(\d{2})/);
+                if (match) {
+                    const startHour = parseInt(match[1], 10);
+                    if (tglVal === todayStr && now.getHours() >= startHour) {
+                        opt.disabled = true;
+                        opt.text = opt.text.replace(' (Sudah Berlalu)', '') + ' (Sudah Berlalu)';
+                    } else {
+                        opt.disabled = false;
+                        opt.text = opt.text.replace(' (Sudah Berlalu)', '');
+                    }
+                }
+            });
+        }
     </script>
     <script src="../../js/chat-widget.js"></script>
 </body>
