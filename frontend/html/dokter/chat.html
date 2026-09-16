@@ -131,8 +131,8 @@
             </a>
             <a href="chat.html" title="Live Chat Konsultasi" class="relative group p-2.5 rounded-2xl bg-brand-50 text-brand-600 font-bold transition-all shadow-2xs">
                 <span class="material-symbols-outlined text-[22px]">forum</span>
-                <span class="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center animate-pulse border border-white shadow-xs">1</span>
-                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Live Chat (1 Masuk)</span>
+                <span id="doctor-chat-badge" class="hidden absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white text-[9px] font-black rounded-full items-center justify-center animate-pulse border border-white shadow-xs">0</span>
+                <span id="doctor-chat-tooltip" class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Live Chat</span>
             </a>
             <a href="laporan-harian.html" title="Laporan Harian Dokter" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">assignment</span>
@@ -485,6 +485,7 @@
                     </button>
                 `;
             }).join('');
+            updateDoctorChatBadge();
         }
 
         function selectDoctorChatSession(sessId, pName, topicName = '🤒 Keluhan Penyakit') {
@@ -696,7 +697,66 @@
             }
 
             loadDoctorChatMessages(activeDoctorSessionId);
+            updateDoctorChatBadge();
         }
+
+        async function updateDoctorChatBadge() {
+            const badge = document.getElementById('doctor-chat-badge');
+            const tooltip = document.getElementById('doctor-chat-tooltip');
+            if (!badge) return;
+
+            const u = window.API ? window.API.getUser() : null;
+            const docId = u ? u.id : 1;
+
+            let unreadCount = 0;
+            const sessionsSet = new Set();
+            const masterSessions = JSON.parse(localStorage.getItem('sentra_telemedis_sessions') || '[]');
+            masterSessions.forEach(s => sessionsSet.add(s));
+
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.startsWith('chat_patient_')) {
+                    sessionsSet.add(key);
+                }
+            }
+            const defaultSess = `chat_patient_1_doc_${docId}`;
+            sessionsSet.add(defaultSess);
+
+            for (const sessId of sessionsSet) {
+                if (localStorage.getItem('cleared_' + sessId) === 'true') continue;
+
+                let msgs = JSON.parse(localStorage.getItem(sessId) || '[]');
+                if (msgs.length === 0 && window.API) {
+                    try {
+                        const res = await window.API.get(`/clinic/chat/messages?sessionId=${sessId}`);
+                        if (Array.isArray(res) && res.length > 0) msgs = res;
+                    } catch (e) {}
+                }
+
+                const realMsgs = msgs.filter(m => !m.senderName?.includes('AI') && m.tipePesan !== 'AI_TRIAGE');
+                if (realMsgs.length > 0) {
+                    const lastMsg = realMsgs[realMsgs.length - 1];
+                    const isFromPatient = (lastMsg.senderId !== docId) && (!lastMsg.senderName || !lastMsg.senderName.includes('dr.'));
+                    if (isFromPatient) {
+                        unreadCount++;
+                    }
+                }
+            }
+
+            if (unreadCount > 0) {
+                badge.innerText = unreadCount;
+                badge.classList.remove('hidden');
+                badge.classList.add('flex');
+                if (tooltip) tooltip.innerText = `Live Chat (${unreadCount} Masuk)`;
+            } else {
+                badge.innerText = '0';
+                badge.classList.remove('flex');
+                badge.classList.add('hidden');
+                if (tooltip) tooltip.innerText = 'Live Chat';
+            }
+        }
+
+        setInterval(updateDoctorChatBadge, 3000);
 
         function escapeHtml(str) {
             if (!str) return '';

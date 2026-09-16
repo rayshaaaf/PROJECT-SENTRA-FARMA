@@ -61,39 +61,61 @@ function stopAlarmLoop() {
     }
 }
 
-// Normalize user input time (e.g., "2" -> ["02:00", "14:00"], "2.00" -> ["02:00"], "14:00" -> ["14:00"])
-function normalizeTimeInput(raw) {
+// Strict validation & normalization of time input
+function validateAndNormalizeTimeInput(raw) {
+    if (!raw) return { valid: false, times: [], error: 'Waktu minum obat wajib diisi!' };
+    
     const tokens = raw.split(',').map(s => s.trim()).filter(Boolean);
-    let result = [];
+    if (tokens.length === 0) {
+        return { valid: false, times: [], error: 'Waktu minum obat wajib diisi!' };
+    }
 
-    tokens.forEach(t => {
+    let resultTimes = [];
+
+    for (let t of tokens) {
         let clean = t.toLowerCase().replace('.', ':');
-        if (!clean.includes(':')) {
-            let num = parseInt(clean);
-            if (!isNaN(num)) {
-                if (num >= 1 && num <= 12) {
-                    let am = String(num).padStart(2, '0') + ':00';
-                    let pm = String(num + 12 === 24 ? 12 : num + 12).padStart(2, '0') + ':00';
-                    result.push(am, pm);
-                } else if (num >= 0 && num <= 23) {
-                    result.push(String(num).padStart(2, '0') + ':00');
-                }
+        
+        // Pure integer number (e.g., "2", "3", "24")
+        if (/^\d+$/.test(clean)) {
+            let num = parseInt(clean, 10);
+            if (num >= 1 && num <= 12) {
+                let am = String(num).padStart(2, '0') + ':00';
+                let pm = String(num + 12 === 24 ? 12 : num + 12).padStart(2, '0') + ':00';
+                resultTimes.push(am, pm);
+            } else if (num >= 0 && num <= 23) {
+                resultTimes.push(String(num).padStart(2, '0') + ':00');
             } else {
-                result.push(clean);
+                return { 
+                    valid: false, 
+                    times: [], 
+                    error: `Angka jam "${t}" tidak valid. Masukkan jam antara 0 - 23 atau frekuensi (contoh: 2).` 
+                };
             }
-        } else {
+        } 
+        // HH:MM or H:MM format (e.g., "02:00", "14:00", "8:30")
+        else if (/^([0-1]?[0-9]|2[0-3])[:.]([0-5][0-9])$/.test(clean)) {
             let parts = clean.split(':');
-            let h = parseInt(parts[0]);
-            let m = parseInt(parts[1]) || 0;
-            if (!isNaN(h)) {
-                result.push(`${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`);
-            } else {
-                result.push(clean);
-            }
+            let h = parseInt(parts[0], 10);
+            let m = parseInt(parts[1], 10);
+            resultTimes.push(`${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`);
+        } 
+        // Invalid text/gibberish (e.g. "bbbbb", "abc")
+        else {
+            return { 
+                valid: false, 
+                times: [], 
+                error: `Format waktu "${t}" tidak valid! Gunakan angka (misal: 2) atau format jam HH:MM (misal: 08:00, 14:00, 20:00).` 
+            };
         }
-    });
+    }
 
-    return Array.from(new Set(result));
+    const uniqueTimes = Array.from(new Set(resultTimes)).sort();
+    return { valid: true, times: uniqueTimes, error: null };
+}
+
+function normalizeTimeInput(raw) {
+    const res = validateAndNormalizeTimeInput(raw);
+    return res.valid ? res.times : [];
 }
 
 // Initialize default data if empty & clean up old initial dummy data
@@ -548,16 +570,18 @@ function createPillModalDOM() {
 
             <form id="pill-form" onsubmit="handlePillSubmit(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nama Obat / Suplemen</label>
-                    <input type="text" id="pill-name" required placeholder="Contoh: Paracetamol, Vitamin D3, Amoxicillin" 
-                        class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-xs font-semibold text-slate-800" />
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nama Obat / Suplemen *</label>
+                    <input type="text" id="pill-name" placeholder="Contoh: Paracetamol, Vitamin D3, Amoxicillin" 
+                        class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-xs font-semibold text-slate-800 transition-all" />
+                    <p id="pill-name-error" class="text-[10px] font-bold text-rose-500 mt-1 hidden"></p>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Dosis & Aturan</label>
-                        <input type="text" id="pill-dosis" required placeholder="Contoh: 1 Tablet (Sesudah Makan)" 
-                            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-xs font-semibold text-slate-800" />
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Dosis & Aturan *</label>
+                        <input type="text" id="pill-dosis" placeholder="Contoh: 1 Tablet (Sesudah Makan)" 
+                            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-xs font-semibold text-slate-800 transition-all" />
+                        <p id="pill-dosis-error" class="text-[10px] font-bold text-rose-500 mt-1 hidden"></p>
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Kategori Obat</label>
@@ -571,10 +595,11 @@ function createPillModalDOM() {
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Waktu Minum Obat (Misal: 2, 02:00, 14:00, 20:00)</label>
-                    <input type="text" id="pill-waktu" required placeholder="Contoh: 2 atau 02:00, 14:00, 20:00" 
-                        class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-xs font-semibold font-mono text-slate-800" />
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Waktu Minum Obat * (Misal: 2, 02:00, 14:00, 20:00)</label>
+                    <input type="text" id="pill-waktu" placeholder="Contoh: 2 atau 02:00, 14:00, 20:00" 
+                        class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-xs font-semibold font-mono text-slate-800 transition-all" />
                     <p class="text-[10px] text-slate-400 mt-1 font-medium">Bisa ketik jam 2 (otomatis set 02:00 & 14:00) atau format HH:MM lain dipisah koma.</p>
+                    <p id="pill-waktu-error" class="text-[10px] font-bold text-rose-500 mt-1 hidden"></p>
                 </div>
 
                 <div>
@@ -599,26 +624,93 @@ function createPillModalDOM() {
     document.body.insertAdjacentHTML('beforeend', modalHTML);
 }
 
+function clearPillFormErrors() {
+    ['pill-name', 'pill-dosis', 'pill-waktu'].forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+            input.classList.remove('border-rose-500', 'ring-2', 'ring-rose-500/20');
+        }
+    });
+    ['pill-name-error', 'pill-dosis-error', 'pill-waktu-error'].forEach(id => {
+        const errEl = document.getElementById(id);
+        if (errEl) {
+            errEl.innerText = '';
+            errEl.classList.add('hidden');
+        }
+    });
+}
+
+function showInlinePillError(inputId, errorId, msg) {
+    const input = document.getElementById(inputId);
+    const errEl = document.getElementById(errorId);
+    if (input) {
+        input.classList.add('border-rose-500', 'ring-2', 'ring-rose-500/20');
+    }
+    if (errEl) {
+        errEl.innerText = '⚠️ ' + msg;
+        errEl.classList.remove('hidden');
+    }
+}
+
 function handlePillSubmit(e) {
     e.preventDefault();
-    const namaObat = document.getElementById('pill-name').value.trim();
-    const dosis = document.getElementById('pill-dosis').value.trim();
+    clearPillFormErrors();
+
+    const nameEl = document.getElementById('pill-name');
+    const dosisEl = document.getElementById('pill-dosis');
+    const waktuEl = document.getElementById('pill-waktu');
     const kategori = document.getElementById('pill-kategori').value;
-    const waktuRaw = document.getElementById('pill-waktu').value.trim();
     const catatan = document.getElementById('pill-catatan').value.trim();
 
-    const waktuArr = normalizeTimeInput(waktuRaw);
+    const namaObat = nameEl ? nameEl.value.trim() : '';
+    const dosis = dosisEl ? dosisEl.value.trim() : '';
+    const waktuRaw = waktuEl ? waktuEl.value.trim() : '';
+
+    let hasError = false;
+    let firstErrorEl = null;
+
+    if (!namaObat || namaObat.length < 2) {
+        showInlinePillError('pill-name', 'pill-name-error', 'Nama obat/suplemen wajib diisi (minimal 2 karakter).');
+        hasError = true;
+        if (!firstErrorEl) firstErrorEl = nameEl;
+    }
+
+    if (!dosis || dosis.length < 2) {
+        showInlinePillError('pill-dosis', 'pill-dosis-error', 'Dosis & aturan minum obat wajib diisi (contoh: 1 Tablet).');
+        hasError = true;
+        if (!firstErrorEl) firstErrorEl = dosisEl;
+    }
+
+    const timeCheck = validateAndNormalizeTimeInput(waktuRaw);
+    if (!timeCheck.valid) {
+        showInlinePillError('pill-waktu', 'pill-waktu-error', timeCheck.error);
+        hasError = true;
+        if (!firstErrorEl) firstErrorEl = waktuEl;
+    }
+
+    if (hasError) {
+        if (firstErrorEl) firstErrorEl.focus();
+        if (typeof Toast !== 'undefined') {
+            Toast.error('Periksa kembali input formulir pengingat minum obat Anda!', 'Validasi Gagal');
+        }
+        return;
+    }
 
     savePillReminder({
         namaObat,
         dosis,
         kategori,
-        waktu: waktuArr,
+        waktu: timeCheck.times,
         catatan
     });
 
+    if (typeof Toast !== 'undefined') {
+        Toast.success(`Pengingat minum obat "${namaObat}" (${timeCheck.times.join(', ')}) berhasil disimpan!`, 'Pengingat Ditambahkan');
+    }
+
     closePillModal();
     document.getElementById('pill-form').reset();
+    clearPillFormErrors();
 }
 
 // Background alarm checker loop

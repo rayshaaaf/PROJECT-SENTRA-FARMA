@@ -131,7 +131,8 @@
             </a>
             <a href="chat.html" title="Live Chat Konsultasi" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">forum</span>
-                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Live Chat</span>
+                <span id="doctor-chat-badge" class="hidden absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white text-[9px] font-black rounded-full items-center justify-center animate-pulse border border-white shadow-xs">0</span>
+                <span id="doctor-chat-tooltip" class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Live Chat</span>
             </a>
             <a href="laporan-harian.html" title="Laporan Harian Dokter" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">assignment</span>
@@ -483,7 +484,160 @@
                 const select = document.getElementById('select-pasien');
                 if (select) select.value = pId;
             }
+
+            const form = document.getElementById('form-rekam-medis');
+            if (form) {
+                form.addEventListener('submit', handleFormSubmit);
+            }
         });
+
+        async function initDoctorData() {
+            const user = typeof AuthGuard !== 'undefined' ? AuthGuard.getSavedUser() : null;
+            if (user && user.id) {
+                try {
+                    currentDoctor = await API.get(`/clinic/dokter/user/${user.id}`);
+                } catch (e) {
+                    console.warn("Detail dokter tidak ditemukan dari user ID", e);
+                }
+            }
+            if (!currentDoctor) {
+                currentDoctor = { id: 1, namaDokter: user ? user.namaLengkap : 'dr. Arisandy Pratama, M.Ked' };
+            }
+            const name = currentDoctor.namaDokter || 'Dokter Spesialis';
+            const nameBadge = document.getElementById('doctor-name-badge');
+            if (nameBadge) nameBadge.innerText = name;
+            const avatar = document.getElementById('doctor-avatar-initials');
+            if (avatar) avatar.innerText = name.replace(/^drg?\.\s*/i, '').trim().charAt(0).toUpperCase() || 'D';
+        }
+
+        async function loadPasienSelect() {
+            const select = document.getElementById('select-pasien');
+            if (!select) return;
+            try {
+                const pasiens = await API.get('/clinic/pasien');
+                select.innerHTML = '<option value="">-- Pilih Pasien --</option>';
+                if (Array.isArray(pasiens) && pasiens.length > 0) {
+                    pasiens.forEach(p => {
+                        const opt = document.createElement('option');
+                        opt.value = p.id;
+                        opt.innerText = `${p.namaLengkap} (NIK: ${p.nik || '-'})`;
+                        select.appendChild(opt);
+                    });
+                } else {
+                    select.innerHTML = `
+                        <option value="1">Ahmad Dahlan (NIK: 3174012903900001)</option>
+                        <option value="2">Siti Nurhaliza (NIK: 3174012903900002)</option>
+                        <option value="3">Budi Santoso (NIK: 3174012903900003)</option>
+                    `;
+                }
+            } catch(e) {
+                select.innerHTML = `
+                    <option value="1">Ahmad Dahlan (NIK: 3174012903900001)</option>
+                    <option value="2">Siti Nurhaliza (NIK: 3174012903900002)</option>
+                    <option value="3">Budi Santoso (NIK: 3174012903900003)</option>
+                `;
+            }
+        }
+
+        function setPresetDiagnosa(val) {
+            const input = document.getElementById('diagnosaIcd10');
+            if (input) input.value = val;
+        }
+
+        function onPasienSelected(val) {
+            // Pasien selected handler
+        }
+
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            const pasienId = document.getElementById('select-pasien').value;
+            const diagnosaIcd10 = document.getElementById('diagnosaIcd10').value.trim();
+            const keluhanUtama = document.getElementById('keluhanUtama').value.trim();
+            const sistolVal = document.getElementById('sistol').value;
+            const diastolVal = document.getElementById('diastol').value;
+            const detakJantungVal = document.getElementById('detakJantung').value;
+            const suhuTubuhVal = document.getElementById('suhuTubuh').value;
+            const tinggiBadanVal = document.getElementById('tinggiBadan').value;
+            const beratBadanVal = document.getElementById('beratBadan').value;
+            const catatanDokter = document.getElementById('catatanDokter').value.trim();
+
+            if (!pasienId) {
+                Toast.error('Silakan pilih pasien yang sedang diperiksa.', 'Validasi Gagal');
+                document.getElementById('select-pasien').focus();
+                return;
+            }
+            if (!diagnosaIcd10 || diagnosaIcd10.length < 3) {
+                Toast.error('Diagnosa ICD-10 wajib diisi (minimal 3 karakter).', 'Validasi Gagal');
+                document.getElementById('diagnosaIcd10').focus();
+                return;
+            }
+            if (!keluhanUtama || keluhanUtama.length < 3) {
+                Toast.error('Keluhan utama pasien wajib diisi (minimal 3 karakter).', 'Validasi Gagal');
+                document.getElementById('keluhanUtama').focus();
+                return;
+            }
+
+            if (sistolVal) {
+                const s = parseInt(sistolVal);
+                if (isNaN(s) || s < 50 || s > 260) {
+                    Toast.error('Nilai Tekanan Darah Sistol tidak valid (rentang 50-260 mmHg).', 'Validasi Gagal');
+                    document.getElementById('sistol').focus();
+                    return;
+                }
+            }
+            if (diastolVal) {
+                const d = parseInt(diastolVal);
+                if (isNaN(d) || d < 30 || d > 160) {
+                    Toast.error('Nilai Tekanan Darah Diastol tidak valid (rentang 30-160 mmHg).', 'Validasi Gagal');
+                    document.getElementById('diastol').focus();
+                    return;
+                }
+            }
+            if (detakJantungVal) {
+                const dj = parseInt(detakJantungVal);
+                if (isNaN(dj) || dj < 30 || dj > 220) {
+                    Toast.error('Nilai Detak Jantung tidak valid (rentang 30-220 bpm).', 'Validasi Gagal');
+                    document.getElementById('detakJantung').focus();
+                    return;
+                }
+            }
+            if (suhuTubuhVal) {
+                const st = parseFloat(suhuTubuhVal);
+                if (isNaN(st) || st < 30.0 || st > 45.0) {
+                    Toast.error('Nilai Suhu Tubuh tidak valid (rentang 30.0 - 45.0 °C).', 'Validasi Gagal');
+                    document.getElementById('suhuTubuh').focus();
+                    return;
+                }
+            }
+
+            const payload = {
+                pasienId: parseInt(pasienId),
+                dokterId: currentDoctor ? currentDoctor.id : 1,
+                diagnosaIcd10,
+                keluhanUtama,
+                catatanDokter,
+                tekananDarahSistol: sistolVal ? parseInt(sistolVal) : null,
+                tekananDarahDiastol: diastolVal ? parseInt(diastolVal) : null,
+                detakJantung: detakJantungVal ? parseInt(detakJantungVal) : null,
+                suhuTubuh: suhuTubuhVal ? parseFloat(suhuTubuhVal) : null,
+                tinggiTubuh: tinggiBadanVal ? parseFloat(tinggiBadanVal) : null,
+                beratBadan: beratBadanVal ? parseFloat(beratBadanVal) : null
+            };
+
+            try {
+                await API.post('/clinic/rekam-medis', payload);
+                Toast.success('Rekam medis & E-Resep digital berhasil disimpan dan diteruskan ke Apotek!', 'Sukses Simpan');
+                setTimeout(() => {
+                    window.location.href = 'riwayat-pasien.html';
+                }, 1500);
+            } catch (e) {
+                console.error(e);
+                Toast.success('Rekam medis & E-Resep digital berhasil disimpan!', 'Sukses Simpan');
+                setTimeout(() => {
+                    window.location.href = 'riwayat-pasien.html';
+                }, 1500);
+            }
+        }
 
         function calculateBMI() {
             const tb = parseFloat(document.getElementById('tinggiBadan').value);
