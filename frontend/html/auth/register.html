@@ -104,14 +104,54 @@
             <p class="text-[11px] font-medium text-slate-500 max-w-md mx-auto">Lengkapi formulir di bawah ini untuk reservasi dokter & rekam medis digital</p>
         </div>
 
-        <!-- SPLASH PROGRESS LOADER (INTEGRATED INSIDE REGISTER CARD) -->
-        <div id="splash-loader" class="space-y-2.5 pt-2 pb-1 transition-all duration-500 ease-in-out">
-            <div class="w-full bg-slate-100/90 rounded-full h-2.5 p-0.5 border border-slate-200/80 overflow-hidden shadow-inner">
-                <div id="splash-progress" class="bg-gradient-to-r from-brand-500 via-brand-600 to-teal-600 h-full rounded-full w-0 transition-all duration-150 ease-out shadow-sm"></div>
+        <!-- EKG HEARTBEAT SPLASH LOADER -->
+        <div id="splash-loader" class="space-y-3 pt-2 pb-1 transition-all duration-500 ease-in-out">
+            <!-- EKG MONITOR DISPLAY BOX -->
+            <div class="relative w-full h-20 bg-slate-950 rounded-2xl border border-emerald-500/30 overflow-hidden shadow-[inset_0_2px_10px_rgba(0,0,0,0.8),0_0_15px_rgba(16,185,129,0.15)] flex flex-col justify-between p-2.5">
+                <!-- EKG Grid Lines Background -->
+                <div class="absolute inset-0 opacity-20 bg-[linear-gradient(to_right,#10b981_1px,transparent_1px),linear-gradient(to_bottom,#10b981_1px,transparent_1px)] bg-[size:10px_10px] pointer-events-none"></div>
+
+                <!-- Monitor Header / Status Bar -->
+                <div class="relative z-10 flex items-center justify-between px-1 text-[10px] text-emerald-400/90 font-mono tracking-wider">
+                    <div class="flex items-center gap-1.5">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </span>
+                        <span class="font-bold text-emerald-400">EKG MONITOR</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 font-bold">
+                        <span id="splash-bpm" class="text-emerald-300">72 BPM</span>
+                        <span class="text-slate-600">|</span>
+                        <span id="splash-percent" class="text-emerald-400 font-extrabold text-xs">0%</span>
+                    </div>
+                </div>
+
+                <!-- SVG EKG Waveform Path -->
+                <div class="relative w-full h-11 my-auto">
+                    <svg class="w-full h-full" viewBox="0 0 500 80" preserveAspectRatio="none">
+                        <!-- Background Dim Path -->
+                        <path d="M 0 45 L 30 45 Q 40 35 50 45 L 65 45 L 70 52 L 78 8 L 86 68 L 92 45 L 115 45 Q 130 25 145 45 L 180 45 Q 190 35 200 45 L 215 45 L 220 52 L 228 8 L 236 68 L 242 45 L 265 45 Q 280 25 295 45 L 330 45 Q 340 35 350 45 L 365 45 L 370 52 L 378 8 L 386 68 L 392 45 L 415 45 Q 430 25 445 45 L 500 45"
+                              fill="none" stroke="rgba(16, 185, 129, 0.15)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        
+                        <!-- Glowing Neon Active Path -->
+                        <path id="ekg-wave-path" d="M 0 45 L 30 45 Q 40 35 50 45 L 65 45 L 70 52 L 78 8 L 86 68 L 92 45 L 115 45 Q 130 25 145 45 L 180 45 Q 190 35 200 45 L 215 45 L 220 52 L 228 8 L 236 68 L 242 45 L 265 45 Q 280 25 295 45 L 330 45 Q 340 35 350 45 L 365 45 L 370 52 L 378 8 L 386 68 L 392 45 L 415 45 Q 430 25 445 45 L 500 45"
+                              fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                              style="filter: drop-shadow(0px 0px 6px #10B981);"/>
+                        
+                        <!-- Glowing Pulse Head Dot -->
+                        <circle id="ekg-head-dot" cx="0" cy="45" r="4" fill="#6EE7B7" style="filter: drop-shadow(0px 0px 8px #34D399);"/>
+                    </svg>
+                </div>
             </div>
-            <div id="splash-status" class="text-[11px] tracking-wide flex items-center justify-center gap-1.5 h-5">
-                <span id="splash-text" class="font-medium text-slate-500">Menyiapkan Formulir Pendaftaran...</span>
-                <span class="font-mono text-brand-700 font-extrabold" id="splash-percent">1%</span>
+
+            <!-- EKG Status Message -->
+            <div id="splash-status" class="text-[11px] tracking-wide flex items-center justify-between px-1 h-5">
+                <span id="splash-text" class="font-semibold text-slate-600 flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-[15px] text-emerald-500 animate-pulse">monitor_heart</span>
+                    <span>Menyiapkan Formulir Pendaftaran...</span>
+                </span>
+                <span id="splash-badge" class="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60">SEHAT</span>
             </div>
         </div>
 
@@ -282,65 +322,85 @@
             const progress = document.getElementById('splash-progress');
             const stageText = document.getElementById('splash-text');
             const percentText = document.getElementById('splash-percent');
+            const bpmText = document.getElementById('splash-bpm');
+            const badgeText = document.getElementById('splash-badge');
             const registerContent = document.getElementById('register-content');
+            const ekgPath = document.getElementById('ekg-wave-path');
+            const ekgHead = document.getElementById('ekg-head-dot');
 
             if (!loader || !registerContent) return;
 
-            const isAppAlreadyLoaded = sessionStorage.getItem('sentra_farma_app_loaded');
+            let totalLen = 0;
+            if (ekgPath) {
+                totalLen = ekgPath.getTotalLength();
+                ekgPath.style.strokeDasharray = totalLen;
+                ekgPath.style.strokeDashoffset = totalLen;
+            }
 
-            if (isAppAlreadyLoaded) {
-                // Skip splash loading animation if application was already opened in this session
-                loader.classList.add('hidden');
-                if (card) {
-                    card.classList.remove('max-w-md');
-                    card.classList.add('max-w-3xl');
+            let p = 1;
+
+            const interval = setInterval(() => {
+                p += 1;
+                if (p > 100) p = 100;
+                if (percentText) percentText.textContent = p + '%';
+
+                if (ekgPath && totalLen > 0) {
+                    const currentLen = (p / 100) * totalLen;
+                    ekgPath.style.strokeDashoffset = totalLen - currentLen;
+                    if (ekgHead) {
+                        try {
+                            const pt = ekgPath.getPointAtLength(currentLen);
+                            ekgHead.setAttribute('cx', pt.x);
+                            ekgHead.setAttribute('cy', pt.y);
+                        } catch (err) {}
+                    }
                 }
-                registerContent.classList.remove('max-h-0', 'opacity-0', 'pointer-events-none', 'scale-95');
-                registerContent.classList.add('max-h-[1000px]', 'opacity-100', 'scale-100', 'pointer-events-auto', 'unfolded');
-            } else {
-                let p = 1;
 
-                const interval = setInterval(() => {
-                    p += 2;
-                    if (p > 100) p = 100;
-                    if (progress) progress.style.width = p + '%';
-                    if (percentText) percentText.textContent = p + '%';
-
-                    if (stageText) {
-                        if (p <= 35) {
-                            stageText.textContent = "Menyiapkan Formulir Pendaftaran...";
-                        } else if (p <= 75) {
-                            stageText.textContent = "Menghubungkan Database Layanan Pasien...";
-                        } else if (p < 100) {
-                            stageText.textContent = "Menyiapkan Akses Rekam Medis Digital...";
-                        } else {
-                            stageText.textContent = "Formulir Siap!";
+                if (stageText) {
+                    if (p <= 35) {
+                        stageText.innerHTML = `<span class="material-symbols-outlined text-[15px] text-emerald-500 animate-pulse">monitor_heart</span><span>Menyiapkan Formulir Pendaftaran...</span>`;
+                        if (bpmText) bpmText.textContent = `${72 + Math.floor(Math.random() * 4)} BPM`;
+                    } else if (p <= 75) {
+                        stageText.innerHTML = `<span class="material-symbols-outlined text-[15px] text-teal-500 animate-pulse">ecg_heart</span><span>Menghubungkan Database Layanan Pasien...</span>`;
+                        if (bpmText) bpmText.textContent = `${76 + Math.floor(Math.random() * 4)} BPM`;
+                        if (badgeText) {
+                            badgeText.textContent = 'TERHUBUNG';
+                            badgeText.className = 'text-[10px] font-mono font-bold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-200/60';
+                        }
+                    } else if (p < 100) {
+                        stageText.innerHTML = `<span class="material-symbols-outlined text-[15px] text-emerald-600 animate-pulse">vital_signs</span><span>Menyiapkan Akses Rekam Medis Digital...</span>`;
+                        if (bpmText) bpmText.textContent = `${78 + Math.floor(Math.random() * 3)} BPM`;
+                    } else {
+                        stageText.innerHTML = `<span class="material-symbols-outlined text-[15px] text-emerald-600">check_circle</span><span>Formulir Siap!</span>`;
+                        if (bpmText) bpmText.textContent = `75 BPM OK`;
+                        if (badgeText) {
+                            badgeText.textContent = 'SIAP';
+                            badgeText.className = 'text-[10px] font-mono font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full border border-emerald-300';
                         }
                     }
+                }
 
-                    if (p >= 100) {
-                        clearInterval(interval);
-                        sessionStorage.setItem('sentra_farma_app_loaded', 'true');
+                if (p >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        if (card) {
+                            card.classList.remove('max-w-md');
+                            card.classList.add('max-w-3xl');
+                        }
+
+                        loader.style.maxHeight = '0px';
+                        loader.style.opacity = '0';
+                        loader.style.overflow = 'hidden';
+
+                        registerContent.classList.remove('max-h-0', 'opacity-0', 'pointer-events-none', 'scale-95');
+                        registerContent.classList.add('max-h-[1000px]', 'opacity-100', 'scale-100', 'pointer-events-auto', 'unfolded');
+
                         setTimeout(() => {
-                            if (card) {
-                                card.classList.remove('max-w-md');
-                                card.classList.add('max-w-3xl');
-                            }
-
-                            loader.style.maxHeight = '0px';
-                            loader.style.opacity = '0';
-                            loader.style.overflow = 'hidden';
-
-                            registerContent.classList.remove('max-h-0', 'opacity-0', 'pointer-events-none', 'scale-95');
-                            registerContent.classList.add('max-h-[1000px]', 'opacity-100', 'scale-100', 'pointer-events-auto', 'unfolded');
-
-                            setTimeout(() => {
-                                loader.classList.add('hidden');
-                            }, 500);
-                        }, 250);
-                    }
-                }, 20);
-            }
+                            loader.classList.add('hidden');
+                        }, 500);
+                    }, 200);
+                }
+            }, 45);
         });
 
         function validateNikInline() {
