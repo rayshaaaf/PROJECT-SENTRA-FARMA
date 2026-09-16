@@ -5,8 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login - Sentra Farma</title>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
-        rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
@@ -28,6 +31,23 @@
         }
     </script>
     <style>
+        .material-symbols-outlined, .material-icons, .material-icons-outlined {
+            font-family: 'Material Symbols Outlined', 'Material Icons Outlined', 'Material Icons' !important;
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+
         ::-webkit-scrollbar {
             display: none;
         }
@@ -57,15 +77,8 @@
         }
 
         .stagger-item {
-            opacity: 0;
-            transform: translateY(16px);
             transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
         }
-
-        .unfolded .stagger-1 { transition-delay: 0.08s; opacity: 1; transform: translateY(0); }
-        .unfolded .stagger-2 { transition-delay: 0.18s; opacity: 1; transform: translateY(0); }
-        .unfolded .stagger-3 { transition-delay: 0.28s; opacity: 1; transform: translateY(0); }
-        .unfolded .stagger-4 { transition-delay: 0.38s; opacity: 1; transform: translateY(0); }
     </style>
 </head>
 
@@ -80,9 +93,9 @@
         class="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-teal-400/20 rounded-full blur-[140px] pointer-events-none">
     </div>
 
-    <!-- UNIFIED HERO LOGIN CARD WITH MORPHING SPLASH ANIMATION -->
+    <!-- UNIFIED HERO LOGIN CARD -->
     <div id="hero-card"
-        class="max-w-md w-full bg-white/95 backdrop-blur-2xl border border-emerald-100/90 shadow-[0_25px_70px_-15px_rgba(16,185,129,0.2)] p-8 md:p-10 rounded-[2.5rem] relative z-10 space-y-6 transition-all duration-700 ease-out">
+        class="max-w-lg w-full bg-white/95 backdrop-blur-2xl border border-emerald-100/90 shadow-[0_25px_70px_-15px_rgba(16,185,129,0.2)] p-8 md:p-10 rounded-[2.5rem] relative z-10 space-y-6">
 
         <!-- PROMINENT LARGE CENTRED LOGO (SHARED) -->
         <div class="text-center space-y-3">
@@ -96,21 +109,10 @@
             </div>
         </div>
 
-        <!-- SPLASH PROGRESS LOADER (INTEGRATED INSIDE LOGIN CARD) -->
-        <div id="splash-loader" class="space-y-2.5 pt-2 pb-1 transition-all duration-500 ease-in-out">
-            <div class="w-full bg-slate-100/90 rounded-full h-2.5 p-0.5 border border-slate-200/80 overflow-hidden shadow-inner">
-                <div id="splash-progress" class="bg-gradient-to-r from-brand-500 via-brand-600 to-teal-600 h-full rounded-full w-0 transition-all duration-150 ease-out shadow-sm"></div>
-            </div>
-            <div id="splash-status" class="text-[11px] tracking-wide flex items-center justify-center gap-1.5 h-5">
-                <span id="splash-text" class="font-medium text-slate-500">Menghubungkan Layanan Klinik...</span>
-                <span class="font-mono text-brand-700 font-extrabold" id="splash-percent">1%</span>
-            </div>
-        </div>
-
-        <!-- LOGIN FORM & TABS CONTENT (UNFOLDS AFTER LOADING COMPLETES) -->
-        <div id="login-content" class="space-y-6 max-h-0 opacity-0 overflow-hidden pointer-events-none transition-all duration-700 ease-out scale-95">
+        <!-- LOGIN FORM & TABS CONTENT -->
+        <div id="login-content" class="space-y-6">
             <!-- INTERACTIVE ROLE SELECTOR TABS -->
-            <div class="stagger-item stagger-1 bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200/60 space-y-1">
+            <div class="stagger-item bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200/60 space-y-1">
                 <div class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider text-center pt-1 pb-1.5">
                     Pilih Peran Untuk Login Cepat (Password: <code
                         class="text-brand-600 font-mono font-bold">password123</code>)</div>
@@ -120,7 +122,7 @@
                         <span class="material-symbols-outlined text-[18px]">person</span>
                         <span class="text-[9px]">Pasien</span>
                     </button>
-                    <button type="button" onclick="selectRoleTab('dokter', 'dr.hendra@sentrafarma.com')" id="tab-dokter"
+                    <button type="button" onclick="selectRoleTab('dokter', 'dr.arisandy@sentrafarma.com')" id="tab-dokter"
                         class="role-tab py-2 px-1 rounded-xl flex flex-col items-center gap-1 transition-all text-slate-500 hover:text-slate-900 hover:bg-white/50">
                         <span class="material-symbols-outlined text-[18px]">stethoscope</span>
                         <span class="text-[9px]">Dokter</span>
@@ -146,7 +148,7 @@
 
             <!-- FORM LOGIN -->
             <form id="login-form" class="space-y-4">
-                <div class="stagger-item stagger-2">
+                <div class="stagger-item">
                     <label class="block text-[11px] font-extrabold text-slate-700 uppercase tracking-wider mb-1.5">EMAIL
                         ALAMAT</label>
                     <div class="relative group">
@@ -157,7 +159,7 @@
                     </div>
                 </div>
 
-                <div class="stagger-item stagger-3">
+                <div class="stagger-item">
                     <div class="flex justify-between items-center mb-1.5">
                         <label class="text-[11px] font-extrabold text-slate-700 uppercase tracking-wider">PASSWORD</label>
                         <a href="/frontend/html/auth/forgot-password.html"
@@ -176,7 +178,7 @@
                     </div>
                 </div>
 
-                <div class="stagger-item stagger-4">
+                <div class="stagger-item">
                     <button type="submit" id="btn-submit"
                         class="w-full py-4 bg-gradient-to-r from-brand-600 via-brand-700 to-emerald-800 hover:from-brand-500 hover:to-emerald-700 text-white font-extrabold text-xs rounded-2xl shadow-xl shadow-brand-600/25 hover:shadow-brand-600/40 active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 tracking-wide uppercase">
                         <span>Masuk Sekarang</span>
@@ -196,76 +198,10 @@
 
     </div>
 
+    <script src="../../js/auth-guard.js"></script>
     <script src="../../js/api.js"></script>
     <script src="../../js/toast.js"></script>
     <script>
-        // APP OPENING SPLASH ANIMATION (MORPHING CARD - RUNS ONCE PER SESSION)
-        window.addEventListener('DOMContentLoaded', () => {
-            const card = document.getElementById('hero-card');
-            const loader = document.getElementById('splash-loader');
-            const progress = document.getElementById('splash-progress');
-            const stageText = document.getElementById('splash-text');
-            const percentText = document.getElementById('splash-percent');
-            const loginContent = document.getElementById('login-content');
-
-            if (!loader || !loginContent) return;
-
-            const isAppAlreadyLoaded = sessionStorage.getItem('sentra_farma_app_loaded');
-
-            if (isAppAlreadyLoaded) {
-                // Skip splash loading animation if application was already opened in this session
-                loader.classList.add('hidden');
-                if (card) {
-                    card.classList.remove('max-w-md');
-                    card.classList.add('max-w-lg');
-                }
-                loginContent.classList.remove('max-h-0', 'opacity-0', 'pointer-events-none', 'scale-95');
-                loginContent.classList.add('max-h-[1000px]', 'opacity-100', 'scale-100', 'pointer-events-auto', 'unfolded');
-            } else {
-                let p = 1;
-
-                const interval = setInterval(() => {
-                    p += 2;
-                    if (p > 100) p = 100;
-                    if (progress) progress.style.width = p + '%';
-                    if (percentText) percentText.textContent = p + '%';
-
-                    if (stageText) {
-                        if (p <= 35) {
-                            stageText.textContent = "Menghubungkan Layanan Klinik...";
-                        } else if (p <= 75) {
-                            stageText.textContent = "Memuat Dokter & Apotek 24 Jam...";
-                        } else if (p < 100) {
-                            stageText.textContent = "Menyiapkan Akses Safe Session...";
-                        } else {
-                            stageText.textContent = "Sistem Siap Digunakan!";
-                        }
-                    }
-
-                    if (p >= 100) {
-                        clearInterval(interval);
-                        sessionStorage.setItem('sentra_farma_app_loaded', 'true');
-                        setTimeout(() => {
-                            if (card) {
-                                card.classList.remove('max-w-md');
-                                card.classList.add('max-w-lg');
-                            }
-
-                            loader.style.maxHeight = '0px';
-                            loader.style.opacity = '0';
-                            loader.style.overflow = 'hidden';
-
-                            loginContent.classList.remove('max-h-0', 'opacity-0', 'pointer-events-none', 'scale-95');
-                            loginContent.classList.add('max-h-[1000px]', 'opacity-100', 'scale-100', 'pointer-events-auto', 'unfolded');
-
-                            setTimeout(() => {
-                                loader.classList.add('hidden');
-                            }, 500);
-                        }, 300);
-                    }
-                }, 20);
-            }
-        });
 
         function selectRoleTab(role, email) {
             document.querySelectorAll('.role-tab').forEach(tab => {

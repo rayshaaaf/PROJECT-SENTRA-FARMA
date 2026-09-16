@@ -11,6 +11,8 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> 
 
     List<ChatMessage> findBySessionIdOrderByCreatedAtAsc(String sessionId);
 
+    void deleteBySessionId(String sessionId);
+
     @Query("SELECT DISTINCT c.sessionId FROM ChatMessage c WHERE c.sessionId LIKE %:docPattern% OR c.receiverId = :doctorId OR c.senderId = :doctorId")
     List<String> findDistinctSessionIdsByDoctor(@Param("doctorId") Long doctorId, @Param("docPattern") String docPattern);
 }

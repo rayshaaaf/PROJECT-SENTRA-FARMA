@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arsip Riwayat Pasien - Sentra Farma</title>
+    <script src="../../js/auth-guard.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#F0FDF4', 100: '#DCFCE7', 200: '#BBF7D0', 300: '#86EFAC', 400: '#4ADE80',
+                            500: '#10B981', 600: '#059669', 700: '#047857', 800: '#065F46', 900: '#064E3B', 950: '#022C22'
+                        },
+                        surface: '#F8FAFC'
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined, .material-icons, .material-icons-outlined {
+            font-family: 'Material Symbols Outlined', 'Material Icons Outlined', 'Material Icons' !important;
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+
+        html,
+        body {
+            height: 100vh;
+            overflow: hidden !important;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 9999px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+
+        @media (max-width: 1024px) {
+            html, body {
+                height: auto;
+                overflow-y: auto !important;
+            }
+            body {
+                flex-direction: column !important;
+                padding: 0.75rem !important;
+            }
+
+            aside.left-dock {
+                position: relative !important;
+                top: 0 !important;
+                left: 0 !important;
+                bottom: auto !important;
+                width: 100% !important;
+                height: auto !important;
+                flex-direction: row !important;
+                justify-content: space-between !important;
+                padding: 0.5rem 1rem !important;
+                margin-bottom: 0.75rem !important;
+            }
+
+            .main-portal-container {
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                height: auto !important;
+                overflow-y: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-emerald-50/60 via-teal-50/40 to-slate-50 font-sans text-slate-800 flex h-screen antialiased selection:bg-brand-100 selection:text-brand-800 relative overflow-hidden">
+
+    <!-- Ambient Glow Mesh Spheres -->
+    <div class="fixed -top-40 -left-40 w-[500px] h-[500px] bg-emerald-300/25 rounded-full blur-[120px] pointer-events-none z-0"></div>
+    <div class="fixed top-1/3 -right-40 w-[450px] h-[450px] bg-teal-200/25 rounded-full blur-[100px] pointer-events-none z-0"></div>
+    <div class="fixed -bottom-40 left-1/3 w-[500px] h-[500px] bg-emerald-200/20 rounded-full blur-[120px] pointer-events-none z-0"></div>
+
+    <!-- LEFT SIDEBAR DOCK (DESKTOP) -->
+    <aside class="left-dock fixed left-6 top-1/2 -translate-y-1/2 w-20 bg-white/95 backdrop-blur-2xl border border-slate-200/80 shadow-xl shadow-slate-300/40 rounded-3xl z-50 hidden lg:flex flex-col items-center py-5 space-y-4">
+        <nav class="flex flex-col items-center gap-2">
+            <a href="dashboard.html" title="Dashboard Utama" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">dashboard</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Dashboard</span>
+            </a>
+            <a href="pemeriksaan.html" title="Ruang Periksa Pasien" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">stethoscope</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Ruang Periksa</span>
+            </a>
+            <a href="jadwal.html" title="Jadwal Shift Dokter" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">calendar_month</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Jadwal Shift</span>
+            </a>
+            <a href="riwayat-pasien.html" title="Arsip Riwayat Pasien" class="relative group p-2.5 rounded-2xl bg-brand-50 text-brand-600 font-bold transition-all shadow-2xs">
+                <span class="material-symbols-outlined text-[22px]">folder_shared</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Riwayat Pasien</span>
+            </a>
+            <a href="chat.html" title="Live Chat Konsultasi" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">forum</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Live Chat</span>
+            </a>
+            <a href="laporan-harian.html" title="Laporan Harian Dokter" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">assignment</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Laporan Harian</span>
+            </a>
+            <button onclick="Absensi.openModal()" title="Presensi Dokter" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all cursor-pointer">
+                <span class="material-symbols-outlined text-[22px]">fingerprint</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Presensi Dokter</span>
+            </button>
+        </nav>
+
+        <div class="w-8 h-px bg-slate-200/70"></div>
+
+        <div class="flex flex-col items-center gap-2">
+            <a href="profil.html" title="Profil Dokter" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">person</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Profil Saya</span>
+            </a>
+            <button onclick="handleLogout()" title="Logout" class="relative group p-2.5 rounded-2xl text-rose-400 hover:text-rose-600 hover:bg-rose-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">logout</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-rose-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- MOBILE BOTTOM NAVIGATION BAR -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-slate-200/80 shadow-lg z-50 flex items-center justify-around p-2 text-slate-500">
+        <a href="dashboard.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">dashboard</span>
+            <span class="text-[9px]">Dashboard</span>
+        </a>
+        <a href="pemeriksaan.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">stethoscope</span>
+            <span class="text-[9px]">Periksa</span>
+        </a>
+        <a href="jadwal.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">calendar_month</span>
+            <span class="text-[9px]">Jadwal</span>
+        </a>
+        <a href="riwayat-pasien.html" class="flex flex-col items-center gap-0.5 p-1 text-brand-600 font-extrabold">
+            <span class="material-symbols-outlined text-[20px]">folder_shared</span>
+            <span class="text-[9px]">Riwayat</span>
+        </a>
+        <a href="laporan-harian.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">assignment</span>
+            <span class="text-[9px]">Laporan</span>
+        </a>
+    </nav>
+
+    <!-- MAIN CONTENT CONTAINER (RESPONSIVE FOR DESKTOP, TABLET, AND MOBILE) -->
+    <div class="main-portal-container flex-1 lg:ml-32 lg:mr-4 px-3 sm:px-6 flex flex-col min-h-screen lg:h-screen overflow-y-auto lg:overflow-hidden pb-20 lg:pb-0">
+
+        <!-- TRANSPARENT HEADER BAR (PATIENT MATCHING STYLE) -->
+        <header
+            class="h-20 flex items-center justify-between px-6 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100/60 transition-all shrink-0">
+            <div class="flex items-center gap-3">
+                <a href="dashboard.html" class="flex items-center gap-2 group cursor-pointer shrink-0" title="Sentra Farma">
+                    <img src="../../assets/logo.png" alt="Sentra Farma" class="h-12 sm:h-14 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform" />
+                </a>
+                <div class="h-8 w-px bg-slate-200/80 hidden sm:block"></div>
+                <div>
+                    <h1 class="text-base font-extrabold text-slate-900 tracking-tight">Arsip Database Rekam Medis Pasien</h1>
+                    <p class="text-[10px] text-slate-500 font-medium">Pencarian & Peninjauan Histori Diagnosa & Pengobatan Pasien</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2.5">
+                <button onclick="Absensi.openModal()" title="Presensi & Absensi Dokter"
+                    class="px-3 py-1 bg-brand-600 hover:bg-brand-700 text-white text-xs font-black rounded-full flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer">
+                    <span class="material-symbols-outlined text-[14px]">fingerprint</span>
+                    <span>Presensi / Absen</span>
+                </button>
+
+                <a href="profil.html" title="Buka Profil Saya"
+                    class="flex items-center gap-2 pl-2 border-l border-slate-200 group cursor-pointer">
+                    <div id="doctor-avatar-initials"
+                        class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-700 to-emerald-500 text-white flex items-center justify-center font-extrabold text-xs shadow-md group-hover:scale-105 transition-transform">D</div>
+                    <span id="doctor-name-badge"
+                        class="text-xs font-extrabold text-slate-900 hidden sm:inline group-hover:text-emerald-700 transition-colors">Dokter</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- MAIN WORKSPACE CONTAINER -->
+        <main class="p-6 max-w-6xl mx-auto w-full flex-1 flex flex-col justify-between overflow-hidden gap-4">
+
+            <!-- SEARCH SECTION -->
+            <section class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-sm flex-1 flex flex-col min-h-0 overflow-hidden space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-3 shrink-0">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center font-bold shadow-2xs">
+                            <span class="material-symbols-outlined text-[20px]">folder_shared</span>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-extrabold text-slate-900">Pencarian Pasien & Histori Medis</h3>
+                            <p class="text-[10px] text-slate-500 font-medium">Cari data rekam medis pasien terdaftar di Sentra Farma</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 shrink-0">
+                    <div class="relative flex-1">
+                        <span class="material-symbols-outlined absolute left-3.5 top-2.5 text-slate-400 text-[18px]">search</span>
+                        <input type="text" id="search-pasien-input" onkeyup="if(event.key==='Enter') searchPasienRecords()" placeholder="Ketik NIK atau Nama Pasien (misal: Ahmad Dahlan / 3171010...)" 
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 pl-10 pr-3 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500 focus:bg-white transition-all" />
+                    </div>
+                    <button onclick="searchPasienRecords()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-extrabold rounded-xl shadow-xs transition-colors flex items-center gap-1 shrink-0">
+                        <span class="material-symbols-outlined text-[15px]">search</span> Cari Pasien
+                    </button>
+                </div>
+
+                <div id="pasien-records-result" class="flex-1 overflow-y-auto space-y-4 pr-1 custom-scrollbar">
+                    <!-- Loaded dynamically -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/toast.js"></script>
+    <script src="../../js/auth-guard.js"></script>
+    <script src="../../js/absensi.js"></script>
+    <script>
+        let currentDoctor = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await initDoctorData();
+            searchPasienRecords();
+        });
+
+        function handleLogout() {
+            API.clearSession();
+            Toast.success('Dokter telah berhasil logout.', 'Sampai Jumpa');
+            setTimeout(() => window.location.href = '/frontend/html/auth/login.html', 1000);
+        }
+
+        async function initDoctorData() {
+            const user = API.getUser();
+            if (user) {
+                try {
+                    const doc = await API.get(`/clinic/dokter/user/${user.id}`);
+                    if (doc && doc.id) currentDoctor = doc;
+                } catch(e) {}
+            }
+
+            if (!currentDoctor) {
+                currentDoctor = { id: 1, namaDokter: user ? user.namaLengkap : 'dr. Arisandy Pratama, M.Ked' };
+            }
+
+            const name = currentDoctor.namaDokter || 'Dokter Spesialis';
+            document.getElementById('doctor-name-badge').innerText = name;
+            document.getElementById('doctor-avatar-initials').innerText = name.replace(/^drg?\.\s*/i, '').trim().charAt(0).toUpperCase() || 'D';
+        }
+
+        async function searchPasienRecords() {
+            const query = document.getElementById('search-pasien-input').value.trim();
+            const resultDiv = document.getElementById('pasien-records-result');
+
+            resultDiv.innerHTML = '<p class="text-xs text-slate-400 italic">Memuat arsip riwayat rekam medis pasien...</p>';
+
+            try {
+                const pasiens = await API.get('/clinic/pasien');
+                let matched = pasiens;
+                if (query) {
+                    matched = pasiens.filter(p => 
+                        p.namaLengkap.toLowerCase().includes(query.toLowerCase()) || 
+                        (p.nik && p.nik.includes(query))
+                    );
+                }
+
+                if (matched.length === 0) {
+                    resultDiv.innerHTML = `
+                        <div class="p-6 bg-slate-50 border border-slate-200/80 rounded-2xl text-center text-slate-400 text-xs">
+                            Data pasien "${query}" tidak ditemukan.
+                        </div>
+                    `;
+                    return;
+                }
+
+                let html = '';
+                for (const p of matched) {
+                    let records = [];
+                    try {
+                        records = await API.get(`/clinic/rekam-medis/pasien/${p.id}`);
+                    } catch(e){}
+
+                    html += `
+                        <div class="p-6 bg-white border border-slate-200/80 rounded-3xl space-y-4 shadow-sm">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="px-2 py-0.5 bg-brand-100 text-brand-800 text-[10px] font-bold rounded-md">ID: ${p.id}</span>
+                                        <h4 class="text-base font-extrabold text-slate-900">${p.namaLengkap}</h4>
+                                    </div>
+                                    <p class="text-xs text-slate-500 font-mono mt-0.5">NIK: ${p.nik} • Kelamin: ${p.jenisKelamin || 'Laki-laki'} • Gol. Darah: ${p.golonganDarah || 'O'}</p>
+                                </div>
+                                <a href="pemeriksaan.html?pasienId=${p.id}" class="px-3.5 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-extrabold rounded-xl transition-all shadow-xs flex items-center gap-1 shrink-0 w-fit">
+                                    <span class="material-symbols-outlined text-[15px]">stethoscope</span> Periksa Pasien Ini
+                                </a>
+                            </div>
+
+                            <div class="space-y-2">
+                                <h5 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Riwayat Pemeriksaan Dokter:</h5>
+                                ${records.length === 0 ? '<p class="text-xs text-slate-400 italic">Belum ada riwayat rekam medis terdahulu.</p>' : 
+                                    records.map(r => `
+                                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/60 text-xs space-y-2">
+                                            <div class="flex justify-between items-center font-bold text-slate-800">
+                                                <span>Diagnosa ICD-10: <strong class="text-brand-700 font-extrabold">${r.diagnosa || '-'}</strong></span>
+                                                <span class="text-[10px] text-slate-400 font-mono">${r.createdAt ? new Date(r.createdAt).toLocaleDateString('id-ID') : 'Hari ini'}</span>
+                                            </div>
+                                            <p class="text-slate-600 font-medium">Anamnesa/Keluhan: ${r.anamnesa || '-'}</p>
+                                            ${r.catatanDokter ? '<p class="text-[11px] text-slate-500 italic">Catatan: ' + r.catatanDokter + '</p>' : ''}
+                                        </div>
+                                    `).join('')
+                                }
+                            </div>
+                        </div>
+                    `;
+                }
+
+                resultDiv.innerHTML = html;
+            } catch(e) {
+                resultDiv.innerHTML = '<p class="text-xs text-rose-500 italic">Gagal memuat riwayat pasien.</p>';
+            }
+        }
+    </script>
+</body>
+
+</html>

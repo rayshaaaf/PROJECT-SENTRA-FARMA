@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Live Chat Konsultasi Dokter - Sentra Farma</title>
+    <script src="../../js/auth-guard.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#F0FDF4', 100: '#DCFCE7', 200: '#BBF7D0', 300: '#86EFAC', 400: '#4ADE80',
+                            500: '#10B981', 600: '#059669', 700: '#047857', 800: '#065F46', 900: '#064E3B', 950: '#022C22'
+                        },
+                        surface: '#F8FAFC'
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined, .material-icons, .material-icons-outlined {
+            font-family: 'Material Symbols Outlined', 'Material Icons Outlined', 'Material Icons' !important;
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+
+        html,
+        body {
+            height: 100vh;
+            overflow: hidden !important;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 9999px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+
+        @media (max-width: 1024px) {
+            html, body {
+                height: auto;
+                overflow-y: auto !important;
+            }
+            body {
+                flex-direction: column !important;
+                padding: 0.75rem !important;
+            }
+
+            aside.left-dock {
+                position: relative !important;
+                top: 0 !important;
+                left: 0 !important;
+                bottom: auto !important;
+                width: 100% !important;
+                height: auto !important;
+                flex-direction: row !important;
+                justify-content: space-between !important;
+                padding: 0.5rem 1rem !important;
+                margin-bottom: 0.75rem !important;
+            }
+
+            .main-portal-container {
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                height: auto !important;
+                overflow-y: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-emerald-50/60 via-teal-50/40 to-slate-50 font-sans text-slate-800 flex h-screen antialiased selection:bg-brand-100 selection:text-brand-800 relative overflow-hidden">
+
+    <!-- Ambient Glow Mesh Spheres -->
+    <div class="fixed -top-40 -left-40 w-[500px] h-[500px] bg-emerald-300/25 rounded-full blur-[120px] pointer-events-none z-0"></div>
+    <div class="fixed top-1/3 -right-40 w-[450px] h-[450px] bg-teal-200/25 rounded-full blur-[100px] pointer-events-none z-0"></div>
+    <div class="fixed -bottom-40 left-1/3 w-[500px] h-[500px] bg-emerald-200/20 rounded-full blur-[120px] pointer-events-none z-0"></div>
+
+    <!-- LEFT SIDEBAR DOCK (DESKTOP) -->
+    <aside class="left-dock fixed left-6 top-1/2 -translate-y-1/2 w-20 bg-white/95 backdrop-blur-2xl border border-slate-200/80 shadow-xl shadow-slate-300/40 rounded-3xl z-50 hidden lg:flex flex-col items-center py-5 space-y-4">
+        <nav class="flex flex-col items-center gap-2">
+            <a href="dashboard.html" title="Dashboard Utama" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">dashboard</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Dashboard</span>
+            </a>
+            <a href="pemeriksaan.html" title="Ruang Periksa Pasien" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">stethoscope</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Ruang Periksa</span>
+            </a>
+            <a href="jadwal.html" title="Jadwal Shift Dokter" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">calendar_month</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Jadwal Shift</span>
+            </a>
+            <a href="riwayat-pasien.html" title="Arsip Riwayat Pasien" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">folder_shared</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Riwayat Pasien</span>
+            </a>
+            <a href="chat.html" title="Live Chat Konsultasi" class="relative group p-2.5 rounded-2xl bg-brand-50 text-brand-600 font-bold transition-all shadow-2xs">
+                <span class="material-symbols-outlined text-[22px]">forum</span>
+                <span class="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center animate-pulse border border-white shadow-xs">1</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Live Chat (1 Masuk)</span>
+            </a>
+            <a href="laporan-harian.html" title="Laporan Harian Dokter" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">assignment</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Laporan Harian</span>
+            </a>
+            <button onclick="Absensi.openModal()" title="Presensi Dokter" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all cursor-pointer">
+                <span class="material-symbols-outlined text-[22px]">fingerprint</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Presensi Dokter</span>
+            </button>
+        </nav>
+
+        <div class="w-8 h-px bg-slate-200/70"></div>
+
+        <div class="flex flex-col items-center gap-2">
+            <a href="profil.html" title="Profil Dokter" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">person</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Profil Saya</span>
+            </a>
+            <button onclick="handleLogout()" title="Logout" class="relative group p-2.5 rounded-2xl text-rose-400 hover:text-rose-600 hover:bg-rose-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">logout</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-rose-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- MOBILE BOTTOM NAVIGATION BAR -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-slate-200/80 shadow-lg z-50 flex items-center justify-around p-2 text-slate-500">
+        <a href="dashboard.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">dashboard</span>
+            <span class="text-[9px]">Dashboard</span>
+        </a>
+        <a href="pemeriksaan.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">stethoscope</span>
+            <span class="text-[9px]">Periksa</span>
+        </a>
+        <a href="jadwal.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">calendar_month</span>
+            <span class="text-[9px]">Jadwal</span>
+        </a>
+        <a href="chat.html" class="flex flex-col items-center gap-0.5 p-1 text-brand-600 font-extrabold relative">
+            <span class="material-symbols-outlined text-[20px]">forum</span>
+            <span class="absolute top-0 right-3 w-3.5 h-3.5 bg-rose-500 text-white text-[8px] font-black rounded-full flex items-center justify-center animate-pulse border border-white">1</span>
+            <span class="text-[9px]">Chat</span>
+        </a>
+        <a href="laporan-harian.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">assignment</span>
+            <span class="text-[9px]">Laporan</span>
+        </a>
+    </nav>
+
+    <!-- MAIN CONTENT CONTAINER (RESPONSIVE FOR DESKTOP, TABLET, AND MOBILE) -->
+    <div class="main-portal-container flex-1 lg:ml-32 lg:mr-4 px-3 sm:px-6 flex flex-col min-h-screen lg:h-screen overflow-y-auto lg:overflow-hidden pb-20 lg:pb-0">
+
+        <!-- TRANSPARENT HEADER BAR (PATIENT MATCHING STYLE) -->
+        <header
+            class="h-20 flex items-center justify-between px-6 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100/60 transition-all shrink-0">
+            <div class="flex items-center gap-3">
+                <a href="dashboard.html" class="flex items-center gap-2 group cursor-pointer shrink-0" title="Sentra Farma">
+                    <img src="../../assets/logo.png" alt="Sentra Farma" class="h-12 sm:h-14 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform" />
+                </a>
+                <div class="h-8 w-px bg-slate-200/80 hidden sm:block"></div>
+                <div>
+                    <h1 class="text-base font-extrabold text-slate-900 tracking-tight">Live Chat Konsultasi Dokter</h1>
+                    <p class="text-[10px] text-slate-500 font-medium">Ruang Konsultasi Medis Real-Time Antara Dokter Spesialis & Pasien</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2.5">
+                <button onclick="Absensi.openModal()" title="Presensi & Absensi Dokter"
+                    class="px-3 py-1 bg-brand-600 hover:bg-brand-700 text-white text-xs font-black rounded-full flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer">
+                    <span class="material-symbols-outlined text-[14px]">fingerprint</span>
+                    <span>Presensi / Absen</span>
+                </button>
+
+                <a href="profil.html" title="Buka Profil Saya"
+                    class="flex items-center gap-2 pl-2 border-l border-slate-200 group cursor-pointer">
+                    <div id="doctor-avatar-initials"
+                        class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-700 to-emerald-500 text-white flex items-center justify-center font-extrabold text-xs shadow-md group-hover:scale-105 transition-transform">D</div>
+                    <span id="doctor-name-badge"
+                        class="text-xs font-extrabold text-slate-900 hidden sm:inline group-hover:text-emerald-700 transition-colors">Dokter</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- MAIN WORKSPACE CONTAINER -->
+        <main class="p-6 max-w-6xl mx-auto w-full flex-1 flex flex-col justify-between overflow-hidden gap-4">
+            <section class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-sm flex-1 flex flex-col min-h-0 overflow-hidden space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-3 shrink-0">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center font-bold shadow-2xs">
+                            <span class="material-symbols-outlined text-[20px]">forum</span>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-extrabold text-slate-900">Ruang Percakapan Konsultasi Medis</h3>
+                            <p class="text-[10px] text-slate-500 font-medium">Pilih pasien di daftar sebelah kiri untuk membalas pesan konsultasi</p>
+                        </div>
+                    </div>
+
+                    <button onclick="loadDoctorChatSessions()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] rounded-xl flex items-center gap-1 transition-colors">
+                        <span class="material-symbols-outlined text-[14px]">refresh</span> Refresh
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1 min-h-0 overflow-hidden">
+                    <!-- Left: Session list -->
+                    <div class="md:col-span-1 border border-slate-200 rounded-2xl p-3 flex flex-col bg-slate-50/50 min-h-0 overflow-hidden">
+                        <h4 class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider mb-2 shrink-0">Daftar Pasien Konsultasi</h4>
+                        <div id="doctor-session-list" class="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Right: Chat thread window -->
+                    <div class="md:col-span-2 border border-slate-200 rounded-2xl flex flex-col bg-white overflow-hidden shadow-2xs min-h-0">
+                        <div id="doctor-chat-header" class="p-3.5 bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-800 flex items-center justify-between gap-2">
+                            <div class="flex items-center gap-2 min-w-0">
+                                <span id="doctor-chat-title" class="font-extrabold text-sm truncate">Pilih pasien di sebelah kiri untuk membuka percakapan</span>
+                            </div>
+                            <div class="flex items-center gap-2 shrink-0">
+                                <button onclick="openClearConfirmModal()" title="Bersihkan Chat Sesi Ini" 
+                                    class="text-[10px] font-extrabold px-2.5 py-1.5 rounded-xl border flex items-center gap-1 transition-all cursor-pointer shadow-2xs bg-rose-50 text-rose-800 border-rose-200 hover:bg-rose-100">
+                                    <span class="material-symbols-outlined text-[14px]">delete</span>
+                                    <span>Bersihkan Chat</span>
+                                </button>
+                                <button id="btn-doctor-status-toggle" onclick="toggleDoctorDutyStatus()" 
+                                    class="text-[10px] font-extrabold px-3 py-1.5 rounded-xl border flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100">
+                                    <span id="doctor-status-dot" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                    <span id="doctor-status-text">🟢 ONLINE TELEMEDIS</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="doctor-chat-messages" class="flex-1 p-5 overflow-y-auto space-y-3 bg-slate-50/40 text-xs custom-scrollbar">
+                            <div class="text-center text-slate-400 py-16 italic font-medium">
+                                Belum ada percakapan terpilih.
+                            </div>
+                        </div>
+
+                        <form id="doctor-chat-form" onsubmit="sendDoctorReply(event)" class="p-3 bg-white border-t border-slate-200 flex items-center gap-2">
+                            <input type="text" id="doctor-chat-input" autocomplete="off" placeholder="Tulis balasan pesan konsultasi untuk pasien..." 
+                                class="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-4 py-3 text-xs text-slate-800 font-medium focus:outline-none focus:border-brand-500 focus:bg-white transition-all" />
+                            <button type="submit" class="px-5 py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-extrabold transition-colors flex items-center gap-1 shadow-xs">
+                                <span class="material-symbols-outlined text-[16px]">send</span> Kirim Balasan
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/toast.js"></script>
+    <script src="../../js/auth-guard.js"></script>
+    <script src="../../js/absensi.js"></script>
+    <script>
+        let currentDoctor = null;
+        let activeDoctorSessionId = null;
+        let activePatientName = '';
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await initDoctorData();
+            loadDoctorChatSessions();
+            setInterval(() => {
+                if (activeDoctorSessionId) {
+                    loadDoctorChatMessages(activeDoctorSessionId);
+                } else {
+                    loadDoctorChatSessions();
+                }
+            }, 3000);
+        });
+
+        function handleLogout() {
+            API.clearSession();
+            Toast.success('Dokter telah berhasil logout.', 'Sampai Jumpa');
+            setTimeout(() => window.location.href = '/frontend/html/auth/login.html', 1000);
+        }
+
+        async function initDoctorData() {
+            const user = API.getUser();
+            if (user) {
+                try {
+                    const doc = await API.get(`/clinic/dokter/user/${user.id}`);
+                    if (doc && doc.id) currentDoctor = doc;
+                } catch(e) {}
+            }
+
+            if (!currentDoctor) {
+                currentDoctor = { id: 1, namaDokter: user ? user.namaLengkap : 'dr. Arisandy Pratama, M.Ked' };
+            }
+
+            const name = currentDoctor.namaDokter || 'Dokter Spesialis';
+            document.getElementById('doctor-name-badge').innerText = name;
+            document.getElementById('doctor-avatar-initials').innerText = name.replace(/^drg?\.\s*/i, '').trim().charAt(0).toUpperCase() || 'D';
+        }
+
+        async function loadDoctorChatSessions() {
+            const listEl = document.getElementById('doctor-session-list');
+            if (!listEl) return;
+
+            const docId = currentDoctor ? currentDoctor.id : 1;
+            let sessions = [];
+            try {
+                const res = await API.get(`/clinic/chat/sessions?doctorId=${docId}`);
+                if (Array.isArray(res)) sessions = res;
+            } catch(e) {}
+
+            if (sessions.length === 0) {
+                sessions = [
+                    `chat_patient_18_doc_${docId}`,
+                    `chat_patient_2_doc_${docId}`,
+                    `chat_patient_3_doc_${docId}`
+                ];
+            }
+
+            const sessionMeta = {
+                [`chat_patient_18_doc_${docId}`]: { name: 'Ahmad Dahlan', topic: '🤒 Keluhan Penyakit', badge: 'bg-rose-100 text-rose-800 border-rose-200' },
+                [`chat_patient_2_doc_${docId}`]: { name: 'Siti Rahmawati', topic: '💊 Konsultasi Resep & Obat', badge: 'bg-blue-100 text-blue-800 border-blue-200' },
+                [`chat_patient_3_doc_${docId}`]: { name: 'Budi Santoso', topic: '📑 Surat Medis & Rujukan', badge: 'bg-purple-100 text-purple-800 border-purple-200' }
+            };
+
+            listEl.innerHTML = sessions.map(sess => {
+                const activeCls = sess === activeDoctorSessionId ? 'bg-brand-50 border-brand-300 font-bold text-brand-900 shadow-2xs' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100';
+                const meta = sessionMeta[sess] || { name: 'Pasien Konsultasi', topic: '💬 Konsultasi Umum', badge: 'bg-slate-100 text-slate-700 border-slate-200' };
+                return `
+                    <button onclick="selectDoctorChatSession('${sess}', '${meta.name}', '${meta.topic}')" class="w-full text-left p-3 rounded-2xl border ${activeCls} transition-all flex items-center justify-between">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            <div class="w-9 h-9 rounded-xl bg-brand-100 text-brand-800 font-extrabold flex items-center justify-center text-xs shadow-2xs shrink-0">
+                                ${meta.name.charAt(0)}
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <div class="text-xs font-extrabold truncate">${meta.name}</div>
+                                <div class="text-[9px] font-bold px-2 py-0.5 rounded-full border ${meta.badge} w-max mt-0.5 truncate">${meta.topic}</div>
+                            </div>
+                        </div>
+                        <span class="material-symbols-outlined text-[18px] text-slate-400 shrink-0">chevron_right</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        let activeTopicName = '🤒 Keluhan Penyakit';
+
+        function selectDoctorChatSession(sessId, pName, topicName = '🤒 Keluhan Penyakit') {
+            activeDoctorSessionId = sessId;
+            activePatientName = pName;
+            activeTopicName = topicName;
+            document.getElementById('doctor-chat-title').innerHTML = `
+                <div class="flex items-center gap-2">
+                    <span class="font-extrabold text-sm truncate">${pName}</span>
+                    <span class="text-[9px] font-bold px-2 py-0.5 bg-slate-200 text-slate-800 rounded-full">${topicName}</span>
+                </div>
+            `;
+            loadDoctorChatSessions();
+            loadDoctorChatMessages(sessId);
+        }
+
+        let isDoctorBusyInPoli = false;
+
+        function toggleDoctorDutyStatus() {
+            isDoctorBusyInPoli = !isDoctorBusyInPoli;
+            const btn = document.getElementById('btn-doctor-status-toggle');
+            const dot = document.getElementById('doctor-status-dot');
+            const text = document.getElementById('doctor-status-text');
+
+            if (isDoctorBusyInPoli) {
+                btn.className = 'text-[10px] font-extrabold px-3 py-1.5 rounded-xl border flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs bg-amber-50 text-amber-900 border-amber-300 hover:bg-amber-100';
+                dot.className = 'w-2 h-2 rounded-full bg-amber-500 animate-pulse';
+                text.innerText = '🟠 SIBUK PRAKTIK POLI';
+                Toast.warning('Status diubah ke: Sedang Praktik Poli (Chat Pasien akan ditangani AI Triage Assistant)', 'Status Dokter');
+            } else {
+                btn.className = 'text-[10px] font-extrabold px-3 py-1.5 rounded-xl border flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100';
+                dot.className = 'w-2 h-2 rounded-full bg-emerald-500 animate-pulse';
+                text.innerText = '🟢 ONLINE TELEMEDIS';
+                Toast.success('Status diubah ke: Online Telemedis (Siap membalas live chat)', 'Status Dokter');
+            }
+        }
+
+        function openClearConfirmModal() {
+            if (!activeDoctorSessionId) return;
+            const modal = document.getElementById('modal-clear-confirm');
+            if (!modal) return;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                if (modal.firstElementChild) modal.firstElementChild.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeClearConfirmModal() {
+            const modal = document.getElementById('modal-clear-confirm');
+            if (!modal) return;
+            modal.classList.add('opacity-0');
+            if (modal.firstElementChild) modal.firstElementChild.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }, 200);
+        }
+
+        async function executeClearDoctorSession() {
+            closeClearConfirmModal();
+            if (!activeDoctorSessionId) return;
+
+            localStorage.setItem('cleared_' + activeDoctorSessionId, 'true');
+            localStorage.removeItem(activeDoctorSessionId);
+
+            if (window.API) {
+                try {
+                    await API.delete(`/clinic/chat/messages?sessionId=${activeDoctorSessionId}`);
+                } catch(e) {}
+            }
+
+            const messagesContainer = document.getElementById('doctor-chat-messages');
+            if (messagesContainer) {
+                messagesContainer.innerHTML = `
+                    <div class="text-center text-slate-400 py-16 font-medium space-y-2">
+                        <span class="material-symbols-outlined text-4xl text-slate-300 block">cleaning_services</span>
+                        <p class="text-xs font-bold text-slate-600">Riwayat percakapan sesi ini telah dibersihkan.</p>
+                        <p class="text-[10px] text-slate-400">Pesan baru dari pasien akan otomatis tampil kembali di sini.</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function loadDoctorChatMessages(sessId) {
+            const messagesContainer = document.getElementById('doctor-chat-messages');
+            if (!messagesContainer) return;
+
+            const docName = currentDoctor ? currentDoctor.namaDokter : 'dr. Arisandy Pratama, M.Ked';
+            const docId = currentDoctor ? currentDoctor.id : 1;
+
+            if (localStorage.getItem('cleared_' + sessId) === 'true') {
+                messagesContainer.innerHTML = `
+                    <div class="text-center text-slate-400 py-16 font-medium space-y-2">
+                        <span class="material-symbols-outlined text-4xl text-slate-300 block">cleaning_services</span>
+                        <p class="text-xs font-bold text-slate-600">Riwayat percakapan sesi ini telah dibersihkan.</p>
+                        <p class="text-[10px] text-slate-400">Pesan baru dari pasien akan otomatis tampil kembali di sini.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let msgs = [];
+            try {
+                const res = await API.get(`/clinic/chat/messages?sessionId=${sessId}`);
+                if (Array.isArray(res)) msgs = res;
+            } catch(e) {}
+
+            let headerCardHtml = '';
+            if (activeTopicName.includes('Keluhan')) {
+                headerCardHtml = `
+                    <div class="p-3.5 bg-gradient-to-r from-slate-900 via-emerald-950 to-slate-900 text-white rounded-2xl shadow-md border border-emerald-500/30 mb-3 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-bold text-xs">🤖</span>
+                                <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-300">SentraAI Medical Triage Summary</span>
+                            </div>
+                            <span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-300 text-[8px] font-extrabold rounded-full border border-emerald-400/30 font-mono">ANAMNESIS AI ACTIVE</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-[10px] pt-1.5 border-t border-emerald-800/60">
+                            <div><span class="text-emerald-400 font-bold">Keluhan Utama:</span> <span class="text-slate-200 font-medium">Demam & Pusing Hebat</span></div>
+                            <div><span class="text-emerald-400 font-bold">Durasi Sakit:</span> <span class="text-slate-200 font-medium">2 Hari Terakhir</span></div>
+                            <div><span class="text-emerald-400 font-bold">Riwayat Alergi:</span> <span class="text-slate-200 font-medium">Penisilin (-)</span></div>
+                            <div><span class="text-emerald-400 font-bold">Status Penanganan:</span> <span class="text-emerald-200 font-semibold">Sudah Ditriage AI ✓</span></div>
+                        </div>
+                    </div>
+                `;
+            } else if (activeTopicName.includes('Resep')) {
+                headerCardHtml = `
+                    <div class="p-3.5 bg-gradient-to-r from-blue-950 via-slate-900 to-blue-950 text-white rounded-2xl shadow-md border border-blue-500/30 mb-3 space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-lg bg-blue-500/20 text-blue-300 flex items-center justify-center font-bold text-xs">💊</span>
+                                <span class="text-[10px] font-extrabold uppercase tracking-wider text-blue-300">Konsultasi Dosis & Resep Obat (Direct Doctor Channel)</span>
+                            </div>
+                            <span class="px-2 py-0.5 bg-blue-500/20 text-blue-300 text-[8px] font-extrabold rounded-full border border-blue-400/30 font-mono">DIRECT CHAT</span>
+                        </div>
+                        <p class="text-[10px] text-slate-300 pt-1 border-t border-blue-800/60">
+                            Pasien berkonsultasi langsung tentang aturan minum, interaksi obat, atau penebusan resep elektronik. <strong>Tanpa hambatan AI Triage.</strong>
+                        </p>
+                    </div>
+                `;
+            } else {
+                headerCardHtml = `
+                    <div class="p-3.5 bg-gradient-to-r from-purple-950 via-slate-900 to-purple-950 text-white rounded-2xl shadow-md border border-purple-500/30 mb-3 space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-lg bg-purple-500/20 text-purple-300 flex items-center justify-center font-bold text-xs">📑</span>
+                                <span class="text-[10px] font-extrabold uppercase tracking-wider text-purple-300">Pengajuan Surat Medis & Rujukan (Direct Doctor Channel)</span>
+                            </div>
+                            <span class="px-2 py-0.5 bg-purple-500/20 text-purple-300 text-[8px] font-extrabold rounded-full border border-purple-400/30 font-mono">DIRECT CHAT</span>
+                        </div>
+                        <p class="text-[10px] text-slate-300 pt-1 border-t border-purple-800/60">
+                            Pasien berkonsultasi langsung terkait pembuatan Surat Sakit, Surat Sehat, atau Rujukan Rumah Sakit. <strong>Terhubung langsung dengan Dokter.</strong>
+                        </p>
+                    </div>
+                `;
+            }
+
+            // Filter out AI auto-reply bubbles from Doctor view so doctor's chat window is clean & uncluttered
+            const directMsgs = msgs.filter(m => {
+                const isAi = (m.senderName && m.senderName.includes('AI')) || m.tipePesan === 'AI_TRIAGE';
+                return !isAi;
+            });
+
+            if (directMsgs.length === 0) {
+                messagesContainer.innerHTML = headerCardHtml + `
+                    <div class="text-center text-slate-400 py-10 italic font-medium">
+                        Belum ada pesan langsung dari pasien pada sesi ini.
+                    </div>
+                `;
+                return;
+            }
+
+            const messagesHtml = directMsgs.map(m => {
+                const isDoc = (m.senderName && m.senderName.includes('dr.')) || m.senderId === docId;
+                const timeStr = m.createdAt ? new Date(m.createdAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : '';
+
+                if (isDoc) {
+                    return `
+                        <div class="flex flex-col items-end space-y-1">
+                            <span class="text-[9px] font-bold text-brand-800">${m.senderName || docName}</span>
+                            <div class="bg-brand-600 text-white px-4 py-2.5 rounded-2xl rounded-tr-xs shadow-2xs max-w-[80%] leading-relaxed font-medium">
+                                ${m.pesan}
+                            </div>
+                            <span class="text-[9px] text-slate-400 font-bold">${timeStr}</span>
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <div class="flex flex-col items-start space-y-1">
+                            <span class="text-[9px] font-bold text-slate-600">${m.senderName || 'Pasien'}</span>
+                            <div class="bg-white border border-slate-200 text-slate-800 px-4 py-2.5 rounded-2xl rounded-tl-xs shadow-2xs max-w-[80%] leading-relaxed font-medium">
+                                ${m.pesan}
+                            </div>
+                            <span class="text-[9px] text-slate-400 font-bold">${timeStr}</span>
+                        </div>
+                    `;
+                }
+            }).join('');
+
+            messagesContainer.innerHTML = headerCardHtml + messagesHtml;
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        async function sendDoctorReply(e) {
+            e.preventDefault();
+            const input = document.getElementById('doctor-chat-input');
+            if (!input) return;
+
+            const text = input.value.trim();
+            if (!text) return;
+
+            if (!activeDoctorSessionId) {
+                return;
+            }
+
+            localStorage.removeItem('cleared_' + activeDoctorSessionId);
+            input.value = '';
+
+            const docName = currentDoctor ? currentDoctor.namaDokter : 'dr. Arisandy Pratama, M.Ked';
+            const docId = currentDoctor ? currentDoctor.id : 1;
+
+            const payload = {
+                sessionId: activeDoctorSessionId,
+                senderId: docId,
+                receiverId: docId,
+                senderName: docName,
+                pesan: text,
+                tipePesan: 'TEXT'
+            };
+
+            try {
+                await API.post('/clinic/chat/messages', payload);
+                Toast.success('Balasan berhasil dikirim ke pasien.', 'Terkirim');
+                loadDoctorChatMessages(activeDoctorSessionId);
+            } catch(err) {
+                Toast.error(err.message || 'Gagal mengirim pesan.', 'Error');
+            }
+        }
+    </script>
+    <!-- CUSTOM CENTER CONFIRMATION MODAL -->
+    <div id="modal-clear-confirm" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4 transition-all duration-300 opacity-0">
+        <div class="bg-white rounded-3xl max-w-xs w-full p-6 shadow-2xl border border-slate-200 text-center space-y-4 transform scale-95 transition-all duration-300">
+            <div class="w-14 h-14 rounded-2xl bg-rose-50 text-rose-500 border border-rose-100 flex items-center justify-center mx-auto shadow-sm">
+                <span class="material-symbols-outlined text-[32px]">delete_forever</span>
+            </div>
+            <div class="space-y-1">
+                <h3 class="text-base font-extrabold text-slate-900">Bersihkan Riwayat Chat?</h3>
+                <p class="text-xs text-slate-500 font-medium leading-relaxed">
+                    Seluruh riwayat obrolan konsultasi pada sesi ini akan dibersihkan.
+                </p>
+            </div>
+            <div class="flex items-center gap-3 pt-2">
+                <button onclick="closeClearConfirmModal()" class="flex-1 py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs rounded-xl transition-all cursor-pointer">
+                    Batal
+                </button>
+                <button onclick="executeClearDoctorSession()" class="flex-1 py-2.5 px-4 bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs rounded-xl shadow-md shadow-rose-600/30 transition-all cursor-pointer">
+                    Ya, Bersihkan
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

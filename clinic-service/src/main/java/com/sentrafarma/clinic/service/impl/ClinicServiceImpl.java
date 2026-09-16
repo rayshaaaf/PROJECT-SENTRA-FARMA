@@ -110,6 +110,33 @@ public class ClinicServiceImpl implements ClinicService {
 
     @Override
     public Pasien savePasien(Pasien pasien) {
+        if (pasien.getId() != null) {
+            Pasien existing = getPasienById(pasien.getId());
+            if (pasien.getNamaLengkap() != null && !pasien.getNamaLengkap().isBlank()) existing.setNamaLengkap(pasien.getNamaLengkap());
+            if (pasien.getEmail() != null && !pasien.getEmail().isBlank()) existing.setEmail(pasien.getEmail());
+            if (pasien.getNoTelepon() != null && !pasien.getNoTelepon().isBlank()) existing.setNoTelepon(pasien.getNoTelepon());
+            if (pasien.getAlamat() != null) existing.setAlamat(pasien.getAlamat());
+            if (pasien.getJenisKelamin() != null) existing.setJenisKelamin(pasien.getJenisKelamin());
+            if (pasien.getGolonganDarah() != null) existing.setGolonganDarah(pasien.getGolonganDarah());
+            if (pasien.getTanggalLahir() != null) existing.setTanggalLahir(pasien.getTanggalLahir());
+            return pasienRepository.save(existing);
+        }
+
+        if (pasien.getUserId() != null) {
+            Optional<Pasien> existing = pasienRepository.findByUserId(pasien.getUserId());
+            if (existing.isPresent()) {
+                Pasien p = existing.get();
+                if (pasien.getNamaLengkap() != null && !pasien.getNamaLengkap().isBlank()) p.setNamaLengkap(pasien.getNamaLengkap());
+                if (pasien.getEmail() != null && !pasien.getEmail().isBlank()) p.setEmail(pasien.getEmail());
+                if (pasien.getNoTelepon() != null && !pasien.getNoTelepon().isBlank()) p.setNoTelepon(pasien.getNoTelepon());
+                if (pasien.getAlamat() != null) p.setAlamat(pasien.getAlamat());
+                if (pasien.getJenisKelamin() != null) p.setJenisKelamin(pasien.getJenisKelamin());
+                if (pasien.getGolonganDarah() != null) p.setGolonganDarah(pasien.getGolonganDarah());
+                if (pasien.getTanggalLahir() != null) p.setTanggalLahir(pasien.getTanggalLahir());
+                return pasienRepository.save(p);
+            }
+        }
+
         if (pasien.getTanggalLahir() != null && !pasien.getTanggalLahir().trim().isEmpty()) {
             try {
                 java.time.LocalDate dob = java.time.LocalDate.parse(pasien.getTanggalLahir().trim());
@@ -120,7 +147,22 @@ public class ClinicServiceImpl implements ClinicService {
                 // Ignore parse errors if custom string
             }
         }
-        return pasienRepository.save(pasien);
+
+        if (pasien.getNik() == null || pasien.getNik().trim().isEmpty()) {
+            String timestampSuffix = String.valueOf(System.currentTimeMillis());
+            if (timestampSuffix.length() > 10) timestampSuffix = timestampSuffix.substring(timestampSuffix.length() - 10);
+            pasien.setNik("31710" + timestampSuffix);
+        }
+
+        try {
+            return pasienRepository.save(pasien);
+        } catch (org.springframework.dao.DataIntegrityViolationException ex) {
+            // Fallback for duplicate NIK
+            String timestampSuffix = String.valueOf(System.currentTimeMillis());
+            if (timestampSuffix.length() > 10) timestampSuffix = timestampSuffix.substring(timestampSuffix.length() - 10);
+            pasien.setNik("31719" + timestampSuffix);
+            return pasienRepository.save(pasien);
+        }
     }
 
     @Override
@@ -279,6 +321,12 @@ public class ClinicServiceImpl implements ClinicService {
     @Override
     public List<ChatMessage> getChatHistory(String sessionId) {
         return chatMessageRepository.findBySessionIdOrderByCreatedAtAsc(sessionId);
+    }
+
+    @Override
+    @Transactional
+    public void deleteChatHistory(String sessionId) {
+        chatMessageRepository.deleteBySessionId(sessionId);
     }
 
     @Override

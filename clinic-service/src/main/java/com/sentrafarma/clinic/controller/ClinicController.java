@@ -108,6 +108,20 @@ public class ClinicController {
         return ResponseEntity.status(HttpStatus.CREATED).body(clinicService.savePasien(pasien));
     }
 
+    @PutMapping("/pasien/{id}")
+    @Operation(summary = "Update Profile Pasien by ID")
+    public ResponseEntity<Pasien> updatePasienById(@PathVariable Long id, @RequestBody Pasien pasien) {
+        pasien.setId(id);
+        return ResponseEntity.ok(clinicService.savePasien(pasien));
+    }
+
+    @PutMapping("/pasien/user/{userId}")
+    @Operation(summary = "Update Profile Pasien by User ID")
+    public ResponseEntity<Pasien> updatePasienByUserId(@PathVariable Long userId, @RequestBody Pasien pasien) {
+        pasien.setUserId(userId);
+        return ResponseEntity.ok(clinicService.savePasien(pasien));
+    }
+
     // --- Antrian ---
     @PostMapping("/antrian")
     @Operation(summary = "Ambil Tiket Antrian Digital (Online/Offline)")
@@ -189,6 +203,13 @@ public class ClinicController {
     @Operation(summary = "Get History Pesan Live Chat Sesi Konsultasi")
     public ResponseEntity<List<ChatMessage>> getChatHistory(@RequestParam String sessionId) {
         return ResponseEntity.ok(clinicService.getChatHistory(sessionId));
+    }
+
+    @DeleteMapping("/chat/messages")
+    @Operation(summary = "Bersihkan/Hapus History Pesan Live Chat Sesi Konsultasi")
+    public ResponseEntity<Map<String, String>> deleteChatHistory(@RequestParam String sessionId) {
+        clinicService.deleteChatHistory(sessionId);
+        return ResponseEntity.ok(Map.of("message", "History pesan berhasil dibersihkan."));
     }
 
     @GetMapping("/chat/sessions")

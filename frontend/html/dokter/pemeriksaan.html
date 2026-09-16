@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ruang Pemeriksaan Medis - Sentra Farma</title>
+    <script src="../../js/auth-guard.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#F0FDF4', 100: '#DCFCE7', 200: '#BBF7D0', 300: '#86EFAC', 400: '#4ADE80',
+                            500: '#10B981', 600: '#059669', 700: '#047857', 800: '#065F46', 900: '#064E3B', 950: '#022C22'
+                        },
+                        surface: '#F8FAFC'
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined, .material-icons, .material-icons-outlined {
+            font-family: 'Material Symbols Outlined', 'Material Icons Outlined', 'Material Icons' !important;
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+
+        html,
+        body {
+            height: 100vh;
+            overflow: hidden !important;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 9999px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+
+        @media (max-width: 1024px) {
+            html, body {
+                height: auto;
+                overflow-y: auto !important;
+            }
+            body {
+                flex-direction: column !important;
+                padding: 0.75rem !important;
+            }
+
+            aside.left-dock {
+                position: relative !important;
+                top: 0 !important;
+                left: 0 !important;
+                bottom: auto !important;
+                width: 100% !important;
+                height: auto !important;
+                flex-direction: row !important;
+                justify-content: space-between !important;
+                padding: 0.5rem 1rem !important;
+                margin-bottom: 0.75rem !important;
+            }
+
+            .main-portal-container {
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                height: auto !important;
+                overflow-y: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-emerald-50/60 via-teal-50/40 to-slate-50 font-sans text-slate-800 flex h-screen antialiased selection:bg-brand-100 selection:text-brand-800 relative overflow-hidden">
+
+    <!-- Ambient Glow Mesh Spheres -->
+    <div class="fixed -top-40 -left-40 w-[500px] h-[500px] bg-emerald-300/25 rounded-full blur-[120px] pointer-events-none z-0"></div>
+    <div class="fixed top-1/3 -right-40 w-[450px] h-[450px] bg-teal-200/25 rounded-full blur-[100px] pointer-events-none z-0"></div>
+    <div class="fixed -bottom-40 left-1/3 w-[500px] h-[500px] bg-emerald-200/20 rounded-full blur-[120px] pointer-events-none z-0"></div>
+
+    <!-- LEFT SIDEBAR DOCK (DESKTOP) -->
+    <aside class="left-dock fixed left-6 top-1/2 -translate-y-1/2 w-20 bg-white/95 backdrop-blur-2xl border border-slate-200/80 shadow-xl shadow-slate-300/40 rounded-3xl z-50 hidden lg:flex flex-col items-center py-5 space-y-4">
+        <nav class="flex flex-col items-center gap-2">
+            <a href="dashboard.html" title="Dashboard Utama" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">dashboard</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Dashboard</span>
+            </a>
+            <a href="pemeriksaan.html" title="Ruang Periksa Pasien" class="relative group p-2.5 rounded-2xl bg-brand-50 text-brand-600 font-bold transition-all shadow-2xs">
+                <span class="material-symbols-outlined text-[22px]">stethoscope</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Ruang Periksa</span>
+            </a>
+            <a href="jadwal.html" title="Jadwal Shift Dokter" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">calendar_month</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Jadwal Shift</span>
+            </a>
+            <a href="riwayat-pasien.html" title="Arsip Riwayat Pasien" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">folder_shared</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Riwayat Pasien</span>
+            </a>
+            <a href="chat.html" title="Live Chat Konsultasi" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">forum</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Live Chat</span>
+            </a>
+            <a href="laporan-harian.html" title="Laporan Harian Dokter" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">assignment</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Laporan Harian</span>
+            </a>
+            <button onclick="Absensi.openModal()" title="Presensi Dokter" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all cursor-pointer">
+                <span class="material-symbols-outlined text-[22px]">fingerprint</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Presensi Dokter</span>
+            </button>
+        </nav>
+
+        <div class="w-8 h-px bg-slate-200/70"></div>
+
+        <div class="flex flex-col items-center gap-2">
+            <a href="profil.html" title="Profil Dokter" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">person</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Profil Saya</span>
+            </a>
+            <button onclick="handleLogout()" title="Logout" class="relative group p-2.5 rounded-2xl text-rose-400 hover:text-rose-600 hover:bg-rose-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">logout</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-rose-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- MOBILE BOTTOM NAVIGATION BAR -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-slate-200/80 shadow-lg z-50 flex items-center justify-around p-2 text-slate-500">
+        <a href="dashboard.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">dashboard</span>
+            <span class="text-[9px]">Dashboard</span>
+        </a>
+        <a href="pemeriksaan.html" class="flex flex-col items-center gap-0.5 p-1 text-brand-600 font-extrabold">
+            <span class="material-symbols-outlined text-[20px]">stethoscope</span>
+            <span class="text-[9px]">Periksa</span>
+        </a>
+        <a href="jadwal.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">calendar_month</span>
+            <span class="text-[9px]">Jadwal</span>
+        </a>
+        <a href="chat.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">forum</span>
+            <span class="text-[9px]">Chat</span>
+        </a>
+        <a href="laporan-harian.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">assignment</span>
+            <span class="text-[9px]">Laporan</span>
+        </a>
+    </nav>
+
+    <!-- MAIN CONTENT CONTAINER (RESPONSIVE FOR DESKTOP, TABLET, AND MOBILE) -->
+    <div class="main-portal-container flex-1 lg:ml-32 lg:mr-4 px-3 sm:px-6 flex flex-col min-h-screen lg:h-screen overflow-y-auto lg:overflow-hidden pb-20 lg:pb-0">
+
+        <!-- TRANSPARENT HEADER BAR (EXACT PATIENT STYLE) -->
+        <header
+            class="h-20 flex items-center justify-between px-6 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100/60 transition-all shrink-0">
+            <div class="flex items-center gap-3">
+                <a href="dashboard.html" class="flex items-center gap-2 group cursor-pointer shrink-0" title="Sentra Farma">
+                    <img src="../../assets/logo.png" alt="Sentra Farma" class="h-12 sm:h-14 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform" />
+                </a>
+                <div class="h-8 w-px bg-slate-200/80 hidden sm:block"></div>
+                <div>
+                    <h1 class="text-base font-extrabold text-slate-900 tracking-tight">Ruang Pemeriksaan Medis & E-Resep</h1>
+                    <p class="text-[10px] text-slate-500 font-medium">Input Diagnosa ICD-10, Vital Signs, & Resep Obat Otomatis Ke Apotek</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2.5">
+                <button onclick="Absensi.openModal()" title="Presensi & Absensi Dokter"
+                    class="px-3 py-1 bg-brand-600 hover:bg-brand-700 text-white text-xs font-black rounded-full flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer">
+                    <span class="material-symbols-outlined text-[14px]">fingerprint</span>
+                    <span>Presensi / Absen</span>
+                </button>
+
+                <a href="profil.html" title="Buka Profil Saya"
+                    class="flex items-center gap-2 pl-2 border-l border-slate-200 group cursor-pointer">
+                    <div id="doctor-avatar-initials"
+                        class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-700 to-emerald-500 text-white flex items-center justify-center font-extrabold text-xs shadow-md group-hover:scale-105 transition-transform">D</div>
+                    <span id="doctor-name-badge"
+                        class="text-xs font-extrabold text-slate-900 hidden sm:inline group-hover:text-emerald-700 transition-colors">Dokter</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- MAIN WORKSPACE CONTAINER (FIT SCREEN WITH INNER FORM BOX SCROLLING) -->
+        <main class="p-6 max-w-6xl mx-auto w-full flex-1 flex flex-col justify-between overflow-hidden gap-4">
+
+            <section class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-sm flex-1 flex flex-col min-h-0 overflow-hidden space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 shrink-0">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center font-bold shadow-2xs">
+                            <span class="material-symbols-outlined text-[20px]">stethoscope</span>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-extrabold text-slate-900">Form Diagnosis & Pemeriksaan Dokter</h3>
+                            <p class="text-[10px] text-slate-500 font-medium">Pengisian data rekam medis pasien terintegrasi apotek</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-1 overflow-y-auto pr-1 space-y-4 custom-scrollbar">
+                    <form id="form-rekam-medis" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px] tracking-wider">Pilih Pasien Yang Sedang Diperiksa *</label>
+                                <select id="select-pasien" required onchange="onPasienSelected(this.value)"
+                                    class="w-full bg-slate-50/80 border border-slate-200 rounded-xl p-2.5 text-slate-800 font-semibold focus:outline-none focus:border-brand-500 focus:bg-white transition-all">
+                                    <!-- Options dynamically populated -->
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px] tracking-wider">Diagnosa ICD-10 *</label>
+                                <div class="space-y-1.5">
+                                    <input type="text" id="diagnosaIcd10" required placeholder="Contoh: I10 - Primary Hypertension"
+                                        class="w-full bg-slate-50/80 border border-slate-200 rounded-xl p-2.5 text-slate-800 font-semibold focus:outline-none focus:border-brand-500 focus:bg-white transition-all" />
+                                    
+                                    <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5 custom-scrollbar">
+                                        <span class="text-[9px] text-slate-400 font-bold uppercase shrink-0">Preset Cepat:</span>
+                                        <button type="button" onclick="setPresetDiagnosa('I10 - Primary Hypertension')" class="px-2 py-0.5 bg-slate-100 hover:bg-brand-50 hover:text-brand-700 rounded-md text-[10px] font-semibold text-slate-700 shrink-0">I10 (Hipertensi)</button>
+                                        <button type="button" onclick="setPresetDiagnosa('J00 - Acute Nasopharyngitis')" class="px-2 py-0.5 bg-slate-100 hover:bg-brand-50 hover:text-brand-700 rounded-md text-[10px] font-semibold text-slate-700 shrink-0">J00 (Flu/Batuk)</button>
+                                        <button type="button" onclick="setPresetDiagnosa('K29.7 - Gastritis Unspecified')" class="px-2 py-0.5 bg-slate-100 hover:bg-brand-50 hover:text-brand-700 rounded-md text-[10px] font-semibold text-slate-700 shrink-0">K29.7 (Gastritis)</button>
+                                        <button type="button" onclick="setPresetDiagnosa('E11 - Type 2 Diabetes Mellitus')" class="px-2 py-0.5 bg-slate-100 hover:bg-brand-50 hover:text-brand-700 rounded-md text-[10px] font-semibold text-slate-700 shrink-0">E11 (Diabetes)</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-xs">
+                            <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px] tracking-wider">Keluhan Utama Pasien *</label>
+                            <textarea id="keluhanUtama" rows="2" required placeholder="Pasien mengeluhkan pusing sejak 2 hari, demam ringan..."
+                                class="w-full bg-slate-50/80 border border-slate-200 rounded-xl p-2.5 text-slate-800 font-medium focus:outline-none focus:border-brand-500 focus:bg-white transition-all"></textarea>
+                        </div>
+
+                        <!-- Input Tanda Vital & Live BMI Calculator -->
+                        <div class="p-4 bg-brand-50/40 border border-brand-100 rounded-2xl space-y-2.5">
+                            <div class="flex justify-between items-center">
+                                <div class="text-xs font-extrabold text-brand-800 uppercase tracking-wider flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-[16px]">favorite</span> Input Tanda-Tanda Vital Pasien
+                                </div>
+                                <div id="bmi-score-badge" class="px-2.5 py-0.5 bg-emerald-100 text-emerald-800 font-extrabold text-[10px] rounded-full border border-emerald-300 hidden">
+                                    BMI: 22.4 (Normal Ideal)
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-xs">
+                                <div>
+                                    <label class="text-slate-600 font-medium block mb-0.5 text-[11px]">Tekanan Darah (S/D)</label>
+                                    <div class="flex items-center gap-1">
+                                        <input type="number" id="sistol" placeholder="120" class="w-full bg-white border border-slate-200 rounded-xl p-2 text-slate-800 font-bold focus:border-brand-500" />
+                                        <span class="font-bold text-slate-400">/</span>
+                                        <input type="number" id="diastol" placeholder="80" class="w-full bg-white border border-slate-200 rounded-xl p-2 text-slate-800 font-bold focus:border-brand-500" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="text-slate-600 font-medium block mb-0.5 text-[11px]">Detak Jantung (bpm)</label>
+                                    <input type="number" id="detakJantung" placeholder="75" class="w-full bg-white border border-slate-200 rounded-xl p-2 text-slate-800 font-bold focus:border-brand-500" />
+                                </div>
+                                <div>
+                                    <label class="text-slate-600 font-medium block mb-0.5 text-[11px]">Suhu Tubuh (°C)</label>
+                                    <input type="number" step="0.1" id="suhuTubuh" placeholder="36.5" class="w-full bg-white border border-slate-200 rounded-xl p-2 text-slate-800 font-bold focus:border-brand-500" />
+                                </div>
+                                <div>
+                                    <label class="text-slate-600 font-medium block mb-0.5 text-[11px]">Tinggi Badan (cm)</label>
+                                    <input type="number" id="tinggiBadan" oninput="calculateBMI()" placeholder="170" class="w-full bg-white border border-slate-200 rounded-xl p-2 text-slate-800 font-bold focus:border-brand-500" />
+                                </div>
+                                <div>
+                                    <label class="text-slate-600 font-medium block mb-0.5 text-[11px]">Berat Badan (kg)</label>
+                                    <input type="number" step="0.5" id="beratBadan" oninput="calculateBMI()" placeholder="65.0" class="w-full bg-white border border-slate-200 rounded-xl p-2 text-slate-800 font-bold focus:border-brand-500" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- UPLOAD LAMPIRAN BERKAS MEDIS PASIEN -->
+                        <div class="space-y-1.5 text-xs">
+                            <label class="block font-bold text-slate-700 uppercase text-[10px] tracking-wider flex items-center justify-between">
+                                <span>Upload Lampiran Medis Pasien (Hasil Lab / Rontgen / USG)</span>
+                                <span class="text-emerald-600 font-bold lowercase text-[10px]">opsional (max 5MB)</span>
+                            </label>
+                            <div class="border-2 border-dashed border-slate-200 hover:border-brand-400 bg-slate-50 hover:bg-brand-50/40 rounded-2xl p-3 text-center transition-all cursor-pointer relative group">
+                                <input type="file" id="pasien-file-input" onchange="handlePasienFileSelected(this)" accept=".pdf,.png,.jpg,.jpeg" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                                <div class="flex items-center justify-center gap-2">
+                                    <span class="material-symbols-outlined text-[20px] text-slate-400 group-hover:text-brand-600 transition-colors">cloud_upload</span>
+                                    <span class="text-xs font-bold text-slate-700" id="pasien-file-label">Upload Berkas Lab / Foto Rontgen Pasien</span>
+                                </div>
+                            </div>
+                            <div id="pasien-file-chip" class="hidden p-2 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center justify-between text-xs">
+                                <span id="pasien-preview-name" class="font-bold text-emerald-800 truncate text-[11px]">hasil_lab.pdf</span>
+                                <button type="button" onclick="clearPasienFile()" class="text-rose-500 hover:text-rose-700 font-bold text-[10px]">Hapus</button>
+                            </div>
+                        </div>
+
+                        <div class="text-xs space-y-1">
+                            <div class="flex justify-between items-center">
+                                <label class="block font-bold text-slate-700 uppercase text-[10px] tracking-wider">Catatan Dokter & Resep Obat Digital</label>
+                                <button type="button" onclick="openKalkulatorDosisModal()" class="text-[10px] font-bold text-brand-700 hover:underline flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-[14px]">calculate</span> Kalkulator Dosis & Cek Interaksi
+                                </button>
+                            </div>
+                            <textarea id="catatanDokter" rows="2" placeholder="Resep: Paracetamol 500mg (3x1 sehari sesudah makan), Amoxicillin 500mg (3x1 sehari sesudah makan habiskan)"
+                                class="w-full bg-slate-50/80 border border-slate-200 rounded-xl p-2.5 text-slate-800 font-medium focus:outline-none focus:border-brand-500 focus:bg-white transition-all"></textarea>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-2 pt-1">
+                            <button type="submit"
+                                class="px-5 py-2.5 bg-gradient-to-r from-brand-700 to-emerald-600 hover:from-brand-800 hover:to-emerald-700 text-white font-extrabold rounded-xl shadow-md flex items-center justify-center gap-1.5 text-xs transition-all flex-1">
+                                <span class="material-symbols-outlined text-[18px]">save</span>
+                                <span>Simpan Rekam Medis & Resep</span>
+                            </button>
+                            <button type="button" onclick="openModalSuratMedis()"
+                                class="px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-extrabold rounded-xl shadow-md flex items-center justify-center gap-1.5 text-xs transition-all cursor-pointer">
+                                <span class="material-symbols-outlined text-[18px]">description</span>
+                                <span>Cetak Surat Sakit / Rujukan</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- MODAL CETAK SURAT MEDIS DIGITAL -->
+    <div id="modal-surat-medis" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 space-y-4 relative">
+            <button onclick="closeModalSuratMedis()" class="absolute right-5 top-5 text-slate-400 hover:text-slate-600 p-1.5 rounded-full hover:bg-slate-100 transition-all">
+                <span class="material-symbols-outlined text-[20px]">close</span>
+            </button>
+
+            <div class="flex items-center gap-3 border-b border-slate-100 pb-3">
+                <div class="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold shadow-2xs">
+                    <span class="material-symbols-outlined text-[22px]">description</span>
+                </div>
+                <div>
+                    <h3 class="text-sm font-extrabold text-slate-900">Generator Surat Medis Digital</h3>
+                    <p class="text-[10px] text-slate-500 font-medium">Cetak Surat Sakit, Surat Rujukan, atau Surat Keterangan Sehat</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-xs">
+                <button type="button" onclick="setTipeSurat('SAKIT')" id="btn-tipe-sakit" class="p-2.5 bg-amber-50 text-amber-800 border border-amber-300 rounded-xl font-bold text-center">Surat Sakit</button>
+                <button type="button" onclick="setTipeSurat('RUJUKAN')" id="btn-tipe-rujukan" class="p-2.5 bg-slate-100 text-slate-600 border border-slate-200 rounded-xl font-bold text-center">Surat Rujukan</button>
+                <button type="button" onclick="setTipeSurat('SEHAT')" id="btn-tipe-sehat" class="p-2.5 bg-slate-100 text-slate-600 border border-slate-200 rounded-xl font-bold text-center">Surat Sehat</button>
+            </div>
+
+            <div id="printable-surat-content" class="p-6 bg-slate-50 border border-slate-200 rounded-2xl space-y-3 text-xs font-sans">
+                <div class="flex justify-between items-center border-b border-slate-300 pb-3">
+                    <div class="flex items-center gap-3">
+                        <img src="../../assets/logo.png" alt="Sentra Farma" class="h-10 w-auto object-contain" />
+                        <div>
+                            <h4 class="font-extrabold text-sm text-slate-900">SENTRA FARMA MEDICAL CENTER</h4>
+                            <p class="text-[10px] text-slate-500">Jl. Kesehatan No. 88 Jakarta • Telp: (021) 7788-9900</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center py-1">
+                    <h5 id="surat-judul-preview" class="font-black text-sm uppercase underline text-slate-900 tracking-wider">SURAT KETERANGAN ISTIRAHAT SAKIT</h5>
+                    <span id="surat-nomor-preview" class="text-[10px] font-mono text-slate-500 block">No: SF-MED/2026/09/0012</span>
+                </div>
+
+                <div class="space-y-1.5 text-[11px] bg-white p-3 rounded-xl border border-slate-200">
+                    <p class="text-slate-700">Yang bertanda tangan di bawah ini menerangkan bahwa:</p>
+                    <div class="grid grid-cols-3 gap-1 pt-1 font-semibold text-slate-800">
+                        <span class="text-slate-400">Nama Pasien:</span> <span id="surat-pasien-nama" class="col-span-2 font-bold text-brand-900">Ahmad Dahlan</span>
+                        <span class="text-slate-400">Diagnosa:</span> <span id="surat-pasien-diagnosa" class="col-span-2 font-bold text-slate-800">I10 - Primary Hypertension</span>
+                        <span class="text-slate-400">Keterangan:</span> <span id="surat-pasien-ket" class="col-span-2 text-slate-700">Diberikan istirahat berobat selama 3 (tiga) hari terhitung 16 Sep 2026.</span>
+                    </div>
+                </div>
+
+                <div class="pt-2 flex justify-between items-end border-t border-slate-200">
+                    <div class="text-[9px] text-slate-400 space-y-1">
+                        <span class="block">E-Sign Digital Verified</span>
+                        <span class="block font-mono">Scan QR Code untuk verifikasi keaslian surat</span>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-14 h-14 mx-auto bg-slate-200/80 rounded-lg flex items-center justify-center text-[9px] font-bold text-slate-500 border border-slate-300">
+                            [ QR Code ]
+                        </div>
+                        <span id="surat-doc-sign" class="text-[9px] font-extrabold text-slate-800 block mt-1">dr. Arisandy Pratama, M.Ked</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-1">
+                <button onclick="closeModalSuratMedis()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-colors">Tutup</button>
+                <button onclick="window.print()" class="px-5 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-extrabold rounded-xl transition-colors flex items-center gap-1 shadow-xs">
+                    <span class="material-symbols-outlined text-[16px]">print</span> Cetak Surat PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL KALKULATOR DOSIS & CEK INTERAKSI OBAT -->
+    <div id="modal-kalkulator-dosis" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4 relative">
+            <button onclick="closeKalkulatorDosisModal()" class="absolute right-5 top-5 text-slate-400 hover:text-slate-600 p-1.5 rounded-full hover:bg-slate-100 transition-all">
+                <span class="material-symbols-outlined text-[20px]">close</span>
+            </button>
+
+            <div class="flex items-center gap-3 border-b border-slate-100 pb-3">
+                <div class="w-10 h-10 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center font-bold shadow-2xs">
+                    <span class="material-symbols-outlined text-[22px]">calculate</span>
+                </div>
+                <div>
+                    <h3 class="text-sm font-extrabold text-slate-900">Kalkulator Dosis Medis & Interaksi</h3>
+                    <p class="text-[10px] text-slate-500 font-medium">Hitung dosis pedatrik/geriatrik & cek kontraindikasi obat</p>
+                </div>
+            </div>
+
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Berat Badan Pasien (kg)</label>
+                    <input type="number" id="calc-bb" oninput="hitungDosisPediatrik()" placeholder="65" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800 font-bold" />
+                </div>
+
+                <div class="p-3 bg-brand-50 border border-brand-200 rounded-xl space-y-1">
+                    <span class="text-[10px] font-extrabold text-brand-800 uppercase block">Rekomendasi Dosis Pediatrik (10-15mg/kgBB):</span>
+                    <span id="calc-result-dosis" class="font-bold text-slate-800 text-xs block">650mg - 975mg per dosis (Paracetamol)</span>
+                </div>
+
+                <div class="p-3 bg-rose-50 border border-rose-200 rounded-xl space-y-1">
+                    <span class="text-[10px] font-extrabold text-rose-800 uppercase flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[14px]">warning</span> Cek Peringatan Interaksi Obat:
+                    </span>
+                    <p class="text-[10px] text-rose-700 font-medium">Hindari mengombinasikan *Aspirin + Warfarin* (risiko pendarahan tinggi). Kombinasi Paracetamol + Amoxicillin terverifikasi AMAN.</p>
+                </div>
+            </div>
+
+            <button onclick="closeKalkulatorDosisModal()" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs rounded-xl shadow-xs">Selesai & Gunakan Dosis</button>
+        </div>
+    </div>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/toast.js"></script>
+    <script src="../../js/auth-guard.js"></script>
+    <script src="../../js/absensi.js"></script>
+    <script>
+        let currentDoctor = null;
+        let selectedPasienFileName = null;
+        let currentTipeSurat = 'SAKIT';
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await initDoctorData();
+            await loadPasienSelect();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const pId = urlParams.get('pasienId');
+            if (pId) {
+                const select = document.getElementById('select-pasien');
+                if (select) select.value = pId;
+            }
+        });
+
+        function calculateBMI() {
+            const tb = parseFloat(document.getElementById('tinggiBadan').value);
+            const bb = parseFloat(document.getElementById('beratBadan').value);
+            const badge = document.getElementById('bmi-score-badge');
+
+            if (tb && bb && tb > 0 && bb > 0) {
+                const bmi = (bb / ((tb / 100) * (tb / 100))).toFixed(1);
+                let cat = 'Normal Ideal';
+                let colorCls = 'bg-emerald-100 text-emerald-800 border-emerald-300';
+                if (bmi < 18.5) { cat = 'Underweight'; colorCls = 'bg-blue-100 text-blue-800 border-blue-300'; }
+                else if (bmi >= 25.0 && bmi < 30) { cat = 'Overweight'; colorCls = 'bg-amber-100 text-amber-800 border-amber-300'; }
+                else if (bmi >= 30) { cat = 'Obese (Obesitas)'; colorCls = 'bg-rose-100 text-rose-800 border-rose-300'; }
+
+                badge.className = `px-2.5 py-0.5 ${colorCls} font-extrabold text-[10px] rounded-full border block`;
+                badge.innerText = `BMI: ${bmi} (${cat})`;
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function handlePasienFileSelected(input) {
+            if (input.files && input.files[0]) {
+                const f = input.files[0];
+                selectedPasienFileName = f.name;
+                document.getElementById('pasien-preview-name').innerText = f.name;
+                document.getElementById('pasien-file-chip').classList.remove('hidden');
+                document.getElementById('pasien-file-label').innerText = 'Lampiran: ' + f.name;
+            }
+        }
+
+        function clearPasienFile() {
+            selectedPasienFileName = null;
+            document.getElementById('pasien-file-input').value = '';
+            document.getElementById('pasien-file-chip').classList.add('hidden');
+            document.getElementById('pasien-file-label').innerText = 'Upload Berkas Lab / Foto Rontgen Pasien';
+        }
+
+        function openKalkulatorDosisModal() {
+            const bb = document.getElementById('beratBadan').value;
+            if (bb) document.getElementById('calc-bb').value = bb;
+            hitungDosisPediatrik();
+            document.getElementById('modal-kalkulator-dosis').classList.remove('hidden');
+        }
+
+        function closeKalkulatorDosisModal() {
+            document.getElementById('modal-kalkulator-dosis').classList.add('hidden');
+        }
+
+        function hitungDosisPediatrik() {
+            const bb = parseFloat(document.getElementById('calc-bb').value || 65);
+            const minDoses = (bb * 10).toFixed(0);
+            const maxDoses = (bb * 15).toFixed(0);
+            document.getElementById('calc-result-dosis').innerText = `${minDoses}mg - ${maxDoses}mg per dosis (BB: ${bb}kg)`;
+        }
+
+        function openModalSuratMedis() {
+            const pSelect = document.getElementById('select-pasien');
+            const pText = pSelect.options[pSelect.selectedIndex] ? pSelect.options[pSelect.selectedIndex].text : 'Ahmad Dahlan';
+            const diag = document.getElementById('diagnosaIcd10').value || 'I10 - Primary Hypertension';
+            const docName = currentDoctor ? currentDoctor.namaDokter : 'dr. Arisandy Pratama, M.Ked';
+
+            document.getElementById('surat-pasien-nama').innerText = pText.split('(')[0].trim();
+            document.getElementById('surat-pasien-diagnosa').innerText = diag;
+            document.getElementById('surat-doc-sign').innerText = docName;
+
+            setTipeSurat('SAKIT');
+            document.getElementById('modal-surat-medis').classList.remove('hidden');
+        }
+
+        function closeModalSuratMedis() {
+            document.getElementById('modal-surat-medis').classList.add('hidden');
+        }
+
+        function setTipeSurat(tipe) {
+            currentTipeSurat = tipe;
+            const bSakit = document.getElementById('btn-tipe-sakit');
+            const bRujukan = document.getElementById('btn-tipe-rujukan');
+            const bSehat = document.getElementById('btn-tipe-sehat');
+
+            [bSakit, bRujukan, bSehat].forEach(b => b.className = 'p-2.5 bg-slate-100 text-slate-600 border border-slate-200 rounded-xl font-bold text-center cursor-pointer');
+
+            if (tipe === 'SAKIT') {
+                bSakit.className = 'p-2.5 bg-amber-50 text-amber-800 border border-amber-300 rounded-xl font-bold text-center cursor-pointer';
+                document.getElementById('surat-judul-preview').innerText = 'SURAT KETERANGAN ISTIRAHAT SAKIT';
+                document.getElementById('surat-pasien-ket').innerText = 'Diberikan istirahat berobat selama 3 (tiga) hari terhitung 16 Sep 2026.';
+            } else if (tipe === 'RUJUKAN') {
+                bRujukan.className = 'p-2.5 bg-blue-50 text-blue-800 border border-blue-300 rounded-xl font-bold text-center cursor-pointer';
+                document.getElementById('surat-judul-preview').innerText = 'SURAT RUJUKAN SPESIALIS RUMAH SAKIT';
+                document.getElementById('surat-pasien-ket').innerText = 'Dirujuk ke RSUP Nasional Poli Spesialis Penyakit Dalam untuk penanganan lanjutan.';
+            } else {
+                bSehat.className = 'p-2.5 bg-emerald-50 text-emerald-800 border border-emerald-300 rounded-xl font-bold text-center cursor-pointer';
+                document.getElementById('surat-judul-preview').innerText = 'SURAT KETERANGAN SEHAT MEDIS';
+                document.getElementById('surat-pasien-ket').innerText = 'Berdasarkan hasil pemeriksaan fisik & vital, pasien dinyatakan SEHAT secara medis.';
+            }
+        }
+    </script>
+</body>
+
+</html>

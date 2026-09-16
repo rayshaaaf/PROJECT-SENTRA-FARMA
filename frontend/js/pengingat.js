@@ -6,6 +6,7 @@
 const STORAGE_KEY = 'sentra_farma_pill_reminders';
 const TAKEN_LOG_KEY = 'sentra_farma_pill_taken_logs';
 let lastTriggeredMinute = '';
+let alarmSoundInterval = null;
 
 const DEFAULT_REMINDERS = [];
 
@@ -17,7 +18,7 @@ function playAlarmChimeSound() {
         const ctx = new AudioCtx();
         
         const now = ctx.currentTime;
-        // 3 pleasant harmonic chime notes: C5 (523.25Hz), E5 (659.25Hz), G5 (783.99Hz)
+        // 4 pleasant harmonic chime notes
         const notes = [523.25, 659.25, 783.99, 1046.50]; 
         notes.forEach((freq, idx) => {
             const osc = ctx.createOscillator();
@@ -37,6 +38,26 @@ function playAlarmChimeSound() {
         });
     } catch (e) {
         console.warn('Audio chime notice:', e);
+    }
+}
+
+// CONTINUOUS ALARM LOOP (Rings until dismissed or marked as taken)
+function startAlarmLoop() {
+    stopAlarmLoop();
+    playAlarmChimeSound();
+    alarmSoundInterval = setInterval(() => {
+        if (document.getElementById('pill-alarm-popup-banner')) {
+            playAlarmChimeSound();
+        } else {
+            stopAlarmLoop();
+        }
+    }, 1500);
+}
+
+function stopAlarmLoop() {
+    if (alarmSoundInterval) {
+        clearInterval(alarmSoundInterval);
+        alarmSoundInterval = null;
     }
 }
 
@@ -75,10 +96,20 @@ function normalizeTimeInput(raw) {
     return Array.from(new Set(result));
 }
 
-// Initialize default data if empty
+// Initialize default data if empty & clean up old initial dummy data
 function initPillStorage() {
     if (!localStorage.getItem(STORAGE_KEY)) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_REMINDERS));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+    } else {
+        try {
+            const data = JSON.parse(localStorage.getItem(STORAGE_KEY));
+            if (Array.isArray(data)) {
+                const cleaned = data.filter(item => item.id !== 'rem-1' && item.id !== 'rem-2' && item.id !== 'rem-3');
+                if (cleaned.length !== data.length) {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(cleaned));
+                }
+            }
+        } catch (e) {}
     }
 }
 
@@ -395,23 +426,37 @@ function renderPillListModalContent() {
     container.innerHTML = listHTML;
 }
 
-// SINGLE UNIFIED ALARM BANNER (No duplicate Toast calls)
+// SINGLE UNIFIED ALARM BANNER (Continuous Audio Loop)
 function triggerTestAlarm(timeLabel = '02:00') {
     const reminders = getPillReminders();
-    const rem = reminders[0] || { namaObat: 'Obat Pasien', dosis: 'Sesuai Dosis Resep' };
-
-    // Play real Web Audio API chime sound
-    playAlarmChimeSound();
-
-    // Show single unified Sentra Farma alarm popup banner
+    const rem = reminders[0] || { namaObat: 'Paracetamol 500 mg', dosis: '1 Tablet (Sesudah Makan)', kategori: 'Obat Bebas' };
     showAlarmPopupBanner(rem, timeLabel);
+}
+
+function closeAlarmPopupBanner() {
+    stopAlarmLoop();
+    const alertBanner = document.getElementById('pill-alarm-popup-banner');
+    if (alertBanner) {
+        alertBanner.remove();
+    }
+}
+
+function markPillTakenFromBanner(remId, timeStr) {
+    if (remId && remId !== 'rem-test') {
+        togglePillTaken(remId, timeStr);
+    } else {
+        if (typeof Toast !== 'undefined') {
+            Toast.success(`Berhasil mencatat tes minum obat jam ${timeStr}!`, 'Tes Berhasil');
+        }
+    }
+    closeAlarmPopupBanner();
 }
 
 function showAlarmPopupBanner(rem, timeStr) {
     let alertBanner = document.getElementById('pill-alarm-popup-banner');
     
-    // Play chime sound
-    playAlarmChimeSound();
+    // Start continuous alarm audio chime loop
+    startAlarmLoop();
 
     if (!alertBanner) {
         const html = `
@@ -429,7 +474,7 @@ function showAlarmPopupBanner(rem, timeStr) {
                         <h3 class="text-sm font-extrabold text-white mt-1 tracking-tight">WAKTU MINUM OBAT PASIEN</h3>
                     </div>
                 </div>
-                <button onclick="document.getElementById('pill-alarm-popup-banner').remove()" class="text-white/60 hover:text-white transition-colors">
+                <button onclick="closeAlarmPopupBanner()" class="text-white/60 hover:text-white transition-colors">
                     <span class="material-symbols-outlined text-[20px]">close</span>
                 </button>
             </div>
@@ -444,12 +489,12 @@ function showAlarmPopupBanner(rem, timeStr) {
             </div>
 
             <div class="flex items-center gap-2 pt-1">
-                <button onclick="togglePillTaken('${rem.id || 'rem-1'}', '${timeStr}'); document.getElementById('pill-alarm-popup-banner').remove();"
+                <button onclick="markPillTakenFromBanner('${rem.id || 'rem-test'}', '${timeStr}')"
                     class="flex-1 py-2.5 bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-black text-xs rounded-xl shadow-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer">
                     <span class="material-symbols-outlined text-[17px]">check_circle</span>
                     <span>Tandai Sudah Minum</span>
                 </button>
-                <button onclick="document.getElementById('pill-alarm-popup-banner').remove()"
+                <button onclick="closeAlarmPopupBanner()"
                     class="px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition-all">
                     Nanti
                 </button>

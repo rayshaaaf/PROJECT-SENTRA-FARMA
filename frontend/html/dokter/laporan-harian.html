@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Laporan Harian & Berkas Dokter - Sentra Farma</title>
+    <script src="../../js/auth-guard.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#F0FDF4', 100: '#DCFCE7', 200: '#BBF7D0', 300: '#86EFAC', 400: '#4ADE80',
+                            500: '#10B981', 600: '#059669', 700: '#047857', 800: '#065F46', 900: '#064E3B', 950: '#022C22'
+                        },
+                        surface: '#F8FAFC'
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined, .material-icons, .material-icons-outlined {
+            font-family: 'Material Symbols Outlined', 'Material Icons Outlined', 'Material Icons' !important;
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+
+        html,
+        body {
+            height: 100vh;
+            overflow: hidden !important;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 9999px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+
+        @media (max-width: 1024px) {
+            html, body {
+                height: auto;
+                overflow-y: auto !important;
+            }
+            body {
+                flex-direction: column !important;
+                padding: 0.75rem !important;
+            }
+
+            aside.left-dock {
+                position: relative !important;
+                top: 0 !important;
+                left: 0 !important;
+                bottom: auto !important;
+                width: 100% !important;
+                height: auto !important;
+                flex-direction: row !important;
+                justify-content: space-between !important;
+                padding: 0.5rem 1rem !important;
+                margin-bottom: 0.75rem !important;
+            }
+
+            .main-portal-container {
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                height: auto !important;
+                overflow-y: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-emerald-50/60 via-teal-50/40 to-slate-50 font-sans text-slate-800 flex h-screen antialiased selection:bg-brand-100 selection:text-brand-800 relative overflow-hidden">
+
+    <!-- Ambient Glow Mesh Spheres -->
+    <div class="fixed -top-40 -left-40 w-[500px] h-[500px] bg-emerald-300/25 rounded-full blur-[120px] pointer-events-none z-0"></div>
+    <div class="fixed top-1/3 -right-40 w-[450px] h-[450px] bg-teal-200/25 rounded-full blur-[100px] pointer-events-none z-0"></div>
+    <div class="fixed -bottom-40 left-1/3 w-[500px] h-[500px] bg-emerald-200/20 rounded-full blur-[120px] pointer-events-none z-0"></div>
+
+    <!-- LEFT SIDEBAR DOCK (DESKTOP) -->
+    <aside class="left-dock fixed left-6 top-1/2 -translate-y-1/2 w-20 bg-white/95 backdrop-blur-2xl border border-slate-200/80 shadow-xl shadow-slate-300/40 rounded-3xl z-50 hidden lg:flex flex-col items-center py-5 space-y-4">
+        <nav class="flex flex-col items-center gap-2">
+            <a href="dashboard.html" title="Dashboard Utama" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">dashboard</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Dashboard</span>
+            </a>
+            <a href="pemeriksaan.html" title="Ruang Periksa Pasien" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">stethoscope</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Ruang Periksa</span>
+            </a>
+            <a href="jadwal.html" title="Jadwal Shift Dokter" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">calendar_month</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Jadwal Shift</span>
+            </a>
+            <a href="riwayat-pasien.html" title="Arsip Riwayat Pasien" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">folder_shared</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Riwayat Pasien</span>
+            </a>
+            <a href="chat.html" title="Live Chat Konsultasi" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">forum</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Live Chat</span>
+            </a>
+            <a href="laporan-harian.html" title="Laporan Harian & Berkas" class="relative group p-2.5 rounded-2xl bg-brand-50 text-brand-600 font-bold transition-all shadow-2xs">
+                <span class="material-symbols-outlined text-[22px]">assignment</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Laporan Harian</span>
+            </a>
+            <button onclick="Absensi.openModal()" title="Presensi Dokter" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all cursor-pointer">
+                <span class="material-symbols-outlined text-[22px]">fingerprint</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Presensi Dokter</span>
+            </button>
+        </nav>
+
+        <div class="w-8 h-px bg-slate-200/70"></div>
+
+        <div class="flex flex-col items-center gap-2">
+            <a href="profil.html" title="Profil Dokter" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">person</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Profil Saya</span>
+            </a>
+            <button onclick="handleLogout()" title="Logout" class="relative group p-2.5 rounded-2xl text-rose-400 hover:text-rose-600 hover:bg-rose-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">logout</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-rose-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- MOBILE BOTTOM NAVIGATION BAR -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-slate-200/80 shadow-lg z-50 flex items-center justify-around p-2 text-slate-500">
+        <a href="dashboard.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">dashboard</span>
+            <span class="text-[9px]">Dashboard</span>
+        </a>
+        <a href="pemeriksaan.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">stethoscope</span>
+            <span class="text-[9px]">Periksa</span>
+        </a>
+        <a href="jadwal.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">calendar_month</span>
+            <span class="text-[9px]">Jadwal</span>
+        </a>
+        <a href="chat.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">forum</span>
+            <span class="text-[9px]">Chat</span>
+        </a>
+        <a href="laporan-harian.html" class="flex flex-col items-center gap-0.5 p-1 text-brand-600 font-extrabold">
+            <span class="material-symbols-outlined text-[20px]">assignment</span>
+            <span class="text-[9px]">Laporan</span>
+        </a>
+    </nav>
+
+    <!-- MAIN CONTENT CONTAINER (RESPONSIVE FOR DESKTOP, TABLET, AND MOBILE) -->
+    <div class="main-portal-container flex-1 lg:ml-32 lg:mr-4 px-3 sm:px-6 flex flex-col min-h-screen lg:h-screen overflow-y-auto lg:overflow-hidden pb-20 lg:pb-0">
+
+        <!-- TRANSPARENT HEADER BAR -->
+        <header class="h-20 flex items-center justify-between px-6 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100/60 transition-all shrink-0">
+            <div class="flex items-center gap-3">
+                <a href="dashboard.html" class="flex items-center gap-2 group cursor-pointer shrink-0" title="Sentra Farma">
+                    <img src="../../assets/logo.png" alt="Sentra Farma" class="h-12 sm:h-14 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform" />
+                </a>
+                <div class="h-8 w-px bg-slate-200/80 hidden sm:block"></div>
+                <div>
+                    <h1 class="text-base font-extrabold text-slate-900 tracking-tight">Laporan Praktik Harian & Upload Berkas Dokter</h1>
+                    <p class="text-[10px] text-slate-500 font-medium">Rekapitulasi Kegiatan Shift Jaga, Unggah Lampiran Dokumen Medis, & Export Laporan PDF</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2.5">
+                <button onclick="Absensi.openModal()" title="Presensi & Absensi Dokter" class="px-3 py-1 bg-brand-600 hover:bg-brand-700 text-white text-xs font-black rounded-full flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer">
+                    <span class="material-symbols-outlined text-[14px]">fingerprint</span>
+                    <span>Presensi / Absen</span>
+                </button>
+                <a href="profil.html" title="Buka Profil Saya" class="flex items-center gap-2 pl-2 border-l border-slate-200 group cursor-pointer">
+                    <div id="doctor-avatar-initials" class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-700 to-emerald-500 text-white flex items-center justify-center font-extrabold text-xs shadow-md group-hover:scale-105 transition-transform">D</div>
+                    <span id="doctor-name-badge" class="text-xs font-extrabold text-slate-900 hidden sm:inline group-hover:text-emerald-700 transition-colors">Dokter</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- MAIN WORKSPACE CONTAINER -->
+        <main class="p-6 max-w-6xl mx-auto w-full flex-1 flex flex-col justify-between overflow-hidden gap-4">
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-1">
+
+                <!-- FORM BUAT LAPORAN HARIAN (LEFT - 5 COLS) -->
+                <div class="lg:col-span-5 bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm space-y-4">
+                    <div class="flex items-center gap-2.5 border-b border-slate-100 pb-3">
+                        <div class="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center font-bold shadow-2xs">
+                            <span class="material-symbols-outlined text-[20px]">note_add</span>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-extrabold text-slate-900">Buat Laporan Praktik Harian</h3>
+                            <p class="text-[10px] text-slate-500 font-medium">Input rangkuman tugas jaga & upload lampiran berkas</p>
+                        </div>
+                    </div>
+
+                    <form id="form-laporan-harian" onsubmit="saveLaporanHarian(event)" class="space-y-3.5 text-xs">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px] tracking-wider">Tanggal Shift *</label>
+                                <input type="date" id="laporan-tanggal" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800 font-semibold focus:outline-none focus:border-brand-500 focus:bg-white transition-all" />
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px] tracking-wider">Shift Jaga *</label>
+                                <select id="laporan-shift" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800 font-semibold focus:outline-none focus:border-brand-500 focus:bg-white transition-all">
+                                    <option value="Shift Pagi (07:00 - 12:00)">Shift Pagi (07:00 - 12:00 WIB)</option>
+                                    <option value="Shift Siang (12:00 - 16:00)">Shift Siang (12:00 - 16:00 WIB)</option>
+                                    <option value="Shift Sore (16:00 - 19:00)">Shift Sore (16:00 - 19:00 WIB)</option>
+                                    <option value="Shift Malam (19:00 - 07:00)">Shift Malam (19:00 - 07:00 WIB)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px] tracking-wider">Total Pasien Diperiksa *</label>
+                                <input type="number" id="laporan-total-pasien" required min="0" placeholder="Contoh: 14" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800 font-semibold focus:outline-none focus:border-brand-500 focus:bg-white transition-all" />
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px] tracking-wider">Status Shift *</label>
+                                <select id="laporan-status-shift" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800 font-semibold focus:outline-none focus:border-brand-500 focus:bg-white transition-all">
+                                    <option value="SELESAI LENGKAP">SELESAI LENGKAP</option>
+                                    <option value="ADA PASIEN RUJUKAN">ADA PASIEN RUJUKAN</option>
+                                    <option value="TINDAKAN DARURAT">TINDAKAN DARURAT</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px] tracking-wider">Ringkasan Kegiatan & Kasus Utama *</label>
+                            <textarea id="laporan-ringkasan" required rows="3" placeholder="Tuliskan rangkuman pemeriksaan, tindakan klinis, atau catatan medis penting shift hari ini..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800 font-medium focus:outline-none focus:border-brand-500 focus:bg-white transition-all resize-none"></textarea>
+                        </div>
+
+                        <!-- UPLOAD FILE LAMPIRAN SECTION -->
+                        <div class="space-y-1.5 pt-1">
+                            <label class="block font-bold text-slate-700 uppercase text-[10px] tracking-wider flex items-center justify-between">
+                                <span>Upload Berkas / Lampiran Laporan (PDF/Gambar)</span>
+                                <span class="text-emerald-600 font-bold lowercase text-[10px]">opsional (max 5MB)</span>
+                            </label>
+                            <div class="border-2 border-dashed border-slate-200 hover:border-brand-400 bg-slate-50 hover:bg-brand-50/40 rounded-2xl p-3 text-center transition-all cursor-pointer relative group">
+                                <input type="file" id="laporan-file-input" onchange="handleFileSelected(this)" accept=".pdf,.png,.jpg,.jpeg,.docx" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                                <div class="space-y-1">
+                                    <span class="material-symbols-outlined text-[24px] text-slate-400 group-hover:text-brand-600 transition-colors">cloud_upload</span>
+                                    <div class="text-[11px] font-bold text-slate-700" id="file-label-text">Klik atau seret file laporan di sini</div>
+                                    <div class="text-[9px] text-slate-400">Format: PDF, PNG, JPG, DOCX (Hasil Lab/Rontgen/Laporan Shift)</div>
+                                </div>
+                            </div>
+                            <div id="file-preview-chip" class="hidden p-2 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center justify-between text-xs">
+                                <div class="flex items-center gap-2 truncate">
+                                    <span class="material-symbols-outlined text-emerald-600 text-[16px]">description</span>
+                                    <span id="preview-filename" class="font-bold text-emerald-800 truncate text-[11px]">filename.pdf</span>
+                                </div>
+                                <button type="button" onclick="clearFileSelection()" class="text-rose-500 hover:text-rose-700 p-1 font-bold text-[10px]">Hapus</button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full py-3 bg-gradient-to-r from-brand-700 to-emerald-600 hover:from-brand-800 hover:to-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-1.5">
+                            <span class="material-symbols-outlined text-[16px]">send</span>
+                            <span>Simpan & Terbitkan Laporan Harian</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- HISTORI & CETAK LAPORAN HARIAN (RIGHT - 7 COLS) -->
+                <div class="lg:col-span-7 bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm space-y-4 flex flex-col min-h-0">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3 shrink-0">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center font-bold shadow-2xs">
+                                <span class="material-symbols-outlined text-[20px]">history_edu</span>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-extrabold text-slate-900">Histori Laporan Praktik Dokter</h3>
+                                <p class="text-[10px] text-slate-500 font-medium">Arsip laporan harian yang telah diterbitkan</p>
+                            </div>
+                        </div>
+
+                        <button onclick="renderLaporanList()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] rounded-xl flex items-center gap-1 transition-colors">
+                            <span class="material-symbols-outlined text-[14px]">refresh</span> Refresh
+                        </button>
+                    </div>
+
+                    <div id="laporan-list-container" class="flex-1 overflow-y-auto space-y-3 pr-1 custom-scrollbar">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL PREVIEW & CETAK LAPORAN PDF -->
+    <div id="modal-cetak-laporan" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 space-y-4 relative">
+            <button onclick="closeModalCetakLaporan()" class="absolute right-5 top-5 text-slate-400 hover:text-slate-600 p-1.5 rounded-full hover:bg-slate-100 transition-all">
+                <span class="material-symbols-outlined text-[20px]">close</span>
+            </button>
+
+            <!-- SURAT LAPORAN PRINTABLE PREVIEW -->
+            <div id="printable-laporan-content" class="p-6 bg-slate-50 border border-slate-200 rounded-2xl space-y-4 text-xs font-sans">
+                <div class="flex justify-between items-start border-b border-slate-300 pb-3">
+                    <div class="flex items-center gap-3">
+                        <img src="../../assets/logo.png" alt="Sentra Farma" class="h-10 w-auto object-contain" />
+                        <div>
+                            <h4 class="font-extrabold text-sm text-slate-900">SENTRA FARMA MEDICAL CENTER</h4>
+                            <p class="text-[10px] text-slate-500">Laporan Praktik & Activity Log Dokter Jaga</p>
+                        </div>
+                    </div>
+                    <span class="px-2.5 py-0.5 bg-brand-100 text-brand-800 text-[10px] font-extrabold rounded-full">OFFICIAL REPORT</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 text-[11px] bg-white p-3 rounded-xl border border-slate-200">
+                    <div><span class="text-slate-400 font-bold block text-[9px] uppercase">DOKTER PRAKTIK</span> <strong id="print-doc-name" class="text-slate-800">dr. Arisandy Pratama, M.Ked</strong></div>
+                    <div><span class="text-slate-400 font-bold block text-[9px] uppercase">TANGGAL & SHIFT</span> <strong id="print-doc-date" class="text-slate-800">16 Sep 2026 • Shift Pagi</strong></div>
+                    <div><span class="text-slate-400 font-bold block text-[9px] uppercase">TOTAL PASIEN</span> <strong id="print-doc-total" class="text-emerald-700 font-extrabold">14 Pasien</strong></div>
+                    <div><span class="text-slate-400 font-bold block text-[9px] uppercase">LAMPIRAN BERKAS</span> <strong id="print-doc-file" class="text-slate-800 font-mono text-[10px]">Ada (Verified)</strong></div>
+                </div>
+
+                <div class="space-y-1 bg-white p-3.5 rounded-xl border border-slate-200">
+                    <span class="text-slate-400 font-bold block text-[9px] uppercase">RINGKASAN KEGIATAN MEDIS</span>
+                    <p id="print-doc-ringkasan" class="text-slate-700 leading-relaxed font-medium text-[11px]">Pemeriksaan rutin antrian poliklinik umum. Penanganan 3 kasus hipertensi, 5 flu ISPA, dan 2 rujukan fisioterapi.</p>
+                </div>
+
+                <div class="pt-3 flex justify-between items-end border-t border-slate-200">
+                    <div class="text-[9px] text-slate-400 space-y-1">
+                        <span class="block">Verified System Timestamp: 2026-09-16 WIB</span>
+                        <span class="block font-mono">Doc ID: SF-LOG/2026/09/16/001</span>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto bg-slate-200/60 rounded-lg flex items-center justify-center text-[9px] font-bold text-slate-500 border border-slate-300">
+                            [ E-Sign QR ]
+                        </div>
+                        <span class="text-[9px] font-extrabold text-slate-700 block mt-1">Tanda Tangan Digital</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end items-center gap-2 pt-2">
+                <button onclick="closeModalCetakLaporan()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-extrabold rounded-xl transition-colors">Tutup</button>
+                <button onclick="window.print()" class="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-extrabold rounded-xl transition-colors flex items-center gap-1 shadow-xs">
+                    <span class="material-symbols-outlined text-[16px]">print</span> Cetak Laporan / Download PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/toast.js"></script>
+    <script src="../../js/auth-guard.js"></script>
+    <script src="../../js/absensi.js"></script>
+    <script>
+        let currentDoctor = null;
+        let selectedFileName = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const todayInput = document.getElementById('laporan-tanggal');
+            if (todayInput) {
+                todayInput.value = new Date().toISOString().split('T')[0];
+            }
+            await initDoctorData();
+            renderLaporanList();
+        });
+
+        function handleLogout() {
+            API.clearSession();
+            Toast.success('Dokter telah berhasil logout.', 'Sampai Jumpa');
+            setTimeout(() => window.location.href = '/frontend/html/auth/login.html', 1000);
+        }
+
+        async function initDoctorData() {
+            const user = API.getUser();
+            if (user) {
+                try {
+                    const doc = await API.get(`/clinic/dokter/user/${user.id}`);
+                    if (doc && doc.id) currentDoctor = doc;
+                } catch(e) {}
+            }
+
+            if (!currentDoctor) {
+                currentDoctor = { id: 1, namaDokter: user ? user.namaLengkap : 'dr. Arisandy Pratama, M.Ked' };
+            }
+
+            const name = currentDoctor.namaDokter || 'Dokter Spesialis';
+            document.getElementById('doctor-name-badge').innerText = name;
+            document.getElementById('doctor-avatar-initials').innerText = name.replace(/^drg?\.\s*/i, '').trim().charAt(0).toUpperCase() || 'D';
+        }
+
+        function handleFileSelected(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                if (file.size > 5 * 1024 * 1024) {
+                    Toast.error('Ukuran file maksimal 5MB!', 'File Terlalu Besar');
+                    input.value = '';
+                    return;
+                }
+                selectedFileName = file.name;
+                document.getElementById('preview-filename').innerText = file.name;
+                document.getElementById('file-preview-chip').classList.remove('hidden');
+                document.getElementById('file-label-text').innerText = 'File Terpilih: ' + file.name;
+            }
+        }
+
+        function clearFileSelection() {
+            selectedFileName = null;
+            document.getElementById('laporan-file-input').value = '';
+            document.getElementById('file-preview-chip').classList.add('hidden');
+            document.getElementById('file-label-text').innerText = 'Klik atau seret file laporan di sini';
+        }
+
+        function getLaporanLogs() {
+            try {
+                return JSON.parse(localStorage.getItem('sentra_doctor_laporan_logs')) || [
+                    {
+                        id: 1,
+                        tanggal: '2026-09-15',
+                        shift: 'Shift Pagi (07:00 - 12:00)',
+                        totalPasien: 12,
+                        statusShift: 'SELESAI LENGKAP',
+                        ringkasan: 'Pemeriksaan rutin 12 pasien di Poliklinik Umum. Semua rekam medis dan e-resep berhasil terkirim ke apotek.',
+                        fileName: 'Laporan_Shift_Pagi_15Sep.pdf',
+                        createdAt: '2026-09-15T15:05:00'
+                    }
+                ];
+            } catch(e) {
+                return [];
+            }
+        }
+
+        function saveLaporanHarian(e) {
+            e.preventDefault();
+            const tanggal = document.getElementById('laporan-tanggal').value;
+            const shift = document.getElementById('laporan-shift').value;
+            const totalPasien = document.getElementById('laporan-total-pasien').value;
+            const statusShift = document.getElementById('laporan-status-shift').value;
+            const ringkasan = document.getElementById('laporan-ringkasan').value.trim();
+
+            const logs = getLaporanLogs();
+            const newRecord = {
+                id: Date.now(),
+                tanggal,
+                shift,
+                totalPasien: parseInt(totalPasien),
+                statusShift,
+                ringkasan,
+                fileName: selectedFileName || null,
+                createdAt: new Date().toISOString()
+            };
+
+            logs.unshift(newRecord);
+            localStorage.setItem('sentra_doctor_laporan_logs', JSON.stringify(logs));
+
+            Toast.success('Laporan Praktik Harian berhasil diterbitkan & tersimpan!', 'Laporan Berhasil');
+            document.getElementById('form-laporan-harian').reset();
+            clearFileSelection();
+            renderLaporanList();
+        }
+
+        function renderLaporanList() {
+            const container = document.getElementById('laporan-list-container');
+            if (!container) return;
+
+            const logs = getLaporanLogs();
+            if (logs.length === 0) {
+                container.innerHTML = '<div class="p-6 bg-slate-50 border border-slate-200 text-center text-slate-400 text-xs italic rounded-2xl">Belum ada laporan harian yang diterbitkan.</div>';
+                return;
+            }
+
+            container.innerHTML = logs.map(l => `
+                <div class="p-4 bg-white border border-slate-200/80 rounded-2xl shadow-2xs space-y-3 hover:border-brand-300 transition-all">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-2">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="px-2 py-0.5 bg-brand-100 text-brand-800 text-[10px] font-extrabold rounded-md">${l.shift}</span>
+                                <span class="text-xs font-extrabold text-slate-900">${l.tanggal}</span>
+                            </div>
+                        </div>
+                        <span class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-extrabold rounded-full border border-emerald-200/80 w-fit">
+                            ${l.totalPasien} Pasien Diperiksa
+                        </span>
+                    </div>
+
+                    <p class="text-xs text-slate-600 font-medium leading-relaxed">${l.ringkasan}</p>
+
+                    ${l.fileName ? `
+                        <div class="p-2 bg-slate-50 rounded-xl border border-slate-200 flex items-center gap-2 text-[11px] text-brand-700 font-bold">
+                            <span class="material-symbols-outlined text-[16px]">attach_file</span>
+                            <span class="truncate">Lampiran File: ${l.fileName}</span>
+                        </div>
+                    ` : ''}
+
+                    <div class="flex items-center justify-between pt-1 text-xs">
+                        <span class="text-[10px] text-slate-400 font-mono">${new Date(l.createdAt).toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'})} WIB</span>
+                        <button onclick="openModalCetakLaporan(${l.id})" class="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl shadow-2xs transition-all flex items-center gap-1 cursor-pointer">
+                            <span class="material-symbols-outlined text-[14px]">print</span> Cetak / PDF
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openModalCetakLaporan(id) {
+            const logs = getLaporanLogs();
+            const item = logs.find(l => l.id === id) || logs[0];
+            if (!item) return;
+
+            const docName = currentDoctor ? currentDoctor.namaDokter : 'dr. Arisandy Pratama, M.Ked';
+            document.getElementById('print-doc-name').innerText = docName;
+            document.getElementById('print-doc-date').innerText = `${item.tanggal} • ${item.shift}`;
+            document.getElementById('print-doc-total').innerText = `${item.totalPasien} Pasien`;
+            document.getElementById('print-doc-file').innerText = item.fileName ? item.fileName : 'Tanpa Lampiran';
+            document.getElementById('print-doc-ringkasan').innerText = item.ringkasan;
+
+            document.getElementById('modal-cetak-laporan').classList.remove('hidden');
+        }
+
+        function closeModalCetakLaporan() {
+            document.getElementById('modal-cetak-laporan').classList.add('hidden');
+        }
+    </script>
+</body>
+
+</html>

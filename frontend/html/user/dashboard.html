@@ -6,9 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sentra Farma - Portal Pasien</title>
 
+    <script src="../../js/auth-guard.js"></script>
+
     <!-- Google Fonts & Material Symbols -->
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
-        rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet" />
 
@@ -30,6 +35,22 @@
         }
     </script>
     <style>
+        .material-symbols-outlined, .material-icons, .material-icons-outlined {
+            font-family: 'Material Symbols Outlined', 'Material Icons Outlined', 'Material Icons' !important;
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
         html,
         body {
             min-height: 100vh;
@@ -648,7 +669,7 @@
                             <h4
                                 class="text-xs font-extrabold text-slate-900 group-hover:text-brand-700 transition-colors">
                                 Poliklinik Umum</h4>
-                            <p class="text-[10px] text-slate-500 font-medium">dr. Dian Sastro, Sp.OG</p>
+                            <p class="text-[10px] text-slate-500 font-medium">dr. Arisandy Pratama, M.Ked</p>
                         </div>
                         <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px]">
                             <span class="text-emerald-600 font-bold flex items-center gap-1"><span
@@ -1057,14 +1078,20 @@
 
                 const currentHour = new Date().getHours();
                 let currentShift = 'Pagi';
-                let shiftTime = '07:00 - 15:00 WIB';
+                let shiftTime = '07:00 - 12:00 WIB';
 
-                if (currentHour >= 15 && currentHour < 23) {
+                if (currentHour >= 7 && currentHour < 12) {
+                    currentShift = 'Pagi';
+                    shiftTime = '07:00 - 12:00 WIB';
+                } else if (currentHour >= 12 && currentHour < 16) {
+                    currentShift = 'Siang';
+                    shiftTime = '12:00 - 16:00 WIB';
+                } else if (currentHour >= 16 && currentHour < 19) {
                     currentShift = 'Sore';
-                    shiftTime = '15:00 - 23:00 WIB';
-                } else if (currentHour >= 23 || currentHour < 7) {
+                    shiftTime = '16:00 - 19:00 WIB';
+                } else {
                     currentShift = 'Malam';
-                    shiftTime = '23:00 - 07:00 WIB';
+                    shiftTime = '19:00 - 07:00 WIB';
                 }
 
                 // Update section header subtitle badge if available

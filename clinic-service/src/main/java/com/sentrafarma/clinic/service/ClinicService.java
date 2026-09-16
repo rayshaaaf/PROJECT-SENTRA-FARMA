@@ -45,5 +45,6 @@ public interface ClinicService {
     // Live Chat
     ChatMessage saveChatMessage(ChatMessage msg);
     List<ChatMessage> getChatHistory(String sessionId);
+    void deleteChatHistory(String sessionId);
     List<String> getDoctorChatSessions(Long doctorId);
 }

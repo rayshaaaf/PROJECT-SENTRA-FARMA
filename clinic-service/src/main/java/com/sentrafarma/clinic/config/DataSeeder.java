@@ -42,7 +42,16 @@ public class DataSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         if (poliklinikRepository.count() > 0) {
-            log.info("Clinic Service: Database sudah terisi. Seeding dilewati.");
+            log.info("Clinic Service: Database sudah terisi. Memeriksa data Dokter...");
+            List<Dokter> doctors = dokterRepository.findAll();
+            for (Dokter d : doctors) {
+                if (d.getNamaDokter() != null && d.getNamaDokter().contains("Dian Sastro") && d.getPoliklinik() != null && d.getPoliklinik().getId() == 1L) {
+                    d.setNamaDokter("dr. Arisandy Pratama, M.Ked");
+                    d.setSpesialisasi("Dokter Umum");
+                    dokterRepository.save(d);
+                    log.info("Berhasil menyelaraskan data Dokter Poli Umum: dr. Arisandy Pratama, M.Ked (Dokter Umum)");
+                }
+            }
             return;
         }
 
