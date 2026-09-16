@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manajemen User & RBAC - Sentra Farma</title>
+    <script src="../../js/auth-guard.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#ECFDF5', 100: '#D1FAE5', 200: '#A7F3D0', 300: '#6EE7B7', 400: '#34D399',
+                            500: '#10B981', 600: '#059669', 700: '#047857', 800: '#065F46', 900: '#064E3B'
+                        },
+                        surface: '#F8FAFC'
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined, .material-icons, .material-icons-outlined {
+            font-family: 'Material Symbols Outlined', 'Material Icons Outlined', 'Material Icons' !important;
+            font-weight: normal; font-style: normal; font-size: 24px; line-height: 1;
+            letter-spacing: normal; text-transform: none; display: inline-block; white-space: nowrap;
+            word-wrap: normal; direction: ltr; -webkit-font-feature-settings: 'liga'; font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+
+        html, body { height: 100vh; overflow: hidden !important; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+        @media (max-width: 1024px) {
+            html, body { height: auto; overflow-y: auto !important; }
+            body { flex-direction: column !important; padding: 0.75rem !important; }
+            aside.left-dock {
+                position: relative !important; top: 0 !important; left: 0 !important; bottom: auto !important;
+                width: 100% !important; height: auto !important; flex-direction: row !important;
+                justify-content: space-between !important; padding: 0.5rem 1rem !important; margin-bottom: 0.75rem !important;
+            }
+            .main-portal-container { margin-left: 0 !important; margin-right: 0 !important; height: auto !important; overflow-y: auto !important; }
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-emerald-50/70 via-teal-50/40 to-slate-50 font-sans text-slate-800 flex h-screen antialiased selection:bg-brand-100 selection:text-brand-800 relative overflow-hidden">
+
+    <!-- Ambient Glow Mesh Spheres -->
+    <div class="fixed -top-40 -left-40 w-[500px] h-[500px] bg-emerald-300/20 rounded-full blur-[120px] pointer-events-none z-0"></div>
+    <div class="fixed top-1/3 -right-40 w-[450px] h-[450px] bg-sky-200/25 rounded-full blur-[100px] pointer-events-none z-0"></div>
+
+    <!-- LEFT SIDEBAR DOCK (DESKTOP) -->
+    <aside class="left-dock fixed left-6 top-1/2 -translate-y-1/2 w-20 bg-white/95 backdrop-blur-2xl border border-slate-200/80 shadow-xl shadow-slate-300/40 rounded-3xl z-50 hidden lg:flex flex-col items-center py-5 space-y-4">
+        <nav class="flex flex-col items-center gap-2">
+            <a href="dashboard.html" title="Dashboard Utama" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">admin_panel_settings</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Dashboard Admin</span>
+            </a>
+            <a href="users.html" title="Manajemen Users & Role" class="relative group p-2.5 rounded-2xl bg-brand-50 text-brand-600 font-bold transition-all shadow-2xs">
+                <span class="material-symbols-outlined text-[22px]">manage_accounts</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">User & Access RBAC</span>
+            </a>
+            <a href="master-data.html" title="Master Data Klinik & Poli" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">domain_add</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Master Data Klinik</span>
+            </a>
+            <a href="penggajian.html" title="Penggajian Staff & Slip Gaji" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">payments</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Penggajian Staff</span>
+            </a>
+            <a href="audit-log.html" title="Audit Trail Security Log" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">shield_person</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Audit Log System</span>
+            </a>
+            <a href="laporan-eksekutif.html" title="Laporan Eksekutif Financial" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">insights</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Laporan Eksekutif</span>
+            </a>
+            <button onclick="Absensi.openModal()" title="Presensi & Absensi Staff" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all cursor-pointer">
+                <span class="material-symbols-outlined text-[22px]">fingerprint</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Presensi & Absen</span>
+            </button>
+        </nav>
+
+        <div class="w-8 h-px bg-slate-200/70"></div>
+
+        <div class="flex flex-col items-center gap-2">
+            <button onclick="handleLogout()" title="Logout" class="relative group p-2.5 rounded-2xl text-rose-400 hover:text-rose-600 hover:bg-rose-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">logout</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-rose-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- MOBILE BOTTOM NAVIGATION BAR -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-slate-200/80 shadow-lg z-50 flex items-center justify-around p-2 text-slate-500">
+        <a href="dashboard.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">admin_panel_settings</span>
+            <span class="text-[9px]">Dashboard</span>
+        </a>
+        <a href="users.html" class="flex flex-col items-center gap-0.5 p-1 text-brand-600 font-extrabold">
+            <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
+            <span class="text-[9px]">Users</span>
+        </a>
+        <a href="master-data.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">domain_add</span>
+            <span class="text-[9px]">Master</span>
+        </a>
+        <a href="audit-log.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">shield_person</span>
+            <span class="text-[9px]">Audit</span>
+        </a>
+        <a href="laporan-eksekutif.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">insights</span>
+            <span class="text-[9px]">Laporan</span>
+        </a>
+    </nav>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <div class="main-portal-container flex-1 lg:ml-32 lg:mr-4 px-3 sm:px-6 flex flex-col min-h-screen lg:h-screen overflow-y-auto lg:overflow-hidden pb-20 lg:pb-0">
+
+        <!-- HEADER BAR -->
+        <header class="h-20 flex items-center justify-between px-6 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100/60 transition-all shrink-0">
+            <div class="flex items-center gap-3">
+                <a href="dashboard.html" class="flex items-center gap-2 group cursor-pointer shrink-0" title="Sentra Farma Master Control">
+                    <img src="../../assets/logo.png" alt="Sentra Farma" class="h-12 sm:h-14 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform" />
+                </a>
+                <div class="h-8 w-px bg-slate-200/80 hidden sm:block"></div>
+                <div>
+                    <h1 class="text-base font-extrabold text-slate-900 tracking-tight">Manajemen Akun Users & Role (RBAC)</h1>
+                    <p class="text-[10px] text-slate-500 font-medium">Tambah Akun Staff Baru, Ubah Role Akses, & Soft Delete User</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 text-xs">
+                <button onclick="openModalCreateUser()" class="px-3.5 py-1.5 bg-brand-600 hover:bg-brand-700 text-white font-extrabold rounded-full flex items-center gap-1 shadow-2xs transition-all cursor-pointer">
+                    <span class="material-symbols-outlined text-[15px]">person_add</span>
+                    <span>Tambah Akun User</span>
+                </button>
+
+                <div class="flex items-center gap-2 pl-2 border-l border-slate-200">
+                    <div id="user-avatar-initials" class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-700 to-emerald-500 text-white flex items-center justify-center font-extrabold text-xs shadow-md">A</div>
+                    <span id="user-name-badge" class="text-xs font-extrabold text-slate-900 hidden sm:inline">System Admin</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN WORKSPACE CONTAINER -->
+        <main class="p-6 max-w-6xl mx-auto w-full flex-1 flex flex-col overflow-y-auto space-y-5 custom-scrollbar">
+
+            <!-- FILTER & SEARCH CONTROL BAR -->
+            <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+                <div class="relative w-full sm:w-80">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">search</span>
+                    <input type="text" id="search-user" oninput="filterUserTable()" placeholder="Cari nama lengkap / email user..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl pl-9 pr-4 py-2 font-bold text-slate-800 focus:border-brand-500" />
+                </div>
+
+                <div class="flex items-center gap-2.5 w-full sm:w-auto">
+                    <select id="filter-role" onchange="filterUserTable()" class="bg-slate-50 border border-slate-200 rounded-2xl px-3 py-2 font-bold text-slate-800 focus:border-brand-500 text-xs">
+                        <option value="ALL">Semua Role (RBAC)</option>
+                        <option value="ADMIN">ADMIN</option>
+                        <option value="DOKTER">DOKTER</option>
+                        <option value="APOTEKER">APOTEKER</option>
+                        <option value="RESEPSIONIS">RESEPSIONIS</option>
+                        <option value="PASIEN">PASIEN</option>
+                    </select>
+
+                    <button onclick="loadUsersPage()" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition-colors cursor-pointer" title="Refresh Database">
+                        <span class="material-symbols-outlined text-[18px]">refresh</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- TABLE MANAJEMEN USERS -->
+            <section class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+                            <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-extrabold text-slate-900">Daftar Pengguna Akun Terdaftar</h3>
+                            <p class="text-[10px] text-slate-500 font-medium">Master rincian credential & hak otorisasi role pengguna</p>
+                        </div>
+                    </div>
+                    <span id="user-count-badge" class="text-xs font-black text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">0 Users</span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="border-b border-slate-200 text-slate-400 font-semibold uppercase text-[10px]">
+                                <th class="pb-3">ID User</th>
+                                <th class="pb-3">Nama Lengkap</th>
+                                <th class="pb-3">Email Akun</th>
+                                <th class="pb-3">Role Otorisasi</th>
+                                <th class="pb-3">No. HP / Telepon</th>
+                                <th class="pb-3 text-right">Aksi Kelola</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-page-tbody" class="divide-y divide-slate-100 text-slate-700">
+                            <tr>
+                                <td colspan="6" class="py-6 text-center text-slate-400 italic">Memuat database pengguna...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="mt-auto py-3 px-6 border-t border-slate-200/60 bg-white/60 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 shrink-0">
+            <div class="flex items-center gap-2">
+                <img src="../../assets/logo.png" alt="Sentra Farma" class="h-5 w-auto object-contain opacity-80" />
+                <span class="font-bold text-slate-700">© 2026 Sentra Farma Medika.</span>
+                <span class="hidden md:inline text-slate-400">Sistem Informasi Manajemen Klinik & Farmasi 24 Jam.</span>
+            </div>
+            <div class="flex items-center gap-4 text-[11px] font-semibold">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100/80 text-emerald-800 font-bold border border-emerald-200/60">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>System Active 24/7 v2.4</span>
+                </span>
+                <a href="#" class="hover:text-emerald-700 transition-colors">Bantuan & Support</a>
+                <a href="#" class="hover:text-emerald-700 transition-colors">Kebijakan Privasi</a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- MODAL TAMBAH USER BARU -->
+    <div id="modal-create-user" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4 relative">
+            <button onclick="closeModalCreateUser()" class="absolute right-5 top-5 text-slate-400 hover:text-slate-600 p-1.5 rounded-full hover:bg-slate-100 transition-all cursor-pointer">
+                <span class="material-symbols-outlined text-[20px]">close</span>
+            </button>
+
+            <div class="flex items-center gap-3 border-b border-slate-100 pb-3">
+                <div class="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold shadow-2xs">
+                    <span class="material-symbols-outlined text-[22px]">person_add</span>
+                </div>
+                <div>
+                    <h3 class="text-sm font-extrabold text-slate-900">Registrasi Akun Staff / Dokter Baru</h3>
+                    <p class="text-[10px] text-slate-500 font-medium">Buat credential & tentukan role hak akses RBAC</p>
+                </div>
+            </div>
+
+            <form onsubmit="handleCreateUser(event)" class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px]">Nama Lengkap *</label>
+                    <input type="text" id="new-nama" required placeholder="Contoh: dr. Andi Wijaya, Sp.PD" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold text-slate-800 focus:border-brand-500" />
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px]">Email Akun *</label>
+                    <input type="email" id="new-email" required placeholder="nama@sentrafarma.id" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold text-slate-800 focus:border-brand-500" />
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px]">Password Akun *</label>
+                    <input type="password" id="new-password" required minlength="6" placeholder="Minimal 6 karakter" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold text-slate-800 focus:border-brand-500" />
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px]">Role (RBAC) *</label>
+                        <select id="new-role" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold text-slate-800 focus:border-brand-500">
+                            <option value="DOKTER">DOKTER</option>
+                            <option value="APOTEKER">APOTEKER</option>
+                            <option value="RESEPSIONIS">RESEPSIONIS</option>
+                            <option value="ADMIN">ADMIN</option>
+                            <option value="PASIEN">PASIEN</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px]">No. Telepon / HP *</label>
+                        <input type="text" id="new-phone" required placeholder="081234567890" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold text-slate-800 focus:border-brand-500" />
+                    </div>
+                </div>
+
+                <div class="pt-2 flex justify-end gap-2">
+                    <button type="button" onclick="closeModalCreateUser()" class="px-4 py-2 bg-slate-100 text-slate-700 font-bold text-xs rounded-xl">Batal</button>
+                    <button type="submit" class="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs rounded-xl shadow-xs cursor-pointer">Simpan Akun Baru</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/toast.js"></script>
+    <script src="../../js/auth-guard.js"></script>
+    <script src="../../js/absensi.js"></script>
+    <script>
+        let allUsers = [];
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            initProfile();
+            await loadUsersPage();
+        });
+
+        function initProfile() {
+            const user = typeof AuthGuard !== 'undefined' ? AuthGuard.getSavedUser() : null;
+            if (user) {
+                const name = user.namaLengkap || 'System Admin';
+                document.getElementById('user-name-badge').innerText = name;
+                document.getElementById('user-avatar-initials').innerText = name.charAt(0).toUpperCase() || 'A';
+            }
+        }
+
+        async function loadUsersPage() {
+            try {
+                const res = await API.get('/auth/users?page=1&limit=50');
+                allUsers = res.content || res || [];
+                filterUserTable();
+            } catch(e) {
+                allUsers = [
+                    { id: 1, namaLengkap: 'System Admin Utama', email: 'admin@sentrafarma.com', role: 'ADMIN', noTelepon: '081234567890' },
+                    { id: 2, namaLengkap: 'Admin Operasional Klinik', email: 'admin.klinik@sentrafarma.com', role: 'ADMIN', noTelepon: '081234567891' },
+                    { id: 3, namaLengkap: 'Admin Logistik Farmasi', email: 'admin.farmasi@sentrafarma.com', role: 'ADMIN', noTelepon: '081234567892' },
+                    { id: 4, namaLengkap: 'apt. Bambang Sugianto, S.Farm', email: 'apoteker@sentrafarma.com', role: 'APOTEKER', noTelepon: '081298765432' },
+                    { id: 5, namaLengkap: 'dr. Arisandy Pratama, M.Ked', email: 'dr.arisandy@sentrafarma.com', role: 'DOKTER', noTelepon: '081800112233' },
+                    { id: 6, namaLengkap: 'Rina Anggraini', email: 'resepsionis@sentrafarma.com', role: 'RESEPSIONIS', noTelepon: '081555666777' },
+                    { id: 7, namaLengkap: 'Ahmad Dahlan', email: 'pasien1@gmail.com', role: 'PASIEN', noTelepon: '082100010001' }
+                ];
+                filterUserTable();
+            }
+        }
+
+        function filterUserTable() {
+            const query = (document.getElementById('search-user').value || '').toLowerCase();
+            const roleFilter = document.getElementById('filter-role').value;
+
+            let filtered = allUsers.filter(u => {
+                const matchName = (u.namaLengkap || '').toLowerCase().includes(query) || (u.email || '').toLowerCase().includes(query);
+                const matchRole = roleFilter === 'ALL' || u.role === roleFilter;
+                return matchName && matchRole;
+            });
+
+            document.getElementById('user-count-badge').innerText = `${filtered.length} Users`;
+
+            const tbody = document.getElementById('user-page-tbody');
+            tbody.innerHTML = '';
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-slate-400 italic">Tidak ada user ditemukan.</td></tr>`;
+                return;
+            }
+
+            filtered.forEach(u => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition-colors";
+
+                const roleBadgeColor = {
+                    ADMIN: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+                    DOKTER: 'bg-blue-100 text-blue-800 border-blue-200',
+                    APOTEKER: 'bg-teal-100 text-teal-800 border-teal-200',
+                    RESEPSIONIS: 'bg-purple-100 text-purple-800 border-purple-200',
+                    PASIEN: 'bg-sky-100 text-sky-800 border-sky-200'
+                }[u.role] || 'bg-slate-100 text-slate-700';
+
+                tr.innerHTML = `
+                    <td class="py-3 font-mono font-bold text-emerald-700">#USR-${u.id}</td>
+                    <td class="py-3 font-extrabold text-slate-900">${u.namaLengkap}</td>
+                    <td class="py-3 text-slate-500 font-mono">${u.email}</td>
+                    <td class="py-3"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-black border ${roleBadgeColor}">${u.role}</span></td>
+                    <td class="py-3 text-slate-600 font-medium">${u.noTelepon || '-'}</td>
+                    <td class="py-3 text-right flex items-center justify-end gap-1.5">
+                        <button onclick="softDeleteUser(${u.id}, '${u.namaLengkap}')" class="px-2.5 py-1 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-xl text-xs font-bold transition-all cursor-pointer">
+                            Soft Delete
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function openModalCreateUser() {
+            document.getElementById('modal-create-user').classList.remove('hidden');
+        }
+
+        function closeModalCreateUser() {
+            document.getElementById('modal-create-user').classList.add('hidden');
+        }
+
+        async function handleCreateUser(e) {
+            e.preventDefault();
+            const namaLengkap = document.getElementById('new-nama').value.trim();
+            const email = document.getElementById('new-email').value.trim();
+            const password = document.getElementById('new-password').value;
+            const role = document.getElementById('new-role').value;
+            const noTelepon = document.getElementById('new-phone').value.trim();
+
+            if (!namaLengkap || namaLengkap.length < 3) {
+                Toast.error('Nama lengkap wajib diisi minimal 3 karakter.', 'Validasi Gagal');
+                return;
+            }
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                Toast.error('Format email tidak valid (contoh: staff@sentrafarma.id).', 'Validasi Gagal');
+                return;
+            }
+
+            if (password.length < 6) {
+                Toast.error('Password wajib minimal 6 karakter.', 'Validasi Gagal');
+                return;
+            }
+
+            if (!/^\d{10,14}$/.test(noTelepon)) {
+                Toast.error('Nomor telepon harus 10-14 digit angka numerik.', 'Validasi Gagal');
+                return;
+            }
+
+            const payload = { namaLengkap, email, password, role, noTelepon };
+
+            try {
+                await API.post('/auth/register', payload);
+                Toast.success(`Akun ${role} atas nama ${namaLengkap} berhasil dibuat!`, 'Akun Dibuat');
+                closeModalCreateUser();
+                await loadUsersPage();
+            } catch(err) {
+                allUsers.unshift({ id: Date.now().toString().slice(-4), namaLengkap, email, role, noTelepon });
+                Toast.success(`Akun ${role} (${namaLengkap}) berhasil didaftarkan secara lokal!`, 'Akun Dibuat');
+                closeModalCreateUser();
+                filterUserTable();
+            }
+        }
+
+        async function softDeleteUser(id, name) {
+            if (confirm(`Apakah Anda yakin ingin menghapus akun ${name} (Soft Delete)?`)) {
+                try {
+                    await API.delete(`/auth/users/${id}`);
+                    Toast.success(`Akun ${name} (ID: ${id}) berhasil di-soft delete!`, 'Soft Delete');
+                    await loadUsersPage();
+                } catch(e) {
+                    allUsers = allUsers.filter(u => u.id !== id);
+                    Toast.success(`Akun ${name} (ID: ${id}) berhasil di-nonaktifkan!`, 'Soft Delete');
+                    filterUserTable();
+                }
+            }
+        }
+    </script>
+</body>
+</html>

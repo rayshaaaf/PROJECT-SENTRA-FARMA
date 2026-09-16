@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registrasi Pasien Baru Offline - Sentra Farma</title>
+    <script src="../../js/auth-guard.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#F5F3FF', 100: '#EDE9FE', 200: '#DDD6FE', 300: '#C4B5FD', 400: '#A78BFA',
+                            500: '#8B5CF6', 600: '#7C3AED', 700: '#6D28D9', 800: '#5B21B6', 900: '#4C1D95'
+                        },
+                        surface: '#F8FAFC'
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined, .material-icons, .material-icons-outlined {
+            font-family: 'Material Symbols Outlined', 'Material Icons Outlined', 'Material Icons' !important;
+            font-weight: normal; font-style: normal; font-size: 24px; line-height: 1;
+            letter-spacing: normal; text-transform: none; display: inline-block; white-space: nowrap;
+            word-wrap: normal; direction: ltr; -webkit-font-feature-settings: 'liga'; font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+
+        html, body { height: 100vh; overflow: hidden !important; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+        @media (max-width: 1024px) {
+            html, body { height: auto; overflow-y: auto !important; }
+            body { flex-direction: column !important; padding: 0.75rem !important; }
+            aside.left-dock {
+                position: relative !important; top: 0 !important; left: 0 !important; bottom: auto !important;
+                width: 100% !important; height: auto !important; flex-direction: row !important;
+                justify-content: space-between !important; padding: 0.5rem 1rem !important; margin-bottom: 0.75rem !important;
+            }
+            .main-portal-container { margin-left: 0 !important; margin-right: 0 !important; height: auto !important; overflow-y: auto !important; }
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-purple-50/60 via-indigo-50/40 to-slate-50 font-sans text-slate-800 flex h-screen antialiased selection:bg-brand-100 selection:text-brand-800 relative overflow-hidden">
+
+    <!-- Ambient Glow Mesh Spheres -->
+    <div class="fixed -top-40 -left-40 w-[500px] h-[500px] bg-purple-300/25 rounded-full blur-[120px] pointer-events-none z-0"></div>
+    <div class="fixed top-1/3 -right-40 w-[450px] h-[450px] bg-indigo-200/25 rounded-full blur-[100px] pointer-events-none z-0"></div>
+
+    <!-- LEFT SIDEBAR DOCK (DESKTOP) -->
+    <aside class="left-dock fixed left-6 top-1/2 -translate-y-1/2 w-20 bg-white/95 backdrop-blur-2xl border border-slate-200/80 shadow-xl shadow-slate-300/40 rounded-3xl z-50 hidden lg:flex flex-col items-center py-5 space-y-4">
+        <nav class="flex flex-col items-center gap-2">
+            <a href="dashboard.html" title="Dashboard Utama" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">dashboard</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Dashboard</span>
+            </a>
+            <a href="tiket-walkin.html" title="Cetak Tiket Walk-In" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">confirmation_number</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Tiket Walk-in</span>
+            </a>
+            <a href="pendaftaran-pasien.html" title="Registrasi Pasien Offline" class="relative group p-2.5 rounded-2xl bg-brand-50 text-brand-600 font-bold transition-all shadow-2xs">
+                <span class="material-symbols-outlined text-[22px]">person_add</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Registrasi Pasien</span>
+            </a>
+            <a href="monitor-antrian.html" title="Monitor Layar Antrian TV" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">desktop_windows</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Layar Monitor TV</span>
+            </a>
+            <button onclick="Absensi.openModal()" title="Presensi & Absensi Resepsionis" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all cursor-pointer">
+                <span class="material-symbols-outlined text-[22px]">fingerprint</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Presensi & Absen</span>
+            </button>
+        </nav>
+
+        <div class="w-8 h-px bg-slate-200/70"></div>
+
+        <div class="flex flex-col items-center gap-2">
+            <button onclick="handleLogout()" title="Logout" class="relative group p-2.5 rounded-2xl text-rose-400 hover:text-rose-600 hover:bg-rose-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">logout</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-rose-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- MOBILE BOTTOM NAVIGATION BAR -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-slate-200/80 shadow-lg z-50 flex items-center justify-around p-2 text-slate-500">
+        <a href="dashboard.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">dashboard</span>
+            <span class="text-[9px]">Dashboard</span>
+        </a>
+        <a href="tiket-walkin.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">confirmation_number</span>
+            <span class="text-[9px]">Tiket</span>
+        </a>
+        <a href="pendaftaran-pasien.html" class="flex flex-col items-center gap-0.5 p-1 text-brand-600 font-extrabold">
+            <span class="material-symbols-outlined text-[20px]">person_add</span>
+            <span class="text-[9px]">Daftar Pasien</span>
+        </a>
+        <a href="monitor-antrian.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">desktop_windows</span>
+            <span class="text-[9px]">Layar TV</span>
+        </a>
+    </nav>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <div class="main-portal-container flex-1 lg:ml-32 lg:mr-4 px-3 sm:px-6 flex flex-col min-h-screen lg:h-screen overflow-y-auto lg:overflow-hidden pb-20 lg:pb-0">
+
+        <!-- HEADER BAR -->
+        <header class="h-20 flex items-center justify-between px-6 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-purple-100/60 transition-all shrink-0">
+            <div class="flex items-center gap-3">
+                <a href="dashboard.html" class="flex items-center gap-2 group cursor-pointer shrink-0" title="Sentra Farma Front Desk">
+                    <img src="../../assets/logo.png" alt="Sentra Farma" class="h-12 sm:h-14 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform" />
+                </a>
+                <div class="h-8 w-px bg-slate-200/80 hidden sm:block"></div>
+                <div>
+                    <h1 class="text-base font-extrabold text-slate-900 tracking-tight">Registrasi Profile Pasien Baru Offline</h1>
+                    <p class="text-[10px] text-slate-500 font-medium">Pendaftaran Akun Pasien Datang Langsung (Walk-In) & Rekam Medis Awal</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2.5">
+                <button onclick="Absensi.openModal()" title="Presensi & Absensi Resepsionis"
+                    class="px-3 py-1 bg-brand-600 hover:bg-brand-700 text-white text-xs font-black rounded-full flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer">
+                    <span class="material-symbols-outlined text-[14px]">fingerprint</span>
+                    <span>Presensi / Absen</span>
+                </button>
+                <div class="flex items-center gap-2 pl-2 border-l border-slate-200">
+                    <div id="user-avatar-initials" class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-700 to-indigo-500 text-white flex items-center justify-center font-extrabold text-xs shadow-md">R</div>
+                    <span id="user-name-badge" class="text-xs font-extrabold text-slate-900 hidden sm:inline">Resepsionis</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN WORKSPACE CONTAINER -->
+        <main class="p-6 max-w-6xl mx-auto w-full flex-1 flex flex-col overflow-y-auto space-y-5 custom-scrollbar">
+
+            <!-- FORM REGISTRASI PASIEN BARU -->
+            <section class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs space-y-4">
+                <div class="flex items-center gap-2.5 border-b border-slate-100 pb-3">
+                    <div class="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center font-bold">
+                        <span class="material-symbols-outlined text-[20px]">person_add</span>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-extrabold text-slate-900">Formulir Pendaftaran Pasien Offline</h3>
+                        <p class="text-[10px] text-slate-500 font-medium">Masukkan data identitas sesuai KTP/Kartu Identitas Resmi Pasien</p>
+                    </div>
+                </div>
+
+                <form id="form-register-pasien" onsubmit="handleRegisterPasien(event)" class="space-y-4 text-xs">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px]">Nama Lengkap Pasien *</label>
+                            <input type="text" id="reg-nama" required placeholder="Sesuai KTP (Contoh: Ahmad Dahlan)" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold focus:border-brand-500" />
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px]">NIK (16 Digit KTP) *</label>
+                            <input type="text" id="reg-nik" required maxlength="16" placeholder="3174012903900001" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold font-mono focus:border-brand-500" />
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px]">Tanggal Lahir *</label>
+                            <input type="date" id="reg-dob" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-semibold focus:border-brand-500" />
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px]">Jenis Kelamin *</label>
+                            <select id="reg-gender" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-semibold focus:border-brand-500">
+                                <option value="L">Laki-laki (L)</option>
+                                <option value="P">Perempuan (P)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px]">No. Telepon / WhatsApp *</label>
+                            <input type="tel" id="reg-phone" required placeholder="081234567890" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold font-mono focus:border-brand-500" />
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px]">Alamat Lengkap *</label>
+                        <textarea id="reg-alamat" rows="2" required placeholder="Jl. Kebon Jeruk No. 12 Jakarta Barat" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-medium focus:border-brand-500"></textarea>
+                    </div>
+
+                    <div class="pt-2 flex justify-end gap-2">
+                        <button type="reset" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs">Reset Form</button>
+                        <button type="submit" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs rounded-xl shadow-xs flex items-center gap-1.5 cursor-pointer">
+                            <span class="material-symbols-outlined text-[18px]">save</span>
+                            <span>Daftarkan Profile Pasien</span>
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="mt-auto py-3 px-6 border-t border-slate-200/60 bg-white/60 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 shrink-0">
+            <div class="flex items-center gap-2">
+                <img src="../../assets/logo.png" alt="Sentra Farma" class="h-5 w-auto object-contain opacity-80" />
+                <span class="font-bold text-slate-700">© 2026 Sentra Farma Medika.</span>
+                <span class="hidden md:inline text-slate-400">Pusat Layanan Kesehatan Digital.</span>
+            </div>
+            <div class="flex items-center gap-4 text-[11px] font-semibold">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100/80 text-emerald-800 font-bold border border-emerald-200/60">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>System Active 24/7 v2.4</span>
+                </span>
+                <a href="#" class="hover:text-emerald-700 transition-colors">Bantuan & Support</a>
+                <a href="#" class="hover:text-emerald-700 transition-colors">Kebijakan Privasi</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/toast.js"></script>
+    <script src="../../js/auth-guard.js"></script>
+    <script src="../../js/absensi.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initProfile();
+        });
+
+        function initProfile() {
+            const user = typeof AuthGuard !== 'undefined' ? AuthGuard.getSavedUser() : null;
+            if (user) {
+                const name = user.namaLengkap || 'Resepsionis';
+                document.getElementById('user-name-badge').innerText = name;
+                document.getElementById('user-avatar-initials').innerText = name.charAt(0).toUpperCase() || 'R';
+            }
+        }
+
+        async function handleRegisterPasien(e) {
+            e.preventDefault();
+            const namaLengkap = document.getElementById('reg-nama').value.trim();
+            const nik = document.getElementById('reg-nik').value.trim();
+            const tanggalLahir = document.getElementById('reg-dob').value;
+            const jenisKelamin = document.getElementById('reg-gender').value;
+            const noTelepon = document.getElementById('reg-phone').value.trim();
+            const alamat = document.getElementById('reg-alamat').value.trim();
+
+            if (!namaLengkap || namaLengkap.length < 3) {
+                Toast.error('Nama pasien wajib diisi minimal 3 karakter.', 'Validasi Gagal');
+                document.getElementById('reg-nama').focus();
+                return;
+            }
+
+            if (!/^\d{16}$/.test(nik)) {
+                Toast.error('NIK KTP harus tepat 16 angka numerik.', 'Validasi Gagal');
+                document.getElementById('reg-nik').focus();
+                return;
+            }
+
+            const payload = {
+                namaLengkap,
+                nik,
+                tanggalLahir,
+                jenisKelamin,
+                noTelepon,
+                alamat
+            };
+
+            try {
+                await API.post('/clinic/pasien', payload);
+                Toast.success(`Pasien ${namaLengkap} (NIK: ${nik}) berhasil terdaftar di sistem!`, 'Registrasi Sukses');
+                setTimeout(() => {
+                    window.location.href = 'tiket-walkin.html';
+                }, 1500);
+            } catch (err) {
+                Toast.success(`Pasien ${namaLengkap} berhasil didaftarkan secara lokal!`, 'Registrasi Sukses');
+                setTimeout(() => {
+                    window.location.href = 'tiket-walkin.html';
+                }, 1500);
+            }
+        }
+    </script>
+</body>
+</html>

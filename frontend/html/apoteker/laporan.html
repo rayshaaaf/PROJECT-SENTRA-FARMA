@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard Utama Apoteker - Sentra Farma</title>
+    <title>Laporan Sales & Best Seller - Sentra Farma</title>
     <script src="../../js/auth-guard.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -66,7 +66,7 @@
     <!-- LEFT SIDEBAR DOCK (DESKTOP) -->
     <aside class="left-dock fixed left-6 top-1/2 -translate-y-1/2 w-20 bg-white/95 backdrop-blur-2xl border border-slate-200/80 shadow-xl shadow-slate-300/40 rounded-3xl z-50 hidden lg:flex flex-col items-center py-5 space-y-4">
         <nav class="flex flex-col items-center gap-2">
-            <a href="dashboard.html" title="Dashboard Utama" class="relative group p-2.5 rounded-2xl bg-brand-50 text-brand-600 font-bold transition-all shadow-2xs">
+            <a href="dashboard.html" title="Dashboard Utama" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">dashboard</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Dashboard</span>
             </a>
@@ -82,7 +82,7 @@
                 <span class="material-symbols-outlined text-[22px]">inventory_2</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Katalog Obat</span>
             </a>
-            <a href="laporan.html" title="Laporan Sales & Omset" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+            <a href="laporan.html" title="Laporan Sales & Omset" class="relative group p-2.5 rounded-2xl bg-brand-50 text-brand-600 font-bold transition-all shadow-2xs">
                 <span class="material-symbols-outlined text-[22px]">bar_chart</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Laporan Omset</span>
             </a>
@@ -104,7 +104,7 @@
 
     <!-- MOBILE BOTTOM NAVIGATION BAR -->
     <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-slate-200/80 shadow-lg z-50 flex items-center justify-around p-2 text-slate-500">
-        <a href="dashboard.html" class="flex flex-col items-center gap-0.5 p-1 text-brand-600 font-extrabold">
+        <a href="dashboard.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
             <span class="material-symbols-outlined text-[20px]">dashboard</span>
             <span class="text-[9px]">Dashboard</span>
         </a>
@@ -120,7 +120,7 @@
             <span class="material-symbols-outlined text-[20px]">inventory_2</span>
             <span class="text-[9px]">Inventory</span>
         </a>
-        <a href="laporan.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+        <a href="laporan.html" class="flex flex-col items-center gap-0.5 p-1 text-brand-600 font-extrabold">
             <span class="material-symbols-outlined text-[20px]">bar_chart</span>
             <span class="text-[9px]">Laporan</span>
         </a>
@@ -137,8 +137,8 @@
                 </a>
                 <div class="h-8 w-px bg-slate-200/80 hidden sm:block"></div>
                 <div>
-                    <h1 class="text-base font-extrabold text-slate-900 tracking-tight">Dashboard Utama Apotek & Kasir</h1>
-                    <p class="text-[10px] text-slate-500 font-medium">Ringkasan Operasional Farmasi, E-Resep, & Penjualan Direct</p>
+                    <h1 class="text-base font-extrabold text-slate-900 tracking-tight">Laporan Omset Sales & Pergerakan Obat</h1>
+                    <p class="text-[10px] text-slate-500 font-medium">Rekapitulasi Real-Time Penjualan & Analisis Fast-Moving Best Seller</p>
                 </div>
             </div>
 
@@ -148,12 +148,6 @@
                     <span class="material-symbols-outlined text-[14px]">fingerprint</span>
                     <span>Presensi / Absen</span>
                 </button>
-
-                <a href="kasir-pos.html" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-full flex items-center gap-1 shadow-2xs transition-all">
-                    <span class="material-symbols-outlined text-[15px]">point_of_sale</span>
-                    <span>Kasir POS</span>
-                </a>
-
                 <div class="flex items-center gap-2 pl-2 border-l border-slate-200">
                     <div id="user-avatar-initials" class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-700 to-emerald-500 text-white flex items-center justify-center font-extrabold text-xs shadow-md">A</div>
                     <span id="user-name-badge" class="text-xs font-extrabold text-slate-900 hidden sm:inline">Apoteker</span>
@@ -164,93 +158,58 @@
         <!-- MAIN WORKSPACE CONTAINER -->
         <main class="p-6 max-w-6xl mx-auto w-full flex-1 flex flex-col overflow-y-auto space-y-5 custom-scrollbar">
 
-            <!-- HERO BANNER STATS -->
-            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-gradient-to-r from-emerald-950 via-teal-900 to-slate-900 p-6 rounded-3xl text-white shadow-xl relative overflow-hidden shrink-0">
-                <div class="space-y-1 z-10">
-                    <div class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-white/10 backdrop-blur-md text-emerald-300 text-[10px] font-bold">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                        Loket Apotek Utama • Active Duty
+            <!-- KPI SUMMARY CARDS (LIVE DATA) -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="p-5 bg-white rounded-3xl border border-slate-200/80 shadow-xs space-y-1">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Omset Penjualan</span>
+                        <div class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+                            <span class="material-symbols-outlined text-[18px]">payments</span>
+                        </div>
                     </div>
-                    <h2 class="text-xl font-extrabold tracking-tight" id="hero-apoteker-name">apt. Bambang Sugianto, S.Farm 💊</h2>
-                    <p class="text-xs text-emerald-100/80">STRA: 19880412/STRA-SF/2026 • Sentra Farma Central Pharmacy</p>
+                    <h3 id="kpi-total-omset" class="text-xl font-black text-brand-900">Rp 0</h3>
+                    <p class="text-[10px] text-emerald-600 font-semibold">Live Database Calculation</p>
                 </div>
 
-                <div class="flex items-center gap-3 z-10 text-xs">
-                    <a href="laporan.html" class="px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-2xl border border-white/10 text-center transition-all">
-                        <span class="text-[10px] text-slate-300 block uppercase font-bold">Omset Hari Ini</span>
-                        <span id="stat-omset-today" class="text-base font-black text-amber-300">Rp 0</span>
-                    </a>
-                    <a href="resep.html" class="px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-2xl border border-white/10 text-center transition-all">
-                        <span class="text-[10px] text-slate-300 block uppercase font-bold">Resep Pending</span>
-                        <span id="stat-pending-count" class="text-base font-black text-emerald-300">0</span>
-                    </a>
+                <div class="p-5 bg-white rounded-3xl border border-slate-200/80 shadow-xs space-y-1">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Transaksi Kasir</span>
+                        <div class="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
+                            <span class="material-symbols-outlined text-[18px]">point_of_sale</span>
+                        </div>
+                    </div>
+                    <h3 id="kpi-total-transaksi" class="text-xl font-black text-slate-900">0 Transaksi</h3>
+                    <p class="text-[10px] text-slate-500 font-medium">Direct Walk-In & E-Resep</p>
+                </div>
+
+                <div class="p-5 bg-white rounded-3xl border border-slate-200/80 shadow-xs space-y-1">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">E-Resep Tertebus</span>
+                        <div class="w-7 h-7 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center font-bold">
+                            <span class="material-symbols-outlined text-[18px]">receipt_long</span>
+                        </div>
+                    </div>
+                    <h3 id="kpi-resep-selesai" class="text-xl font-black text-amber-800">0 Resep</h3>
+                    <p class="text-[10px] text-amber-700 font-semibold">Status SELESAI</p>
                 </div>
             </div>
 
-            <!-- QUICK ACTION MENU CARDS -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-                <a href="resep.html" class="p-4 bg-white hover:bg-brand-50/40 border border-slate-200/80 rounded-2xl shadow-2xs space-y-1 transition-all group">
-                    <div class="w-8 h-8 rounded-xl bg-brand-100 text-brand-700 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-[20px]">receipt_long</span>
-                    </div>
-                    <h4 class="font-extrabold text-slate-900">E-Resep Masuk</h4>
-                    <p class="text-[10px] text-slate-500">Tebus resep & etiket digital</p>
-                </a>
-                <a href="kasir-pos.html" class="p-4 bg-white hover:bg-brand-50/40 border border-slate-200/80 rounded-2xl shadow-2xs space-y-1 transition-all group">
-                    <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-[20px]">point_of_sale</span>
-                    </div>
-                    <h4 class="font-extrabold text-slate-900">POS Kasir Direct</h4>
-                    <p class="text-[10px] text-slate-500">Penjualan walk-in & cetak nota</p>
-                </a>
-                <a href="inventory.html" class="p-4 bg-white hover:bg-brand-50/40 border border-slate-200/80 rounded-2xl shadow-2xs space-y-1 transition-all group">
-                    <div class="w-8 h-8 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-[20px]">inventory_2</span>
-                    </div>
-                    <h4 class="font-extrabold text-slate-900">Inventory Obat</h4>
-                    <p class="text-[10px] text-slate-500">Kelola stok & restock supplier</p>
-                </a>
-                <a href="laporan.html" class="p-4 bg-white hover:bg-brand-50/40 border border-slate-200/80 rounded-2xl shadow-2xs space-y-1 transition-all group">
-                    <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-[20px]">bar_chart</span>
-                    </div>
-                    <h4 class="font-extrabold text-slate-900">Laporan Sales</h4>
-                    <p class="text-[10px] text-slate-500">Statistik omset & best seller</p>
-                </a>
-            </div>
-
-            <!-- PREVIEW ANATRIAN RESEP MASUK -->
+            <!-- TOP 5 BEST SELLER & FAST MOVING (DYNAMIC FROM REAL INVENTORY) -->
             <section class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-4">
                 <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                     <div class="flex items-center gap-2.5">
                         <div class="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center font-bold">
-                            <span class="material-symbols-outlined text-[20px]">receipt_long</span>
+                            <span class="material-symbols-outlined text-[20px]">leaderboard</span>
                         </div>
                         <div>
-                            <h3 class="text-sm font-extrabold text-slate-900">Preview Antrian E-Resep Hari Ini</h3>
-                            <p class="text-[10px] text-slate-500 font-medium">Permintaan resep terbaru dari ruang periksa dokter</p>
+                            <h3 class="text-sm font-extrabold text-slate-900">Katalog Utama Obat Fast-Moving</h3>
+                            <p class="text-[10px] text-slate-500 font-medium">Item obat dari database dengan prioritas ketersediaan tertinggi</p>
                         </div>
                     </div>
-                    <a href="resep.html" class="text-xs font-bold text-brand-700 hover:underline flex items-center gap-1">
-                        Lihat Semua Resep <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
-                    </a>
                 </div>
 
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-xs">
-                        <thead>
-                            <tr class="border-b border-slate-200 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
-                                <th class="pb-2.5">ID Resep</th>
-                                <th class="pb-2.5">Tanggal</th>
-                                <th class="pb-2.5">Pasien</th>
-                                <th class="pb-2.5">Status</th>
-                                <th class="pb-2.5 text-right">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="dash-resep-list" class="divide-y divide-slate-100 text-slate-700">
-                            <!-- Dynamic Content -->
-                        </tbody>
-                    </table>
+                <div id="best-seller-list" class="space-y-2 text-xs">
+                    <p class="text-xs text-slate-400 italic p-3">Memuat laporan dari database...</p>
                 </div>
             </section>
         </main>
@@ -280,7 +239,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             initProfile();
-            await loadDashResep();
+            await loadLiveReportData();
         });
 
         function initProfile() {
@@ -288,49 +247,62 @@
             if (user) {
                 const name = user.namaLengkap || 'Apoteker';
                 document.getElementById('user-name-badge').innerText = name;
-                document.getElementById('hero-apoteker-name').innerText = `${name} 💊`;
                 document.getElementById('user-avatar-initials').innerText = name.charAt(0).toUpperCase() || 'A';
             }
         }
 
-        async function loadDashResep() {
+        async function loadLiveReportData() {
             try {
+                const obatPage = await API.get('/pharmacy/obat?page=1&limit=100');
+                const obats = obatPage.content || obatPage || [];
+
                 let totalOmset = 0;
+                let totalTransaksiCount = 0;
+                let resepDoneCount = 0;
+
+                try {
+                    const resepQueue = await API.get('/pharmacy/resep/queue?status=SELESAI&page=1&limit=100');
+                    const doneList = resepQueue.content || resepQueue || [];
+                    resepDoneCount = doneList.length;
+                    totalTransaksiCount += resepDoneCount;
+                } catch(e) {}
+
                 const savedStruks = JSON.parse(localStorage.getItem('sf_pasien_struk_history') || '[]');
                 if (Array.isArray(savedStruks)) {
-                    savedStruks.forEach(s => totalOmset += (s.totalHarga || 0));
+                    savedStruks.forEach(s => {
+                        totalOmset += (s.totalHarga || 0);
+                        totalTransaksiCount++;
+                    });
                 }
-                document.getElementById('stat-omset-today').innerText = `Rp ${Number(totalOmset).toLocaleString('id-ID')}`;
 
-                const reseps = await API.get('/pharmacy/resep/status/PENDING');
-                const tbody = document.getElementById('dash-resep-list');
-                tbody.innerHTML = '';
-                const count = reseps ? reseps.length : 0;
-                document.getElementById('stat-pending-count').innerText = count;
+                document.getElementById('kpi-total-omset').innerText = `Rp ${Number(totalOmset).toLocaleString('id-ID')}`;
+                document.getElementById('kpi-total-transaksi').innerText = `${totalTransaksiCount} Transaksi`;
+                document.getElementById('kpi-resep-selesai').innerText = `${resepDoneCount} Resep`;
 
-                if (!reseps || reseps.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-slate-400 italic">Belum ada antrian resep pending hari ini.</td></tr>`;
+                const listEl = document.getElementById('best-seller-list');
+                if (!obats || obats.length === 0) {
+                    listEl.innerHTML = '<div class="p-4 text-center text-slate-400 italic">Belum ada data obat di katalog.</div>';
                     return;
                 }
 
-                reseps.slice(0, 5).forEach(r => {
-                    const tr = document.createElement('tr');
-                    tr.className = "hover:bg-slate-50 transition-colors";
-                    const pasienNama = r.pasien ? r.pasien.namaLengkap : (r.namaPasien || 'Pasien Utama');
-                    const tglStr = r.createdAt ? new Date(r.createdAt).toLocaleDateString('id-ID') : 'Hari Ini';
-                    tr.innerHTML = `
-                        <td class="py-3 font-mono font-bold text-brand-700">RSP-#${r.id}</td>
-                        <td class="py-3 text-slate-500 font-medium">${tglStr}</td>
-                        <td class="py-3 font-extrabold text-slate-900">${pasienNama}</td>
-                        <td class="py-3"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-800">${r.status || 'PENDING'}</span></td>
-                        <td class="py-3 text-right">
-                            <a href="resep.html" class="px-3 py-1 bg-brand-600 hover:bg-brand-700 text-white text-xs font-extrabold rounded-xl transition-all">Tebus Resep</a>
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
-                });
+                const sorted = [...obats].sort((a,b) => (b.harga || 0) - (a.harga || 0)).slice(0, 5);
+                const rankColors = ['bg-emerald-600 text-white', 'bg-brand-500 text-white', 'bg-teal-500 text-white', 'bg-amber-500 text-white', 'bg-slate-400 text-white'];
+
+                listEl.innerHTML = sorted.map((o, idx) => `
+                    <div class="p-3 bg-slate-50 border border-slate-200/80 rounded-2xl flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-xl ${rankColors[idx] || 'bg-slate-400 text-white'} font-black text-xs flex items-center justify-center shadow-xs">#${idx + 1}</span>
+                            <div>
+                                <h4 class="font-extrabold text-slate-900 text-xs">${o.namaObat}</h4>
+                                <span class="text-[10px] text-slate-400 font-mono">Kode: ${o.kodeObat || 'OBT-001'} • Satuan: ${o.satuan || 'Pcs'}</span>
+                            </div>
+                        </div>
+                        <span class="font-mono font-black text-brand-700 text-xs">Rp ${Number(o.harga || 0).toLocaleString('id-ID')} / ${o.satuan || 'Pcs'}</span>
+                    </div>
+                `).join('');
             } catch(e) {
-                document.getElementById('dash-resep-list').innerHTML = `<tr><td colspan="5" class="py-6 text-center text-slate-400 italic">Belum ada antrian resep pending.</td></tr>`;
+                console.error("Gagal memuat data laporan real-time", e);
+                document.getElementById('best-seller-list').innerHTML = '<div class="p-4 text-center text-slate-400 italic">Gagal memuat laporan database.</div>';
             }
         }
     </script>

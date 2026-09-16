@@ -7,7 +7,9 @@
     <title>Login - Sentra Farma</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
@@ -31,7 +33,9 @@
         }
     </script>
     <style>
-        .material-symbols-outlined, .material-icons, .material-icons-outlined {
+        .material-symbols-outlined,
+        .material-icons,
+        .material-icons-outlined {
             font-family: 'Material Symbols Outlined', 'Material Icons Outlined', 'Material Icons' !important;
             font-weight: normal;
             font-style: normal;
@@ -66,6 +70,7 @@
                 opacity: 0;
                 transform: translateY(10px);
             }
+
             100% {
                 opacity: 1;
                 transform: translateY(0);
@@ -82,10 +87,29 @@
             transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .unfolded .stagger-1 { transition-delay: 0.08s; opacity: 1; transform: translateY(0); }
-        .unfolded .stagger-2 { transition-delay: 0.18s; opacity: 1; transform: translateY(0); }
-        .unfolded .stagger-3 { transition-delay: 0.28s; opacity: 1; transform: translateY(0); }
-        .unfolded .stagger-4 { transition-delay: 0.38s; opacity: 1; transform: translateY(0); }
+        .unfolded .stagger-1 {
+            transition-delay: 0.08s;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .unfolded .stagger-2 {
+            transition-delay: 0.18s;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .unfolded .stagger-3 {
+            transition-delay: 0.28s;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .unfolded .stagger-4 {
+            transition-delay: 0.38s;
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 
@@ -119,15 +143,20 @@
         <!-- EKG HEARTBEAT SPLASH LOADER -->
         <div id="splash-loader" class="space-y-3 pt-2 pb-1 transition-all duration-500 ease-in-out">
             <!-- EKG MONITOR DISPLAY BOX -->
-            <div class="relative w-full h-20 bg-slate-950 rounded-2xl border border-emerald-500/30 overflow-hidden shadow-[inset_0_2px_10px_rgba(0,0,0,0.8),0_0_15px_rgba(16,185,129,0.15)] flex flex-col justify-between p-2.5">
+            <div
+                class="relative w-full h-20 bg-slate-950 rounded-2xl border border-emerald-500/30 overflow-hidden shadow-[inset_0_2px_10px_rgba(0,0,0,0.8),0_0_15px_rgba(16,185,129,0.15)] flex flex-col justify-between p-2.5">
                 <!-- EKG Grid Lines Background -->
-                <div class="absolute inset-0 opacity-20 bg-[linear-gradient(to_right,#10b981_1px,transparent_1px),linear-gradient(to_bottom,#10b981_1px,transparent_1px)] bg-[size:10px_10px] pointer-events-none"></div>
+                <div
+                    class="absolute inset-0 opacity-20 bg-[linear-gradient(to_right,#10b981_1px,transparent_1px),linear-gradient(to_bottom,#10b981_1px,transparent_1px)] bg-[size:10px_10px] pointer-events-none">
+                </div>
 
                 <!-- Monitor Header / Status Bar -->
-                <div class="relative z-10 flex items-center justify-between px-1 text-[10px] text-emerald-400/90 font-mono tracking-wider">
+                <div
+                    class="relative z-10 flex items-center justify-between px-1 text-[10px] text-emerald-400/90 font-mono tracking-wider">
                     <div class="flex items-center gap-1.5">
                         <span class="relative flex h-2 w-2">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span
+                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                             <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                         </span>
                         <span class="font-bold text-emerald-400">EKG MONITOR</span>
@@ -143,16 +172,20 @@
                 <div class="relative w-full h-11 my-auto">
                     <svg class="w-full h-full" viewBox="0 0 500 80" preserveAspectRatio="none">
                         <!-- Background Dim Path -->
-                        <path d="M 0 45 L 30 45 Q 40 35 50 45 L 65 45 L 70 52 L 78 8 L 86 68 L 92 45 L 115 45 Q 130 25 145 45 L 180 45 Q 190 35 200 45 L 215 45 L 220 52 L 228 8 L 236 68 L 242 45 L 265 45 Q 280 25 295 45 L 330 45 Q 340 35 350 45 L 365 45 L 370 52 L 378 8 L 386 68 L 392 45 L 415 45 Q 430 25 445 45 L 500 45"
-                              fill="none" stroke="rgba(16, 185, 129, 0.15)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        
+                        <path
+                            d="M 0 45 L 30 45 Q 40 35 50 45 L 65 45 L 70 52 L 78 8 L 86 68 L 92 45 L 115 45 Q 130 25 145 45 L 180 45 Q 190 35 200 45 L 215 45 L 220 52 L 228 8 L 236 68 L 242 45 L 265 45 Q 280 25 295 45 L 330 45 Q 340 35 350 45 L 365 45 L 370 52 L 378 8 L 386 68 L 392 45 L 415 45 Q 430 25 445 45 L 500 45"
+                            fill="none" stroke="rgba(16, 185, 129, 0.15)" stroke-width="2.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+
                         <!-- Glowing Neon Active Path -->
-                        <path id="ekg-wave-path" d="M 0 45 L 30 45 Q 40 35 50 45 L 65 45 L 70 52 L 78 8 L 86 68 L 92 45 L 115 45 Q 130 25 145 45 L 180 45 Q 190 35 200 45 L 215 45 L 220 52 L 228 8 L 236 68 L 242 45 L 265 45 Q 280 25 295 45 L 330 45 Q 340 35 350 45 L 365 45 L 370 52 L 378 8 L 386 68 L 392 45 L 415 45 Q 430 25 445 45 L 500 45"
-                              fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
-                              style="filter: drop-shadow(0px 0px 6px #10B981);"/>
-                        
+                        <path id="ekg-wave-path"
+                            d="M 0 45 L 30 45 Q 40 35 50 45 L 65 45 L 70 52 L 78 8 L 86 68 L 92 45 L 115 45 Q 130 25 145 45 L 180 45 Q 190 35 200 45 L 215 45 L 220 52 L 228 8 L 236 68 L 242 45 L 265 45 Q 280 25 295 45 L 330 45 Q 340 35 350 45 L 365 45 L 370 52 L 378 8 L 386 68 L 392 45 L 415 45 Q 430 25 445 45 L 500 45"
+                            fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                            style="filter: drop-shadow(0px 0px 6px #10B981);" />
+
                         <!-- Glowing Pulse Head Dot -->
-                        <circle id="ekg-head-dot" cx="0" cy="45" r="4" fill="#6EE7B7" style="filter: drop-shadow(0px 0px 8px #34D399);"/>
+                        <circle id="ekg-head-dot" cx="0" cy="45" r="4" fill="#6EE7B7"
+                            style="filter: drop-shadow(0px 0px 8px #34D399);" />
                     </svg>
                 </div>
             </div>
@@ -160,15 +193,18 @@
             <!-- EKG Status Message -->
             <div id="splash-status" class="text-[11px] tracking-wide flex items-center justify-between px-1 h-5">
                 <span id="splash-text" class="font-semibold text-slate-600 flex items-center gap-1.5">
-                    <span class="material-symbols-outlined text-[15px] text-emerald-500 animate-pulse">monitor_heart</span>
+                    <span
+                        class="material-symbols-outlined text-[15px] text-emerald-500 animate-pulse">monitor_heart</span>
                     <span>Menghubungkan Monitor Klinik...</span>
                 </span>
-                <span id="splash-badge" class="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60">TERHUBUNG</span>
+                <span id="splash-badge"
+                    class="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60">TERHUBUNG</span>
             </div>
         </div>
 
         <!-- LOGIN FORM & TABS CONTENT (UNFOLDS AFTER LOADING COMPLETES) -->
-        <div id="login-content" class="space-y-6 max-h-0 opacity-0 overflow-hidden pointer-events-none transition-all duration-700 ease-out scale-95">
+        <div id="login-content"
+            class="space-y-6 max-h-0 opacity-0 overflow-hidden pointer-events-none transition-all duration-700 ease-out scale-95">
             <!-- INTERACTIVE ROLE SELECTOR TABS -->
             <div class="stagger-item stagger-1 bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200/60 space-y-1">
                 <div class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider text-center pt-1 pb-1.5">
@@ -180,12 +216,14 @@
                         <span class="material-symbols-outlined text-[18px]">person</span>
                         <span class="text-[9px]">Pasien</span>
                     </button>
-                    <button type="button" onclick="selectRoleTab('dokter', 'dr.arisandy@sentrafarma.com')" id="tab-dokter"
+                    <button type="button" onclick="selectRoleTab('dokter', 'dr.arisandy@sentrafarma.com')"
+                        id="tab-dokter"
                         class="role-tab py-2 px-1 rounded-xl flex flex-col items-center gap-1 transition-all text-slate-500 hover:text-slate-900 hover:bg-white/50">
                         <span class="material-symbols-outlined text-[18px]">stethoscope</span>
                         <span class="text-[9px]">Dokter</span>
                     </button>
-                    <button type="button" onclick="selectRoleTab('apoteker', 'apoteker@sentrafarma.com')" id="tab-apoteker"
+                    <button type="button" onclick="selectRoleTab('apoteker', 'apoteker@sentrafarma.com')"
+                        id="tab-apoteker"
                         class="role-tab py-2 px-1 rounded-xl flex flex-col items-center gap-1 transition-all text-slate-500 hover:text-slate-900 hover:bg-white/50">
                         <span class="material-symbols-outlined text-[18px]">medication</span>
                         <span class="text-[9px]">Apotek</span>
@@ -212,14 +250,16 @@
                     <div class="relative group">
                         <span
                             class="material-symbols-outlined absolute left-4 top-3.5 text-slate-400 group-focus-within:text-brand-600 text-[20px] transition-colors">mail</span>
-                        <input type="email" id="email" required placeholder="pasien1@gmail.com" value="pasien1@gmail.com"
+                        <input type="email" id="email" required placeholder="pasien1@gmail.com"
+                            value="pasien1@gmail.com"
                             class="w-full bg-slate-50/80 border border-slate-200 rounded-2xl py-3 pl-11 pr-4 text-xs font-medium text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:bg-white focus:ring-4 focus:ring-brand-500/15 transition-all" />
                     </div>
                 </div>
 
                 <div class="stagger-item stagger-3">
                     <div class="flex justify-between items-center mb-1.5">
-                        <label class="text-[11px] font-extrabold text-slate-700 uppercase tracking-wider">PASSWORD</label>
+                        <label
+                            class="text-[11px] font-extrabold text-slate-700 uppercase tracking-wider">PASSWORD</label>
                         <a href="/frontend/html/auth/forgot-password.html"
                             class="text-xs text-brand-600 hover:text-brand-700 font-bold transition-colors">Lupa
                             Password?</a>
@@ -255,6 +295,22 @@
         </div>
 
     </div>
+
+    <!-- FOOTER -->
+    <footer class="w-full max-w-md py-3 px-6 border-t border-slate-200/60 bg-white/70 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 shrink-0 rounded-2xl relative z-10 shadow-sm">
+        <div class="flex items-center gap-2">
+            <img src="../../assets/logo.png" alt="Sentra Farma" class="h-5 w-auto object-contain opacity-80" />
+            <span class="font-bold text-slate-700">© 2026 Sentra Farma Medika.</span>
+        </div>
+        <div class="flex items-center gap-3 text-[11px] font-semibold">
+            <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-100/80 text-emerald-800 font-bold border border-emerald-200/60">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>v2.4</span>
+            </span>
+            <a href="#" class="hover:text-emerald-700 transition-colors">Bantuan</a>
+            <a href="#" class="hover:text-emerald-700 transition-colors">Privasi</a>
+        </div>
+    </footer>
 
     <script src="../../js/auth-guard.js"></script>
     <script src="../../js/api.js"></script>
@@ -297,7 +353,7 @@
                             const pt = ekgPath.getPointAtLength(currentLen);
                             ekgHead.setAttribute('cx', pt.x);
                             ekgHead.setAttribute('cy', pt.y);
-                        } catch (err) {}
+                        } catch (err) { }
                     }
                 }
 

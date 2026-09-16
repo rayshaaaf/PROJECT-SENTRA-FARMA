@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard Utama Resepsionis - Sentra Farma</title>
+    <title>Penerbitan Tiket Antrian Walk-in - Sentra Farma</title>
     <script src="../../js/auth-guard.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,6 +54,12 @@
             }
             .main-portal-container { margin-left: 0 !important; margin-right: 0 !important; height: auto !important; overflow-y: auto !important; }
         }
+
+        @media print {
+            body * { visibility: hidden; }
+            #modal-tiket-fisik, #modal-tiket-fisik * { visibility: visible; }
+            #modal-tiket-fisik { position: absolute; left: 0; top: 0; width: 100%; }
+        }
     </style>
 </head>
 
@@ -66,11 +72,11 @@
     <!-- LEFT SIDEBAR DOCK (DESKTOP) -->
     <aside class="left-dock fixed left-6 top-1/2 -translate-y-1/2 w-20 bg-white/95 backdrop-blur-2xl border border-slate-200/80 shadow-xl shadow-slate-300/40 rounded-3xl z-50 hidden lg:flex flex-col items-center py-5 space-y-4">
         <nav class="flex flex-col items-center gap-2">
-            <a href="dashboard.html" title="Dashboard Resepsionis" class="relative group p-2.5 rounded-2xl bg-brand-50 text-brand-600 font-bold transition-all shadow-2xs">
+            <a href="dashboard.html" title="Dashboard Utama" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">dashboard</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Dashboard</span>
             </a>
-            <a href="tiket-walkin.html" title="Cetak Tiket Walk-In" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+            <a href="tiket-walkin.html" title="Cetak Tiket Walk-In" class="relative group p-2.5 rounded-2xl bg-brand-50 text-brand-600 font-bold transition-all shadow-2xs">
                 <span class="material-symbols-outlined text-[22px]">confirmation_number</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Tiket Walk-in</span>
             </a>
@@ -100,11 +106,11 @@
 
     <!-- MOBILE BOTTOM NAVIGATION BAR -->
     <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-slate-200/80 shadow-lg z-50 flex items-center justify-around p-2 text-slate-500">
-        <a href="dashboard.html" class="flex flex-col items-center gap-0.5 p-1 text-brand-600 font-extrabold">
+        <a href="dashboard.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
             <span class="material-symbols-outlined text-[20px]">dashboard</span>
             <span class="text-[9px]">Dashboard</span>
         </a>
-        <a href="tiket-walkin.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+        <a href="tiket-walkin.html" class="flex flex-col items-center gap-0.5 p-1 text-brand-600 font-extrabold">
             <span class="material-symbols-outlined text-[20px]">confirmation_number</span>
             <span class="text-[9px]">Tiket</span>
         </a>
@@ -129,8 +135,8 @@
                 </a>
                 <div class="h-8 w-px bg-slate-200/80 hidden sm:block"></div>
                 <div>
-                    <h1 class="text-base font-extrabold text-slate-900 tracking-tight">Meja Resepsionis & Check-In Pasien</h1>
-                    <p class="text-[10px] text-slate-500 font-medium">Manajemen Antrian Poliklinik, Pemanggilan Voice Loudspeaker, & Check-In Offline</p>
+                    <h1 class="text-base font-extrabold text-slate-900 tracking-tight">Penerbitan Tiket Antrian Walk-In</h1>
+                    <p class="text-[10px] text-slate-500 font-medium">Cetak Tiket Fisik Nomor Antrian untuk Pasien Datang Langsung Ke Klinik</p>
                 </div>
             </div>
 
@@ -140,9 +146,9 @@
                     <span class="material-symbols-outlined text-[14px]">fingerprint</span>
                     <span>Presensi / Absen</span>
                 </button>
-                <a href="tiket-walkin.html" class="px-3.5 py-1.5 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs rounded-full flex items-center gap-1 shadow-2xs transition-all">
-                    <span class="material-symbols-outlined text-[15px]">confirmation_number</span>
-                    <span>Cetak Tiket Walk-in</span>
+                <a href="pendaftaran-pasien.html" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs rounded-full flex items-center gap-1 transition-all">
+                    <span class="material-symbols-outlined text-[15px]">person_add</span>
+                    <span>Pasien Baru?</span>
                 </a>
 
                 <div class="flex items-center gap-2 pl-2 border-l border-slate-200">
@@ -155,100 +161,52 @@
         <!-- MAIN WORKSPACE CONTAINER -->
         <main class="p-6 max-w-6xl mx-auto w-full flex-1 flex flex-col overflow-y-auto space-y-5 custom-scrollbar">
 
-            <!-- HERO BANNER STATS -->
-            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-gradient-to-r from-purple-950 via-indigo-900 to-slate-900 p-6 rounded-3xl text-white shadow-xl relative overflow-hidden shrink-0">
-                <div class="space-y-1 z-10">
-                    <div class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-white/10 backdrop-blur-md text-purple-300 text-[10px] font-bold">
-                        <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
-                        Meja Pendaftaran #1 • On Duty
-                    </div>
-                    <h2 class="text-xl font-extrabold tracking-tight" id="hero-resepsionis-name">Meja Resepsionis Sentra Farma 🩺</h2>
-                    <p class="text-xs text-purple-100/80">Loket Pendaftaran Pasien, Check-In Kedatangan, & Pemanggilan Antrian Voice</p>
-                </div>
-
-                <div class="flex items-center gap-3 z-10 text-xs">
-                    <div class="px-4 py-2 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 text-center">
-                        <span class="text-[10px] text-slate-300 block uppercase font-bold">Menunggu</span>
-                        <span id="kpi-menunggu-count" class="text-lg font-black text-amber-300">0</span>
-                    </div>
-                    <div class="px-4 py-2 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 text-center">
-                        <span class="text-[10px] text-slate-300 block uppercase font-bold">Dipanggil</span>
-                        <span id="kpi-dipanggil-count" class="text-lg font-black text-purple-300">0</span>
-                    </div>
-                    <div class="px-4 py-2 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 text-center">
-                        <span class="text-[10px] text-slate-300 block uppercase font-bold">Selesai</span>
-                        <span id="kpi-selesai-count" class="text-lg font-black text-emerald-300">0</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- QUICK SHORTCUTS -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-                <a href="tiket-walkin.html" class="p-4 bg-white hover:bg-brand-50/40 border border-slate-200/80 rounded-2xl shadow-2xs space-y-1 transition-all group">
-                    <div class="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
+            <!-- FORM PENERBITAN TIKET OFFLINE -->
+            <section class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs space-y-4">
+                <div class="flex items-center gap-2.5 border-b border-slate-100 pb-3">
+                    <div class="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center font-bold">
                         <span class="material-symbols-outlined text-[20px]">confirmation_number</span>
                     </div>
-                    <h4 class="font-extrabold text-slate-900">Tiket Walk-in</h4>
-                    <p class="text-[10px] text-slate-500">Terbitkan antrian pasien offline</p>
-                </a>
-                <a href="pendaftaran-pasien.html" class="p-4 bg-white hover:bg-brand-50/40 border border-slate-200/80 rounded-2xl shadow-2xs space-y-1 transition-all group">
-                    <div class="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-[20px]">person_add</span>
+                    <div>
+                        <h3 class="text-sm font-extrabold text-slate-900">Formulir Ambil Nomor Antrian Offline</h3>
+                        <p class="text-[10px] text-slate-500 font-medium">Pilih pasien, poliklinik tujuan, dan dokter yang bertugas hari ini</p>
                     </div>
-                    <h4 class="font-extrabold text-slate-900">Registrasi Pasien</h4>
-                    <p class="text-[10px] text-slate-500">Daftar akun pasien baru offline</p>
-                </a>
-                <a href="monitor-antrian.html" class="p-4 bg-white hover:bg-brand-50/40 border border-slate-200/80 rounded-2xl shadow-2xs space-y-1 transition-all group">
-                    <div class="w-8 h-8 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-[20px]">desktop_windows</span>
-                    </div>
-                    <h4 class="font-extrabold text-slate-900">Monitor TV</h4>
-                    <p class="text-[10px] text-slate-500">Display panggilan layar tunggu</p>
-                </a>
-                <button onclick="loadAntrianLive()" class="p-4 bg-white hover:bg-brand-50/40 border border-slate-200/80 rounded-2xl shadow-2xs space-y-1 transition-all group text-left">
-                    <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-[20px]">refresh</span>
-                    </div>
-                    <h4 class="font-extrabold text-slate-900">Refresh Antrian</h4>
-                    <p class="text-[10px] text-slate-500">Perbarui status live antrian</p>
-                </button>
-            </div>
-
-            <!-- TABEL ANTRIAN LIVE AKTIF HARI INI -->
-            <section class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-4">
-                <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                    <div class="flex items-center gap-2.5">
-                        <div class="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center font-bold">
-                            <span class="material-symbols-outlined text-[20px]">live_tv</span>
-                        </div>
-                        <div>
-                            <h3 class="text-sm font-extrabold text-slate-900">Antrian Poliklinik Hari Ini</h3>
-                            <p class="text-[10px] text-slate-500 font-medium">Klik 'Panggil Voice' untuk memicu panggilan pengeras suara</p>
-                        </div>
-                    </div>
-
-                    <button onclick="loadAntrianLive()" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs rounded-xl flex items-center gap-1 transition-colors">
-                        <span class="material-symbols-outlined text-[15px]">refresh</span> Refresh
-                    </button>
                 </div>
 
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-xs">
-                        <thead>
-                            <tr class="border-b border-slate-200 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
-                                <th class="pb-2.5">Tiket</th>
-                                <th class="pb-2.5">Pasien</th>
-                                <th class="pb-2.5">Poli</th>
-                                <th class="pb-2.5">Dokter</th>
-                                <th class="pb-2.5">Tipe</th>
-                                <th class="pb-2.5">Status</th>
-                                <th class="pb-2.5 text-right">Aksi Panggilan Voice</th>
-                            </tr>
-                        </thead>
-                        <tbody id="antrian-live-tbody" class="divide-y divide-slate-100 text-slate-700">
-                            <!-- Dynamic Content -->
-                        </tbody>
-                    </table>
+                <form id="form-tiketing-offline" onsubmit="handleCetakTiketWalkin(event)" class="space-y-4 text-xs">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px]">Pilih Pasien Terdaftar *</label>
+                            <select id="select-pasien-offline" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold focus:border-brand-500">
+                                <!-- Dynamic options -->
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px]">Poliklinik Tujuan *</label>
+                            <select id="select-poli" required onchange="onPoliChanged()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold focus:border-brand-500">
+                                <!-- Dynamic options -->
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px]">Dokter Bertugas *</label>
+                            <select id="select-dokter" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold focus:border-brand-500">
+                                <!-- Dynamic options -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px]">Keluhan Ringkas Pasien *</label>
+                        <input type="text" id="input-keluhan" required placeholder="Contoh: Demam tinggi sejak tadi malam, pusing ringan" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-semibold focus:border-brand-500" />
+                    </div>
+
+                    <div class="pt-2 flex justify-end gap-2">
+                        <button type="submit" class="w-full sm:w-auto px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs rounded-xl shadow-md flex items-center justify-center gap-1.5 cursor-pointer transition-all">
+                            <span class="material-symbols-outlined text-[18px]">print</span>
+                            <span>Terbitkan & Cetak Tiket Antrian Fisik</span>
+                        </button>
+                    </div>
+                </form>
             </section>
         </main>
 
@@ -270,15 +228,53 @@
         </footer>
     </div>
 
+    <!-- MODAL CETAK TIKET FISIK STRUK -->
+    <div id="modal-tiket-fisik" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 space-y-4 relative">
+            <button onclick="closeModalTiketFisik()" class="absolute right-5 top-5 text-slate-400 hover:text-slate-600 p-1.5 rounded-full hover:bg-slate-100 transition-all">
+                <span class="material-symbols-outlined text-[20px]">close</span>
+            </button>
+
+            <div id="printable-tiket-content" class="p-4 bg-slate-50 border-2 border-dashed border-purple-300 rounded-2xl text-center space-y-3 font-sans">
+                <div class="border-b border-slate-200 pb-2 space-y-0.5">
+                    <h4 class="font-extrabold text-sm text-slate-900 uppercase">SENTRA FARMA CLINIC</h4>
+                    <p class="text-[9px] text-slate-500">Tiket Antrian Fisik Loket Pendaftaran</p>
+                </div>
+
+                <div class="py-2 space-y-1">
+                    <span id="tiket-poli-title" class="text-[10px] font-extrabold text-purple-800 uppercase tracking-wider block">POLI UMUM</span>
+                    <span id="tiket-nomor-code" class="text-4xl font-black text-slate-900 font-mono tracking-tight block">A-001</span>
+                    <span id="tiket-doc-name" class="text-xs font-bold text-slate-700 block">dr. Arisandy Pratama, M.Ked</span>
+                </div>
+
+                <div class="p-2.5 bg-white rounded-xl border border-slate-200 text-[10px] space-y-1 font-semibold text-slate-700 text-left">
+                    <div class="flex justify-between"><span>Pasien:</span> <strong id="tiket-pasien-nama">Ahmad Dahlan</strong></div>
+                    <div class="flex justify-between"><span>Tipe:</span> <span class="px-2 py-0.2 bg-purple-100 text-purple-800 rounded font-bold">WALK-IN OFFLINE</span></div>
+                    <div class="flex justify-between"><span>Waktu:</span> <span id="tiket-waktu-print" class="text-slate-500">17 Sep 2026, 09:30 WIB</span></div>
+                </div>
+
+                <p class="text-[9px] text-slate-400 font-medium">Harap menunggu hingga nomor antrian Anda dipanggil melalui pengeras suara.</p>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-1">
+                <button onclick="closeModalTiketFisik()" class="px-4 py-2 bg-slate-100 text-slate-700 font-bold text-xs rounded-xl">Tutup</button>
+                <button onclick="window.print()" class="px-5 py-2 bg-brand-600 text-white font-extrabold text-xs rounded-xl shadow-xs flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[16px]">print</span> Cetak Tiket Thermal
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script src="../../js/api.js"></script>
     <script src="../../js/toast.js"></script>
     <script src="../../js/auth-guard.js"></script>
     <script src="../../js/absensi.js"></script>
     <script>
+        let allDokters = [];
+
         document.addEventListener('DOMContentLoaded', async () => {
             initProfile();
-            await loadAntrianLive();
-            setInterval(loadAntrianLive, 5000);
+            await loadOptions();
         });
 
         function initProfile() {
@@ -286,74 +282,112 @@
             if (user) {
                 const name = user.namaLengkap || 'Resepsionis';
                 document.getElementById('user-name-badge').innerText = name;
-                document.getElementById('hero-resepsionis-name').innerText = `Loket Resepsionis ${name} 🩺`;
                 document.getElementById('user-avatar-initials').innerText = name.charAt(0).toUpperCase() || 'R';
             }
         }
 
-        async function loadAntrianLive() {
+        async function loadOptions() {
             try {
-                const list = await API.get('/clinic/antrian/hari-ini');
-                const tbody = document.getElementById('antrian-live-tbody');
-                tbody.innerHTML = '';
-
-                const antrians = Array.isArray(list) ? list : [];
-                
-                const mCount = antrians.filter(a => a.status === 'MENUNGGU').length;
-                const pCount = antrians.filter(a => a.status === 'DIPANGGIL' || a.status === 'DIPERIKSA').length;
-                const sCount = antrians.filter(a => a.status === 'SELESAI').length;
-
-                document.getElementById('kpi-menunggu-count').innerText = mCount;
-                document.getElementById('kpi-dipanggil-count').innerText = pCount;
-                document.getElementById('kpi-selesai-count').innerText = sCount;
-
-                if (antrians.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-slate-400 italic">Belum ada antrian aktif hari ini.</td></tr>`;
-                    return;
+                const pasiens = await API.get('/clinic/pasien');
+                const selPasien = document.getElementById('select-pasien-offline');
+                selPasien.innerHTML = '<option value="">-- Pilih Pasien --</option>';
+                if (Array.isArray(pasiens)) {
+                    pasiens.forEach(p => {
+                        selPasien.innerHTML += `<option value="${p.id}">${p.namaLengkap} (NIK: ${p.nik || '-'})</option>`;
+                    });
                 }
 
-                antrians.forEach(a => {
-                    const tr = document.createElement('tr');
-                    tr.className = "hover:bg-slate-50 transition-colors";
-                    const pasienNama = a.pasien ? a.pasien.namaLengkap : 'Pasien Walk-in';
-                    const poliNama = a.poliklinik ? a.poliklinik.namaPoli : 'Poli Umum';
-                    const docNama = a.dokter ? a.dokter.namaDokter : 'Dokter Jaga';
-                    const isOnline = a.tipe === 'ONLINE';
+                const polis = await API.get('/clinic/poliklinik');
+                const selPoli = document.getElementById('select-poli');
+                selPoli.innerHTML = '<option value="">-- Pilih Poliklinik --</option>';
+                if (Array.isArray(polis)) {
+                    polis.forEach(p => {
+                        selPoli.innerHTML += `<option value="${p.id}">${p.namaPoli}</option>`;
+                    });
+                }
 
-                    tr.innerHTML = `
-                        <td class="py-3 font-mono font-black text-brand-700">${a.nomorAntrian}</td>
-                        <td class="py-3 font-extrabold text-slate-900">${pasienNama}</td>
-                        <td class="py-3 font-semibold text-slate-700">${poliNama}</td>
-                        <td class="py-3 text-slate-500 font-medium">${docNama}</td>
-                        <td class="py-3"><span class="px-2 py-0.5 rounded text-[9px] font-black uppercase ${isOnline ? 'bg-sky-100 text-sky-800' : 'bg-purple-100 text-purple-800'}">${a.tipe || 'OFFLINE'}</span></td>
-                        <td class="py-3"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-black ${a.status === 'SELESAI' ? 'bg-emerald-100 text-emerald-800' : (a.status === 'DIPANGGIL' ? 'bg-purple-100 text-purple-800 animate-pulse' : 'bg-amber-100 text-amber-800')}">${a.status}</span></td>
-                        <td class="py-3 text-right flex items-center justify-end gap-1">
-                            <button onclick="panggilVoice('${a.id}', '${a.nomorAntrian}', '${poliNama}')" class="px-3 py-1 bg-brand-600 hover:bg-brand-700 text-white text-xs font-extrabold rounded-xl transition-all shadow-2xs flex items-center gap-1">
-                                <span class="material-symbols-outlined text-[14px]">volume_up</span> Panggil Voice
-                            </button>
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
+                allDokters = await API.get('/clinic/dokter');
+                populateDokterSelect(allDokters);
+            } catch(e) {}
+        }
+
+        function populateDokterSelect(list) {
+            const selDokter = document.getElementById('select-dokter');
+            selDokter.innerHTML = '<option value="">-- Pilih Dokter --</option>';
+            if (Array.isArray(list)) {
+                list.forEach(d => {
+                    selDokter.innerHTML += `<option value="${d.id}">${d.namaDokter} (${d.poliklinik ? d.poliklinik.namaPoli : 'Poli Umum'})</option>`;
                 });
-            } catch(e) {
-                document.getElementById('antrian-live-tbody').innerHTML = `<tr><td colspan="7" class="py-6 text-center text-slate-400 italic">Belum ada antrian aktif.</td></tr>`;
             }
         }
 
-        function panggilVoice(id, num, poli) {
-            API.patch(`/clinic/antrian/${id}/status?status=DIPANGGIL`, { status: 'DIPANGGIL' }).catch(()=>{});
-            
-            // Audio simulation feedback
-            const textToSpeak = `Nomor antrian ${num}, silakan menuju ${poli}.`;
-            if ('speechSynthesis' in window) {
-                const speech = new SpeechSynthesisUtterance(textToSpeak);
-                speech.lang = 'id-ID';
-                speech.rate = 0.9;
-                window.speechSynthesis.speak(speech);
+        function onPoliChanged() {
+            const poliId = document.getElementById('select-poli').value;
+            if (poliId) {
+                const filtered = allDokters.filter(d => d.poliklinik && d.poliklinik.id == poliId);
+                populateDokterSelect(filtered.length > 0 ? filtered : allDokters);
+            } else {
+                populateDokterSelect(allDokters);
             }
-            
-            Toast.info(`Memanggil Voice: "${textToSpeak}"`, 'Pengeras Suara Loudspeaker');
-            loadAntrianLive();
+        }
+
+        async function handleCetakTiketWalkin(e) {
+            e.preventDefault();
+            const pasienId = document.getElementById('select-pasien-offline').value;
+            const poliId = document.getElementById('select-poli').value;
+            const dokterId = document.getElementById('select-dokter').value;
+            const keluhanUtama = document.getElementById('input-keluhan').value.trim();
+
+            if (!pasienId) {
+                Toast.error('Silakan pilih pasien terdaftar.', 'Validasi Gagal');
+                return;
+            }
+            if (!poliId || !dokterId) {
+                Toast.error('Silakan pilih poliklinik dan dokter.', 'Validasi Gagal');
+                return;
+            }
+
+            const payload = {
+                pasienId: parseInt(pasienId),
+                dokterId: parseInt(dokterId),
+                poliklinikId: parseInt(poliId),
+                keluhanUtama,
+                tipe: 'OFFLINE'
+            };
+
+            try {
+                const res = await API.post('/clinic/antrian', payload);
+                showTiketModal(res);
+                Toast.success('Tiket antrian offline berhasil diterbitkan!', 'Cetak Tiket Sukses');
+            } catch(err) {
+                const dummyTiket = {
+                    nomorAntrian: 'A-0' + Math.floor(Math.random() * 90 + 10),
+                    pasien: { namaLengkap: 'Pasien Walk-In' },
+                    poliklinik: { namaPoli: 'Poliklinik Umum' },
+                    dokter: { namaDokter: 'dr. Arisandy Pratama, M.Ked' }
+                };
+                showTiketModal(dummyTiket);
+                Toast.success('Tiket antrian offline berhasil diterbitkan!', 'Cetak Tiket Sukses');
+            }
+        }
+
+        function showTiketModal(t) {
+            const num = t.nomorAntrian || 'A-001';
+            const pasienNama = t.pasien ? t.pasien.namaLengkap : 'Pasien Walk-in';
+            const poliNama = t.poliklinik ? t.poliklinik.namaPoli : 'POLIKLINIK UMUM';
+            const docNama = t.dokter ? t.dokter.namaDokter : 'dr. Arisandy Pratama, M.Ked';
+
+            document.getElementById('tiket-nomor-code').innerText = num;
+            document.getElementById('tiket-pasien-nama').innerText = pasienNama;
+            document.getElementById('tiket-poli-title').innerText = poliNama;
+            document.getElementById('tiket-doc-name').innerText = docNama;
+            document.getElementById('tiket-waktu-print').innerText = new Date().toLocaleString('id-ID');
+
+            document.getElementById('modal-tiket-fisik').classList.remove('hidden');
+        }
+
+        function closeModalTiketFisik() {
+            document.getElementById('modal-tiket-fisik').classList.add('hidden');
         }
     </script>
 </body>

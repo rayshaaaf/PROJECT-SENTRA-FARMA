@@ -199,7 +199,7 @@
     </aside>
 
     <!-- MAIN CONTENT CONTAINER -->
-    <div class="main-portal-container flex-1 ml-32 mr-8 transition-all flex flex-col h-screen overflow-hidden">
+    <div class="main-portal-container flex-1 ml-32 mr-8 transition-all flex flex-col min-h-screen overflow-y-auto">
 
         <!-- TRANSPARENT HEADER BAR (MATCHES PAGE BACKGROUND & COMPACT LOGO) -->
         <header
@@ -233,7 +233,7 @@
         </header>
 
         <!-- MAIN WORKSPACE (FILLS VERTICAL SPACE RICHLY) -->
-        <main class="p-6 sm:p-8 max-w-6xl mx-auto w-full flex-1 flex flex-col justify-center overflow-hidden my-auto">
+        <main class="p-6 sm:p-8 max-w-6xl mx-auto w-full flex-1 flex flex-col justify-center my-auto">
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch h-full">
 
@@ -292,11 +292,19 @@
                             <span class="material-symbols-outlined text-[18px]">support_agent</span>
                             <span>Tanya Dokter (Live Chat)</span>
                         </button>
+
+                        <!-- CARD FOOTER -->
+                        <div class="pt-3 border-t border-slate-700/60 flex items-center justify-between text-[10px] text-slate-400">
+                            <span class="flex items-center gap-1 font-semibold text-emerald-400">
+                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Status: Pasien Aktif
+                            </span>
+                            <span class="font-mono text-slate-400">Sentra Farma Medika</span>
+                        </div>
                     </div>
                 </div>
 
                 <!-- PROFILE EDIT FORM (RIGHT) -->
-                <div class="lg:col-span-7 bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-md space-y-5 flex flex-col justify-between h-full">
+                <div class="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-7 shadow-xl border border-slate-100 flex flex-col justify-between">
                     <div class="border-b border-slate-100 pb-3 flex items-center justify-between gap-3">
                         <div>
                             <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
@@ -363,6 +371,23 @@
             </div>
 
         </main>
+
+        <!-- FOOTER -->
+        <footer class="mt-auto py-3 px-6 border-t border-slate-200/60 bg-white/60 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 shrink-0 rounded-2xl mb-4 mx-6">
+            <div class="flex items-center gap-2">
+                <img src="../../assets/logo.png" alt="Sentra Farma" class="h-5 w-auto object-contain opacity-80" />
+                <span class="font-bold text-slate-700">© 2026 Sentra Farma Medika.</span>
+                <span class="hidden md:inline text-slate-400">Pusat Layanan Kesehatan Digital.</span>
+            </div>
+            <div class="flex items-center gap-4 text-[11px] font-semibold">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100/80 text-emerald-800 font-bold border border-emerald-200/60">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>System Active 24/7 v2.4</span>
+                </span>
+                <a href="#" class="hover:text-emerald-700 transition-colors">Bantuan & Support</a>
+                <a href="#" class="hover:text-emerald-700 transition-colors">Kebijakan Privasi</a>
+            </div>
+        </footer>
     </div>
 
     <!-- DELETE ACCOUNT CONFIRMATION MODAL -->

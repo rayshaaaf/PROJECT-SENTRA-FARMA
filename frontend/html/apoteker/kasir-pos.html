@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>POS Kasir Penjualan Direct - Sentra Farma</title>
+    <script src="../../js/auth-guard.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#F0FDF4', 100: '#DCFCE7', 200: '#BBF7D0', 300: '#86EFAC', 400: '#4ADE80',
+                            500: '#10B981', 600: '#059669', 700: '#047857', 800: '#065F46', 900: '#064E3B', 950: '#022C22'
+                        },
+                        surface: '#F8FAFC'
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined, .material-icons, .material-icons-outlined {
+            font-family: 'Material Symbols Outlined', 'Material Icons Outlined', 'Material Icons' !important;
+            font-weight: normal; font-style: normal; font-size: 24px; line-height: 1;
+            letter-spacing: normal; text-transform: none; display: inline-block; white-space: nowrap;
+            word-wrap: normal; direction: ltr; -webkit-font-feature-settings: 'liga'; font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+
+        html, body { height: 100vh; overflow: hidden !important; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+        @media (max-width: 1024px) {
+            html, body { height: auto; overflow-y: auto !important; }
+            body { flex-direction: column !important; padding: 0.75rem !important; }
+            aside.left-dock {
+                position: relative !important; top: 0 !important; left: 0 !important; bottom: auto !important;
+                width: 100% !important; height: auto !important; flex-direction: row !important;
+                justify-content: space-between !important; padding: 0.5rem 1rem !important; margin-bottom: 0.75rem !important;
+            }
+            .main-portal-container { margin-left: 0 !important; margin-right: 0 !important; height: auto !important; overflow-y: auto !important; }
+        }
+
+        @media print {
+            body * { visibility: hidden; }
+            #modal-struk-kasir, #modal-struk-kasir * { visibility: visible; }
+            #modal-struk-kasir { position: absolute; left: 0; top: 0; width: 100%; }
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-emerald-50/60 via-teal-50/40 to-slate-50 font-sans text-slate-800 flex h-screen antialiased selection:bg-brand-100 selection:text-brand-800 relative overflow-hidden">
+
+    <!-- Ambient Glow Mesh Spheres -->
+    <div class="fixed -top-40 -left-40 w-[500px] h-[500px] bg-emerald-300/25 rounded-full blur-[120px] pointer-events-none z-0"></div>
+    <div class="fixed top-1/3 -right-40 w-[450px] h-[450px] bg-teal-200/25 rounded-full blur-[100px] pointer-events-none z-0"></div>
+
+    <!-- LEFT SIDEBAR DOCK (DESKTOP) -->
+    <aside class="left-dock fixed left-6 top-1/2 -translate-y-1/2 w-20 bg-white/95 backdrop-blur-2xl border border-slate-200/80 shadow-xl shadow-slate-300/40 rounded-3xl z-50 hidden lg:flex flex-col items-center py-5 space-y-4">
+        <nav class="flex flex-col items-center gap-2">
+            <a href="dashboard.html" title="Dashboard Utama" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">dashboard</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Dashboard</span>
+            </a>
+            <a href="resep.html" title="E-Resep Dokter" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">receipt_long</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">E-Resep Masuk</span>
+            </a>
+            <a href="kasir-pos.html" title="POS Kasir Direct" class="relative group p-2.5 rounded-2xl bg-brand-50 text-brand-600 font-bold transition-all shadow-2xs">
+                <span class="material-symbols-outlined text-[22px]">point_of_sale</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">POS Kasir Obat</span>
+            </a>
+            <a href="inventory.html" title="Katalog Inventory Obat" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">inventory_2</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Katalog Obat</span>
+            </a>
+            <a href="laporan.html" title="Laporan Sales & Omset" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">bar_chart</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Laporan Omset</span>
+            </a>
+            <button onclick="Absensi.openModal()" title="Presensi & Absensi Apoteker" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all cursor-pointer">
+                <span class="material-symbols-outlined text-[22px]">fingerprint</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Presensi & Absen</span>
+            </button>
+        </nav>
+
+        <div class="w-8 h-px bg-slate-200/70"></div>
+
+        <div class="flex flex-col items-center gap-2">
+            <button onclick="handleLogout()" title="Logout" class="relative group p-2.5 rounded-2xl text-rose-400 hover:text-rose-600 hover:bg-rose-50 transition-all">
+                <span class="material-symbols-outlined text-[22px]">logout</span>
+                <span class="absolute left-full ml-4 px-3 py-1.5 bg-rose-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- MOBILE BOTTOM NAVIGATION BAR -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-slate-200/80 shadow-lg z-50 flex items-center justify-around p-2 text-slate-500">
+        <a href="dashboard.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">dashboard</span>
+            <span class="text-[9px]">Dashboard</span>
+        </a>
+        <a href="resep.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">receipt_long</span>
+            <span class="text-[9px]">E-Resep</span>
+        </a>
+        <a href="kasir-pos.html" class="flex flex-col items-center gap-0.5 p-1 text-brand-600 font-extrabold">
+            <span class="material-symbols-outlined text-[20px]">point_of_sale</span>
+            <span class="text-[9px]">Kasir POS</span>
+        </a>
+        <a href="inventory.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">inventory_2</span>
+            <span class="text-[9px]">Inventory</span>
+        </a>
+        <a href="laporan.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+            <span class="material-symbols-outlined text-[20px]">bar_chart</span>
+            <span class="text-[9px]">Laporan</span>
+        </a>
+    </nav>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <div class="main-portal-container flex-1 lg:ml-32 lg:mr-4 px-3 sm:px-6 flex flex-col min-h-screen lg:h-screen overflow-y-auto lg:overflow-hidden pb-20 lg:pb-0">
+
+        <!-- HEADER BAR -->
+        <header class="h-20 flex items-center justify-between px-6 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100/60 transition-all shrink-0">
+            <div class="flex items-center gap-3">
+                <a href="dashboard.html" class="flex items-center gap-2 group cursor-pointer shrink-0" title="Sentra Farma Apotek">
+                    <img src="../../assets/logo.png" alt="Sentra Farma" class="h-12 sm:h-14 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform" />
+                </a>
+                <div class="h-8 w-px bg-slate-200/80 hidden sm:block"></div>
+                <div>
+                    <h1 class="text-base font-extrabold text-slate-900 tracking-tight">Kasir POS Penjualan Obat Direct</h1>
+                    <p class="text-[10px] text-slate-500 font-medium">Layanan Kasir Pembelian Obat Walk-In & Terbit Struk Kasir</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2.5">
+                <button onclick="Absensi.openModal()" title="Presensi & Absensi Apoteker"
+                    class="px-3 py-1 bg-brand-600 hover:bg-brand-700 text-white text-xs font-black rounded-full flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer">
+                    <span class="material-symbols-outlined text-[14px]">fingerprint</span>
+                    <span>Presensi / Absen</span>
+                </button>
+                <div class="flex items-center gap-2 pl-2 border-l border-slate-200">
+                    <div id="user-avatar-initials" class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-700 to-emerald-500 text-white flex items-center justify-center font-extrabold text-xs shadow-md">A</div>
+                    <span id="user-name-badge" class="text-xs font-extrabold text-slate-900 hidden sm:inline">Apoteker</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN WORKSPACE CONTAINER -->
+        <main class="p-6 max-w-6xl mx-auto w-full flex-1 flex flex-col md:flex-row gap-6 overflow-hidden">
+
+            <!-- LEFT: FORM PENJUALAN KASIR -->
+            <section class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs flex-1 flex flex-col justify-between space-y-4">
+                <div class="flex items-center gap-2.5 border-b border-slate-100 pb-3">
+                    <div class="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center font-bold">
+                        <span class="material-symbols-outlined text-[20px]">point_of_sale</span>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-extrabold text-slate-900">Form Transaksi Kasir</h3>
+                        <p class="text-[10px] text-slate-500 font-medium">Pilih obat dan masukkan pembayaran pasien</p>
+                    </div>
+                </div>
+
+                <div class="space-y-3 text-xs flex-1 overflow-y-auto pr-1 custom-scrollbar">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px]">Pilih Obat dari Inventory *</label>
+                        <select id="pos-select-obat" onchange="onPosObatSelected()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold focus:border-brand-500">
+                            <!-- Options -->
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px]">Jumlah (Qty) *</label>
+                            <input type="number" id="pos-qty" min="1" value="1" oninput="calculatePosTotal()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold focus:border-brand-500" />
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px]">Harga Satuan</label>
+                            <input type="text" id="pos-harga-display" readonly class="w-full bg-slate-100 border border-slate-200 rounded-xl p-2.5 font-bold text-slate-700" value="Rp 0" />
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-brand-50/60 border border-brand-200 rounded-2xl space-y-3">
+                        <div class="flex justify-between items-center text-xs font-bold text-slate-700">
+                            <span>Total Tagihan:</span>
+                            <span id="pos-total-tagihan" class="text-lg font-black text-brand-900">Rp 0</span>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3 pt-1">
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1 text-[10px] uppercase">Nominal Bayar (Rp) *</label>
+                                <input type="number" id="pos-bayar-input" min="0" placeholder="50000" oninput="calculatePosKembalian()" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 font-bold focus:border-brand-500" />
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1 text-[10px] uppercase">Uang Kembalian</label>
+                                <input type="text" id="pos-kembalian-display" readonly class="w-full bg-white border border-slate-200 rounded-xl p-2.5 font-extrabold text-emerald-700" value="Rp 0" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="processPosCheckout()" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs rounded-xl shadow-md flex items-center justify-center gap-1.5 cursor-pointer transition-all">
+                    <span class="material-symbols-outlined text-[18px]">receipt</span>
+                    <span>Proses Bayar & Terbitkan Struk Kasir</span>
+                </button>
+            </section>
+
+            <!-- RIGHT: PREVIEW STRUK SIMULATOR -->
+            <section class="w-full md:w-80 bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between">
+                <div class="space-y-3">
+                    <div class="flex items-center gap-2 border-b border-slate-100 pb-2.5 text-xs font-extrabold text-slate-900">
+                        <span class="material-symbols-outlined text-[18px] text-brand-600">print</span>
+                        <span>Preview Nota Struk Kasir</span>
+                    </div>
+
+                    <div id="mini-struk-preview" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2 text-xs font-mono">
+                        <div class="text-center space-y-0.5 border-b border-slate-300 pb-2">
+                            <h5 class="font-extrabold text-[11px]">SENTRA FARMA APOTEK</h5>
+                            <span id="mini-inv-no" class="text-[9px] text-slate-400 block">INV-POS/PREVIEW</span>
+                        </div>
+                        <div class="space-y-1 text-[10px]">
+                            <div class="flex justify-between"><span>Obat:</span> <span id="mini-nama-obat" class="font-bold truncate max-w-[120px]">-</span></div>
+                            <div class="flex justify-between"><span>Qty:</span> <span id="mini-qty-obat">0</span></div>
+                            <div class="flex justify-between border-t border-slate-300 pt-1 font-bold"><span>Total:</span> <span id="mini-total-obat" class="text-brand-800">Rp 0</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 text-[10px] text-slate-500 space-y-1">
+                    <span class="font-bold text-slate-700 block uppercase">Info Kasir Direct:</span>
+                    <p>Struk nota kasir otomatis tercetak dan memotong stok obat secara real-time dari database.</p>
+            </section>
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="mt-auto py-3 px-6 border-t border-slate-200/60 bg-white/60 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 shrink-0">
+            <div class="flex items-center gap-2">
+                <img src="../../assets/logo.png" alt="Sentra Farma" class="h-5 w-auto object-contain opacity-80" />
+                <span class="font-bold text-slate-700">© 2026 Sentra Farma Medika.</span>
+                <span class="hidden md:inline text-slate-400">Pusat Layanan Kesehatan Digital.</span>
+            </div>
+            <div class="flex items-center gap-4 text-[11px] font-semibold">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100/80 text-emerald-800 font-bold border border-emerald-200/60">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>System Active 24/7 v2.4</span>
+                </span>
+                <a href="#" class="hover:text-emerald-700 transition-colors">Bantuan & Support</a>
+                <a href="#" class="hover:text-emerald-700 transition-colors">Kebijakan Privasi</a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- MODAL CETAK STRUK NOTA KASIR DIRECT -->
+    <div id="modal-struk-kasir" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 space-y-4 relative">
+            <button onclick="closeModalStrukKasir()" class="absolute right-5 top-5 text-slate-400 hover:text-slate-600 p-1.5 rounded-full hover:bg-slate-100 transition-all">
+                <span class="material-symbols-outlined text-[20px]">close</span>
+            </button>
+
+            <div class="text-center border-b border-slate-200 pb-3 space-y-0.5 font-sans">
+                <h4 class="font-extrabold text-sm text-slate-900 uppercase tracking-wider">APOTEK SENTRA FARMA</h4>
+                <p class="text-[10px] text-slate-500">Jl. Kesehatan No. 88 Jakarta • (021) 7788-9900</p>
+                <span id="struk-pos-invoice" class="text-[9px] font-mono text-slate-400 font-bold block pt-1">INV-POS/2026/09/0088</span>
+            </div>
+
+            <div class="space-y-1.5 text-xs font-mono">
+                <div class="flex justify-between text-[11px] text-slate-600">
+                    <span>Tanggal: <strong id="struk-pos-tgl">17 Sep 2026</strong></span>
+                    <span>Kasir: <strong id="struk-pos-kasir">Bambang</strong></span>
+                </div>
+                <div class="border-t border-b border-dashed border-slate-300 py-2 space-y-1 text-[11px]">
+                    <div class="flex justify-between font-bold text-slate-900">
+                        <span id="struk-pos-item-nama">Paracetamol 500mg</span>
+                        <span id="struk-pos-item-qty">2x</span>
+                    </div>
+                    <div class="flex justify-between text-[10px] text-slate-600">
+                        <span>Harga Satuan:</span>
+                        <span id="struk-pos-item-harga">Rp 15.000</span>
+                    </div>
+                </div>
+
+                <div class="pt-1 space-y-1 text-xs font-bold">
+                    <div class="flex justify-between text-slate-800">
+                        <span>Total:</span>
+                        <span id="struk-pos-subtotal" class="font-black text-brand-800">Rp 30.000</span>
+                    </div>
+                    <div class="flex justify-between text-slate-600">
+                        <span>Bayar:</span>
+                        <span id="struk-pos-bayar">Rp 50.000</span>
+                    </div>
+                    <div class="flex justify-between text-emerald-700">
+                        <span>Kembali:</span>
+                        <span id="struk-pos-kembali" class="font-black">Rp 20.000</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-2 flex justify-end gap-2">
+                <button onclick="closeModalStrukKasir()" class="px-4 py-2 bg-slate-100 text-slate-700 font-bold text-xs rounded-xl">Tutup</button>
+                <button onclick="window.print()" class="px-4 py-2 bg-brand-600 text-white font-extrabold text-xs rounded-xl shadow-xs flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[16px]">print</span> Cetak Struk
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/toast.js"></script>
+    <script src="../../js/auth-guard.js"></script>
+    <script src="../../js/absensi.js"></script>
+    <script>
+        let currentObatList = [];
+        let selectedPosObat = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            initProfile();
+            await loadObatSelect();
+        });
+
+        function initProfile() {
+            const user = typeof AuthGuard !== 'undefined' ? AuthGuard.getSavedUser() : null;
+            if (user) {
+                const name = user.namaLengkap || 'Apoteker';
+                document.getElementById('user-name-badge').innerText = name;
+                document.getElementById('user-avatar-initials').innerText = name.charAt(0).toUpperCase() || 'A';
+            }
+        }
+
+        async function loadObatSelect() {
+            try {
+                const res = await API.get('/pharmacy/obat?page=1&limit=50');
+                currentObatList = res.content || [];
+                const select = document.getElementById('pos-select-obat');
+                select.innerHTML = '<option value="">-- Pilih Obat --</option>';
+                currentObatList.forEach(o => {
+                    const opt = document.createElement('option');
+                    opt.value = o.id;
+                    opt.innerText = `${o.namaObat} - Rp ${Number(o.harga).toLocaleString('id-ID')} (Stok: ${o.stok})`;
+                    select.appendChild(opt);
+                });
+            } catch(e) {}
+        }
+
+        function onPosObatSelected() {
+            const id = document.getElementById('pos-select-obat').value;
+            selectedPosObat = currentObatList.find(o => o.id == id);
+            if (selectedPosObat) {
+                document.getElementById('pos-harga-display').value = `Rp ${Number(selectedPosObat.harga).toLocaleString('id-ID')}`;
+                document.getElementById('mini-nama-obat').innerText = selectedPosObat.namaObat;
+            } else {
+                document.getElementById('pos-harga-display').value = 'Rp 0';
+                document.getElementById('mini-nama-obat').innerText = '-';
+            }
+            calculatePosTotal();
+        }
+
+        function calculatePosTotal() {
+            const qty = parseInt(document.getElementById('pos-qty').value || 1);
+            const harga = selectedPosObat ? selectedPosObat.harga : 0;
+            const subtotal = harga * qty;
+            document.getElementById('pos-total-tagihan').innerText = `Rp ${Number(subtotal).toLocaleString('id-ID')}`;
+            document.getElementById('mini-qty-obat').innerText = `${qty}x`;
+            document.getElementById('mini-total-obat').innerText = `Rp ${Number(subtotal).toLocaleString('id-ID')}`;
+            calculatePosKembalian();
+        }
+
+        function calculatePosKembalian() {
+            const qty = parseInt(document.getElementById('pos-qty').value || 1);
+            const harga = selectedPosObat ? selectedPosObat.harga : 0;
+            const subtotal = harga * qty;
+            const bayar = parseFloat(document.getElementById('pos-bayar-input').value || 0);
+            const kembali = bayar - subtotal;
+
+            if (bayar > 0 && kembali >= 0) {
+                document.getElementById('pos-kembalian-display').value = `Rp ${Number(kembali).toLocaleString('id-ID')}`;
+            } else {
+                document.getElementById('pos-kembalian-display').value = 'Rp 0';
+            }
+        }
+
+        function processPosCheckout() {
+            if (!selectedPosObat) {
+                Toast.error('Silakan pilih obat yang akan dibeli.', 'Validasi Gagal');
+                return;
+            }
+            const qty = parseInt(document.getElementById('pos-qty').value || 1);
+            const bayar = parseFloat(document.getElementById('pos-bayar-input').value || 0);
+            const subtotal = selectedPosObat.harga * qty;
+
+            if (bayar < subtotal) {
+                Toast.error(`Uang pembayaran kurang (Minimal Rp ${Number(subtotal).toLocaleString('id-ID')}).`, 'Pembayaran Kurang');
+                return;
+            }
+
+            const invNo = `INV-POS/${Date.now().toString().slice(-6)}`;
+            document.getElementById('struk-pos-invoice').innerText = invNo;
+            document.getElementById('struk-pos-tgl').innerText = new Date().toLocaleDateString('id-ID');
+            document.getElementById('struk-pos-item-nama').innerText = selectedPosObat.namaObat;
+            document.getElementById('struk-pos-item-qty').innerText = `${qty}x`;
+            document.getElementById('struk-pos-item-harga').innerText = `Rp ${Number(selectedPosObat.harga).toLocaleString('id-ID')}`;
+            document.getElementById('struk-pos-subtotal').innerText = `Rp ${Number(subtotal).toLocaleString('id-ID')}`;
+            document.getElementById('struk-pos-bayar').innerText = `Rp ${Number(bayar).toLocaleString('id-ID')}`;
+            document.getElementById('struk-pos-kembali').innerText = `Rp ${Number(bayar - subtotal).toLocaleString('id-ID')}`;
+
+            document.getElementById('modal-struk-kasir').classList.remove('hidden');
+            Toast.success('Transaksi Kasir Direct Berhasil! Struk Nota Kasir terbit.', 'Pembayaran Sukses');
+
+            if (selectedPosObat.stok) selectedPosObat.stok -= qty;
+        }
+
+        function closeModalStrukKasir() {
+            document.getElementById('modal-struk-kasir').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

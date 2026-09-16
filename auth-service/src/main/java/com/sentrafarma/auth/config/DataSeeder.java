@@ -36,6 +36,8 @@ public class DataSeeder implements CommandLineRunner {
 
         List<User> initialUsers = List.of(
                 User.builder().email("admin@sentrafarma.com").password(defaultPassword).namaLengkap("Administrator System").role(Role.ADMIN).noTelepon("081234567890").isDeleted(false).build(),
+                User.builder().email("admin.klinik@sentrafarma.com").password(defaultPassword).namaLengkap("Admin Operasional Klinik").role(Role.ADMIN).noTelepon("081234567891").isDeleted(false).build(),
+                User.builder().email("admin.farmasi@sentrafarma.com").password(defaultPassword).namaLengkap("Admin Logistik Farmasi").role(Role.ADMIN).noTelepon("081234567892").isDeleted(false).build(),
                 User.builder().email("apoteker@sentrafarma.com").password(defaultPassword).namaLengkap("apt. Bambang Sugianto, S.Farm").role(Role.APOTEKER).noTelepon("081298765432").isDeleted(false).build(),
                 User.builder().email("apoteker2@sentrafarma.com").password(defaultPassword).namaLengkap("apt. Siti Nurhaliza, S.Farm").role(Role.APOTEKER).noTelepon("081311223344").isDeleted(false).build(),
                 User.builder().email("resepsionis@sentrafarma.com").password(defaultPassword).namaLengkap("Rina Anggraini").role(Role.RESEPSIONIS).noTelepon("081555666777").isDeleted(false).build(),

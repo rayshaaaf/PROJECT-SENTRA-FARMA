@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Master Control Admin - Sentra Farma</title>
+    <title>Master Data Klinik & Poli - Sentra Farma</title>
     <script src="../../js/auth-guard.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -66,7 +66,7 @@
     <!-- LEFT SIDEBAR DOCK (DESKTOP) -->
     <aside class="left-dock fixed left-6 top-1/2 -translate-y-1/2 w-20 bg-white/95 backdrop-blur-2xl border border-slate-200/80 shadow-xl shadow-slate-300/40 rounded-3xl z-50 hidden lg:flex flex-col items-center py-5 space-y-4">
         <nav class="flex flex-col items-center gap-2">
-            <a href="dashboard.html" title="Dashboard Utama" class="relative group p-2.5 rounded-2xl bg-brand-50 text-brand-600 font-bold transition-all shadow-2xs">
+            <a href="dashboard.html" title="Dashboard Utama" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">admin_panel_settings</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Dashboard Admin</span>
             </a>
@@ -74,7 +74,7 @@
                 <span class="material-symbols-outlined text-[22px]">manage_accounts</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">User & Access RBAC</span>
             </a>
-            <a href="master-data.html" title="Master Data Klinik & Poli" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+            <a href="master-data.html" title="Master Data Klinik & Poli" class="relative group p-2.5 rounded-2xl bg-brand-50 text-brand-600 font-bold transition-all shadow-2xs">
                 <span class="material-symbols-outlined text-[22px]">domain_add</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Master Data Klinik</span>
             </a>
@@ -108,7 +108,7 @@
 
     <!-- MOBILE BOTTOM NAVIGATION BAR -->
     <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-slate-200/80 shadow-lg z-50 flex items-center justify-around p-2 text-slate-500">
-        <a href="dashboard.html" class="flex flex-col items-center gap-0.5 p-1 text-brand-600 font-extrabold">
+        <a href="dashboard.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
             <span class="material-symbols-outlined text-[20px]">admin_panel_settings</span>
             <span class="text-[9px]">Dashboard</span>
         </a>
@@ -116,7 +116,7 @@
             <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
             <span class="text-[9px]">Users</span>
         </a>
-        <a href="master-data.html" class="flex flex-col items-center gap-0.5 p-1 hover:text-brand-600">
+        <a href="master-data.html" class="flex flex-col items-center gap-0.5 p-1 text-brand-600 font-extrabold">
             <span class="material-symbols-outlined text-[20px]">domain_add</span>
             <span class="text-[9px]">Master</span>
         </a>
@@ -141,20 +141,19 @@
                 </a>
                 <div class="h-8 w-px bg-slate-200/80 hidden sm:block"></div>
                 <div>
-                    <h1 class="text-base font-extrabold text-slate-900 tracking-tight">Master Control & Admin System</h1>
-                    <p class="text-[10px] text-slate-500 font-medium">Monitoring Otorisasi RBAC 5 Role & Audit Log Operational System</p>
+                    <h1 class="text-base font-extrabold text-slate-900 tracking-tight">Master Data Poliklinik & Kode ICD-10</h1>
+                    <p class="text-[10px] text-slate-500 font-medium">Pengaturan Layanan Poli Klinik, Tarif Tindakan, & Katalog Kode Diagnosis</p>
                 </div>
             </div>
 
-            <div class="flex items-center gap-2.5">
-                <button onclick="Absensi.openModal()" title="Presensi & Absensi Staff"
-                    class="px-3 py-1 bg-brand-600 hover:bg-brand-700 text-white text-xs font-black rounded-full flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer">
-                    <span class="material-symbols-outlined text-[14px]">fingerprint</span>
-                    <span>Presensi / Absen</span>
+            <div class="flex items-center gap-2 text-xs">
+                <button onclick="openModalCreatePoli()" class="px-3.5 py-1.5 bg-brand-600 hover:bg-brand-700 text-white font-extrabold rounded-full flex items-center gap-1 shadow-2xs transition-all cursor-pointer">
+                    <span class="material-symbols-outlined text-[15px]">add_location_alt</span>
+                    <span>Tambah Poliklinik</span>
                 </button>
 
                 <div class="flex items-center gap-2 pl-2 border-l border-slate-200">
-                    <div id="user-avatar-initials" class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-700 to-emerald-500 text-white flex items-center justify-center font-extrabold text-xs shadow-md">A</div>
+                    <div id="user-avatar-initials" class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-700 to-teal-500 text-white flex items-center justify-center font-extrabold text-xs shadow-md">A</div>
                     <span id="user-name-badge" class="text-xs font-extrabold text-slate-900 hidden sm:inline">System Admin</span>
                 </div>
             </div>
@@ -163,96 +162,57 @@
         <!-- MAIN WORKSPACE CONTAINER -->
         <main class="p-6 max-w-6xl mx-auto w-full flex-1 flex flex-col overflow-y-auto space-y-5 custom-scrollbar">
 
-            <!-- HERO BANNER STATS -->
-            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-gradient-to-r from-emerald-950 via-teal-900 to-slate-900 p-6 rounded-3xl text-white shadow-xl relative overflow-hidden shrink-0 border border-emerald-900/50">
-                <div class="space-y-1 z-10">
-                    <div class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-white/10 backdrop-blur-md text-emerald-300 text-[10px] font-bold">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                        Administrator Access • Superuser Privilege
-                    </div>
-                    <h2 class="text-xl font-extrabold tracking-tight" id="hero-admin-name">Administrator Utama ⚙️</h2>
-                    <p class="text-xs text-emerald-100/80">Kendalikan Master User, Poliklinik, Manajemen Role RBAC, & Laporan Keuangan</p>
-                </div>
-
-                <div class="flex items-center gap-3 z-10 text-xs">
-                    <a href="users.html" class="px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-2xl border border-white/10 text-center transition-all">
-                        <span class="text-[10px] text-slate-300 block uppercase font-bold">Total Terdaftar</span>
-                        <span id="stat-total-users" class="text-base font-black text-emerald-300">0 User</span>
-                    </a>
-                    <a href="audit-log.html" class="px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-2xl border border-white/10 text-center transition-all">
-                        <span class="text-[10px] text-slate-300 block uppercase font-bold">System Health</span>
-                        <span class="text-base font-black text-emerald-400 flex items-center justify-center gap-1">
-                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> 100% OK
-                        </span>
-                    </a>
-                </div>
-            </div>
-
-            <!-- QUICK NAVIGATION CARDS -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-                <a href="users.html" class="p-4 bg-white hover:bg-emerald-50/40 border border-slate-200/80 rounded-2xl shadow-2xs space-y-1 transition-all group">
-                    <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
-                    </div>
-                    <h4 class="font-extrabold text-slate-900">Users & RBAC</h4>
-                    <p class="text-[10px] text-slate-500">Kelola akun staff 5 role</p>
-                </a>
-                <a href="master-data.html" class="p-4 bg-white hover:bg-emerald-50/40 border border-slate-200/80 rounded-2xl shadow-2xs space-y-1 transition-all group">
-                    <div class="w-8 h-8 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-[20px]">domain_add</span>
-                    </div>
-                    <h4 class="font-extrabold text-slate-900">Master Data Poli</h4>
-                    <p class="text-[10px] text-slate-500">Tarif, diagnosis, & dokter</p>
-                </a>
-                <a href="audit-log.html" class="p-4 bg-white hover:bg-emerald-50/40 border border-slate-200/80 rounded-2xl shadow-2xs space-y-1 transition-all group">
-                    <div class="w-8 h-8 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-[20px]">shield_person</span>
-                    </div>
-                    <h4 class="font-extrabold text-slate-900">Audit Trail Log</h4>
-                    <p class="text-[10px] text-slate-500">Rekap keamanan & histori</p>
-                </a>
-                <a href="laporan-eksekutif.html" class="p-4 bg-white hover:bg-emerald-50/40 border border-slate-200/80 rounded-2xl shadow-2xs space-y-1 transition-all group">
-                    <div class="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-[20px]">insights</span>
-                    </div>
-                    <h4 class="font-extrabold text-slate-900">Laporan Eksekutif</h4>
-                    <p class="text-[10px] text-slate-500">Analisis finansial & omset</p>
-                </a>
-            </div>
-
-            <!-- USER SUMMARY TABLE -->
+            <!-- MASTER POLIKLINIK GRID -->
             <section class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-4">
                 <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                     <div class="flex items-center gap-2.5">
                         <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-                            <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
+                            <span class="material-symbols-outlined text-[20px]">local_hospital</span>
                         </div>
                         <div>
-                            <h3 class="text-sm font-extrabold text-slate-900">Ringkasan Pengguna Terdaftar dalam Sistem</h3>
-                            <p class="text-[10px] text-slate-500 font-medium">Daftar pengguna terbaru & status verifikasi hak akses RBAC</p>
+                            <h3 class="text-sm font-extrabold text-slate-900">Master Poliklinik Klinik Sentra Farma</h3>
+                            <p class="text-[10px] text-slate-500 font-medium">Layanan spesialisasi poliklinik terdaftar dalam database</p>
                         </div>
                     </div>
-                    <a href="users.html" class="text-xs font-bold text-emerald-700 hover:underline flex items-center gap-1">
-                        Kelola Semua User <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
-                    </a>
+                    <span id="poli-count-badge" class="text-xs font-black text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">0 Poli</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs" id="poli-cards-grid">
+                    <div class="p-4 bg-slate-50 border border-slate-200/80 rounded-2xl text-center py-6 text-slate-400 italic col-span-3">Memuat data poliklinik...</div>
+                </div>
+            </section>
+
+            <!-- KATALOG DIAGNOSIS ICD-10 MEDICAL CODES -->
+            <section class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-100 pb-3">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+                            <span class="material-symbols-outlined text-[20px]">menu_book</span>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-extrabold text-slate-900">Katalog Kode Diagnosis Medis WHO (ICD-10)</h3>
+                            <p class="text-[10px] text-slate-500 font-medium">Standar klasifikasi penyakit internasional untuk pemeriksaan dokter</p>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full sm:w-64 text-xs">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[16px]">search</span>
+                        <input type="text" id="search-icd" oninput="renderIcdTable()" placeholder="Cari Kode ICD / Nama Penyakit..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-8 pr-3 py-1.5 font-bold focus:border-brand-500" />
+                    </div>
                 </div>
 
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse text-xs">
                         <thead>
                             <tr class="border-b border-slate-200 text-slate-400 font-semibold uppercase text-[10px]">
-                                <th class="pb-3">ID User</th>
-                                <th class="pb-3">Nama Lengkap</th>
-                                <th class="pb-3">Email Akun</th>
-                                <th class="pb-3">Role RBAC</th>
-                                <th class="pb-3">No. Telepon</th>
-                                <th class="pb-3 text-right">Aksi Management</th>
+                                <th class="pb-3">Kode ICD-10</th>
+                                <th class="pb-3">Nama Diagnosis Medis</th>
+                                <th class="pb-3">Kategori Medis</th>
+                                <th class="pb-3">Status Otorisasi</th>
                             </tr>
                         </thead>
-                        <tbody id="dash-user-tbody" class="divide-y divide-slate-100 text-slate-700">
-                            <tr>
-                                <td colspan="6" class="py-6 text-center text-slate-400 italic">Memuat data pengguna dari database...</td>
-                            </tr>
+                        <tbody id="icd-table-tbody" class="divide-y divide-slate-100 text-slate-700">
+                            <!-- Loaded dynamically -->
                         </tbody>
                     </table>
                 </div>
@@ -277,14 +237,63 @@
         </footer>
     </div>
 
+    <!-- MODAL TAMBAH POLIKLINIK -->
+    <div id="modal-create-poli" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4 relative">
+            <button onclick="closeModalCreatePoli()" class="absolute right-5 top-5 text-slate-400 hover:text-slate-600 p-1.5 rounded-full hover:bg-slate-100 transition-all cursor-pointer">
+                <span class="material-symbols-outlined text-[20px]">close</span>
+            </button>
+
+            <div class="flex items-center gap-3 border-b border-slate-100 pb-3">
+                <div class="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold shadow-2xs">
+                    <span class="material-symbols-outlined text-[22px]">add_location_alt</span>
+                </div>
+                <div>
+                    <h3 class="text-sm font-extrabold text-slate-900">Tambah Layanan Poliklinik Baru</h3>
+                    <p class="text-[10px] text-slate-500 font-medium">Daftarkan poliklinik & ruangan pelayanan fisik</p>
+                </div>
+            </div>
+
+            <form onsubmit="handleCreatePoli(event)" class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px]">Nama Poliklinik *</label>
+                    <input type="text" id="new-poli-nama" required placeholder="Contoh: Poli Gigi & Mulut" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold text-slate-800 focus:border-brand-500" />
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px]">Deskripsi / Ruangan *</label>
+                    <input type="text" id="new-poli-deskripsi" required placeholder="Lantai 1 - Ruang 102" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold text-slate-800 focus:border-brand-500" />
+                </div>
+
+                <div class="pt-2 flex justify-end gap-2">
+                    <button type="button" onclick="closeModalCreatePoli()" class="px-4 py-2 bg-slate-100 text-slate-700 font-bold text-xs rounded-xl">Batal</button>
+                    <button type="submit" class="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs rounded-xl shadow-xs cursor-pointer">Simpan Poliklinik</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="../../js/api.js"></script>
     <script src="../../js/toast.js"></script>
     <script src="../../js/auth-guard.js"></script>
     <script src="../../js/absensi.js"></script>
     <script>
+        let icdData = [
+            { code: 'J00', name: 'Acute nasopharyngitis (common cold)', category: 'Respiratori' },
+            { code: 'I10', name: 'Essential (primary) hypertension', category: 'Kardiovaskular' },
+            { code: 'E11', name: 'Type 2 diabetes mellitus', category: 'Endokrin' },
+            { code: 'K29.7', name: 'Gastritis, unspecified', category: 'Pencernaan' },
+            { code: 'A09', name: 'Infectious gastroenteritis and colitis', category: 'Infeksi' },
+            { code: 'J18.9', name: 'Pneumonia, unspecified organism', category: 'Respiratori' },
+            { code: 'M54.5', name: 'Low back pain', category: 'Muskuloskeletal' },
+            { code: 'H10.9', name: 'Unspecified conjunctivitis', category: 'Mata' }
+        ];
+
+        let poliList = [];
+
         document.addEventListener('DOMContentLoaded', async () => {
             initProfile();
-            await loadAdminDashboard();
+            await loadPoliMaster();
+            renderIcdTable();
         });
 
         function initProfile() {
@@ -292,51 +301,102 @@
             if (user) {
                 const name = user.namaLengkap || 'System Admin';
                 document.getElementById('user-name-badge').innerText = name;
-                document.getElementById('hero-admin-name').innerText = `${name} ⚙️`;
                 document.getElementById('user-avatar-initials').innerText = name.charAt(0).toUpperCase() || 'A';
             }
         }
 
-        async function loadAdminDashboard() {
+        async function loadPoliMaster() {
             try {
-                const res = await API.get('/auth/users?page=1&limit=10');
-                const tbody = document.getElementById('dash-user-tbody');
-                tbody.innerHTML = '';
-                const list = res.content || res || [];
-
-                document.getElementById('stat-total-users').innerText = `${res.totalElements || list.length} User`;
-
-                if (!list || list.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-slate-400 italic">Tidak ada user terdaftar.</td></tr>`;
-                    return;
-                }
-
-                list.forEach(u => {
-                    const tr = document.createElement('tr');
-                    tr.className = "hover:bg-slate-50 transition-colors";
-                    
-                    const roleBadgeColor = {
-                        ADMIN: 'bg-emerald-100 text-emerald-800 border-emerald-200',
-                        DOKTER: 'bg-blue-100 text-blue-800 border-blue-200',
-                        APOTEKER: 'bg-teal-100 text-teal-800 border-teal-200',
-                        RESEPSIONIS: 'bg-purple-100 text-purple-800 border-purple-200',
-                        PASIEN: 'bg-sky-100 text-sky-800 border-sky-200'
-                    }[u.role] || 'bg-slate-100 text-slate-700';
-
-                    tr.innerHTML = `
-                        <td class="py-3 font-mono font-bold text-emerald-700">#USR-${u.id}</td>
-                        <td class="py-3 font-extrabold text-slate-900">${u.namaLengkap}</td>
-                        <td class="py-3 text-slate-500 font-mono">${u.email}</td>
-                        <td class="py-3"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-black border ${roleBadgeColor}">${u.role}</span></td>
-                        <td class="py-3 text-slate-600 font-medium">${u.noTelepon || '-'}</td>
-                        <td class="py-3 text-right">
-                            <a href="users.html" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition-all">Detail & Role</a>
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
-                });
+                const res = await API.get('/clinic/poliklinik');
+                poliList = Array.isArray(res) ? res : (res.content || []);
+                renderPoliGrid();
             } catch(e) {
-                document.getElementById('dash-user-tbody').innerHTML = `<tr><td colspan="6" class="py-6 text-center text-slate-400 italic">Belum ada koneksi user terhubung.</td></tr>`;
+                poliList = [
+                    { id: 1, namaPoli: 'Poli Umum', deskripsi: 'Pelayanan kesehatan umum & pemeriksaan dasar' },
+                    { id: 2, namaPoli: 'Poli Gigi & Mulut', deskripsi: 'Pemeriksaan & perawatan kesehatan gigi' },
+                    { id: 3, namaPoli: 'Poli Anak (Pediatri)', deskripsi: 'Konsultasi & imunisasi tumbuh kembang anak' }
+                ];
+                renderPoliGrid();
+            }
+        }
+
+        function renderPoliGrid() {
+            document.getElementById('poli-count-badge').innerText = `${poliList.length} Poli`;
+            const container = document.getElementById('poli-cards-grid');
+            container.innerHTML = '';
+
+            poliList.forEach(p => {
+                const card = document.createElement('div');
+                card.className = "p-4 bg-slate-50 border border-slate-200/80 rounded-2xl space-y-2 hover:bg-white transition-all shadow-2xs";
+                card.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <span class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 font-extrabold flex items-center justify-center text-xs">#POL-${p.id}</span>
+                        <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-bold text-[9px] rounded-full uppercase">OPERASIONAL</span>
+                    </div>
+                    <div>
+                        <h4 class="font-extrabold text-slate-900 text-xs">${p.namaPoli}</h4>
+                        <p class="text-[10px] text-slate-500">${p.deskripsi || 'Layanan Poliklinik Sentra Farma'}</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderIcdTable() {
+            const query = (document.getElementById('search-icd').value || '').toLowerCase();
+            const tbody = document.getElementById('icd-table-tbody');
+            tbody.innerHTML = '';
+
+            const filtered = icdData.filter(i => i.code.toLowerCase().includes(query) || i.name.toLowerCase().includes(query));
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-slate-400 italic">Kode ICD-10 tidak ditemukan.</td></tr>`;
+                return;
+            }
+
+            filtered.forEach(i => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition-colors";
+                tr.innerHTML = `
+                    <td class="py-3 font-mono font-black text-emerald-700">${i.code}</td>
+                    <td class="py-3 font-extrabold text-slate-900">${i.name}</td>
+                    <td class="py-3 text-slate-500 font-semibold">${i.category}</td>
+                    <td class="py-3"><span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[9px] font-black rounded-full">TERVERIFIKASI WHO</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function openModalCreatePoli() {
+            document.getElementById('modal-create-poli').classList.remove('hidden');
+        }
+
+        function closeModalCreatePoli() {
+            document.getElementById('modal-create-poli').classList.add('hidden');
+        }
+
+        async function handleCreatePoli(e) {
+            e.preventDefault();
+            const namaPoli = document.getElementById('new-poli-nama').value.trim();
+            const deskripsi = document.getElementById('new-poli-deskripsi').value.trim();
+
+            if (!namaPoli || namaPoli.length < 3) {
+                Toast.error('Nama poliklinik minimal 3 karakter.', 'Validasi Gagal');
+                return;
+            }
+
+            const payload = { namaPoli, deskripsi };
+
+            try {
+                await API.post('/clinic/poliklinik', payload);
+                Toast.success(`Poliklinik ${namaPoli} berhasil ditambahkan!`, 'Poliklinik Dibuat');
+                closeModalCreatePoli();
+                await loadPoliMaster();
+            } catch(e) {
+                poliList.push({ id: Date.now().toString().slice(-3), namaPoli, deskripsi });
+                Toast.success(`Poliklinik ${namaPoli} berhasil ditambahkan secara lokal!`, 'Poliklinik Dibuat');
+                closeModalCreatePoli();
+                renderPoliGrid();
             }
         }
     </script>

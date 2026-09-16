@@ -81,6 +81,18 @@ const Absensi = {
     },
 
     renderStatus() {
+        const roleTitleEl = document.getElementById('absen-role-title');
+        if (roleTitleEl) {
+            const user = typeof AuthGuard !== 'undefined' ? AuthGuard.getSavedUser() : null;
+            if (user && user.role) {
+                const r = user.role.toUpperCase();
+                if (r.includes('DOKTER')) roleTitleEl.innerText = 'Presensi & Absensi Dokter';
+                else if (r.includes('APOTEKER')) roleTitleEl.innerText = 'Presensi & Absensi Apoteker';
+                else if (r.includes('RESEPSIONIS')) roleTitleEl.innerText = 'Presensi & Absensi Resepsionis';
+                else roleTitleEl.innerText = 'Presensi & Absensi Staff';
+            }
+        }
+
         const record = this.getTodayRecord();
         const currentShift = this.getCurrentShiftName();
         const shiftEl = document.getElementById('absen-active-shift');
@@ -228,8 +240,8 @@ const Absensi = {
                         <span class="material-symbols-outlined text-[22px]">fingerprint</span>
                     </div>
                     <div>
-                        <h3 class="text-sm font-extrabold text-slate-900">Presensi & Absensi Dokter</h3>
-                        <p class="text-[10px] text-slate-500 font-medium">Sistem Verifikasi Clock In / Clock Out Tugas Jaga Dokter</p>
+                        <h3 class="text-sm font-extrabold text-slate-900" id="absen-role-title">Presensi & Absensi Staff</h3>
+                        <p class="text-[10px] text-slate-500 font-medium">Sistem Verifikasi Clock In / Clock Out Tugas Jaga Staff</p>
                     </div>
                 </div>
 
