@@ -5,7 +5,12 @@
 (function() {
     let activeDoctorId = 1;
     let pollInterval = null;
-    let doctorsList = [];
+    let doctorsList = [
+        { id: 1, namaDokter: 'dr. Arisandy Pratama, M.Ked', spesialisasi: 'Dokter Umum' },
+        { id: 2, namaDokter: 'dr. Sabrina Prameshwari', spesialisasi: 'Dokter Umum' },
+        { id: 6, namaDokter: 'dr. Kalila Kirana, Dip.Derm', spesialisasi: 'Dokter KIA & Estetika' },
+        { id: 8, namaDokter: 'dr. Aurelia Savitri, Sp.A', spesialisasi: 'Dokter Spesialis Anak' }
+    ];
 
     document.addEventListener('DOMContentLoaded', () => {
         injectChatWidgetHTML();
@@ -23,33 +28,87 @@
         return `chat_patient_${u.id}_doc_${activeDoctorId}`;
     }
 
+    const TELEMEDIS_DOC_IDS = [1, 2, 6, 8];
+
     async function fetchDoctorsFromAPI() {
         if (window.API) {
             try {
                 const res = await window.API.get('/clinic/dokter');
                 if (res && Array.isArray(res) && res.length > 0) {
-                    doctorsList = res;
-                    if (!activeDoctorId || !doctorsList.find(d => d.id == activeDoctorId)) {
-                        activeDoctorId = doctorsList[0].id;
+                    const filtered = res.filter(d => TELEMEDIS_DOC_IDS.includes(Number(d.id)));
+                    if (filtered.length > 0) {
+                        doctorsList = filtered;
                     }
-                    populateDoctorSelect();
                 }
             } catch(e) {}
         }
+        if (!activeDoctorId || !doctorsList.find(d => d.id == activeDoctorId)) {
+            activeDoctorId = doctorsList[0].id;
+        }
+        populateDoctorSelect();
     }
 
     function populateDoctorSelect() {
-        const sel = document.getElementById('chat-doctor-select');
-        if (!sel) return;
-        if (doctorsList.length === 0) {
-            sel.innerHTML = '<option value="">Memuat daftar dokter...</option>';
-            return;
+        const activeDoc = doctorsList.find(d => d.id == activeDoctorId) || doctorsList[0];
+        const btnAvatar = document.getElementById('custom-doc-avatar');
+        const btnName = document.getElementById('custom-doc-name');
+        const btnSpec = document.getElementById('custom-doc-spec');
+
+        if (activeDoc && btnName) {
+            if (btnAvatar) btnAvatar.innerText = activeDoc.namaDokter.replace(/^drg?\.\s*/i, '').trim().charAt(0).toUpperCase() || 'D';
+            btnName.innerText = activeDoc.namaDokter;
+            if (btnSpec) btnSpec.innerText = activeDoc.spesialisasi || 'Dokter Spesialis Telemedis';
         }
-        sel.innerHTML = doctorsList.map(d => `
-            <option value="${d.id}" class="text-slate-900">${d.namaDokter} (${d.spesialisasi || 'Dokter Spesialis'})</option>
-        `).join('');
-        sel.value = activeDoctorId;
+
+        const menu = document.getElementById('custom-doctor-dropdown-menu');
+        if (!menu) return;
+
+        menu.innerHTML = doctorsList.map(d => {
+            const isSelected = d.id == activeDoctorId;
+            const initial = d.namaDokter.replace(/^drg?\.\s*/i, '').trim().charAt(0).toUpperCase() || 'D';
+            const activeCls = isSelected ? 'bg-emerald-600/30 border-emerald-400/40 text-white font-extrabold' : 'hover:bg-white/10 text-slate-200 font-semibold border-transparent';
+            const checkIcon = isSelected ? '<span class="material-symbols-outlined text-[16px] text-emerald-400 shrink-0">check_circle</span>' : '';
+
+            return `
+                <button type="button" onclick="window.selectCustomDoctor(${d.id})" class="w-full text-left p-2.5 rounded-xl border ${activeCls} transition-all flex items-center justify-between cursor-pointer group">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <div class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-300 font-extrabold flex items-center justify-center text-xs shrink-0 border border-emerald-400/20">
+                            ${initial}
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <div class="text-xs truncate">${escapeHtml(d.namaDokter)}</div>
+                            <div class="text-[9px] text-emerald-300/90 truncate font-medium">${escapeHtml(d.spesialisasi || 'Dokter Spesialis')}</div>
+                        </div>
+                    </div>
+                    ${checkIcon}
+                </button>
+            `;
+        }).join('');
     }
+
+    window.toggleCustomDoctorDropdown = function() {
+        const menu = document.getElementById('custom-doctor-dropdown-menu');
+        if (!menu) return;
+        const isHidden = menu.classList.contains('hidden');
+        if (isHidden) {
+            menu.classList.remove('hidden');
+            setTimeout(() => {
+                menu.classList.remove('opacity-0', 'scale-95');
+            }, 10);
+        } else {
+            menu.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+                menu.classList.add('hidden');
+            }, 150);
+        }
+    };
+
+    window.selectCustomDoctor = function(docId) {
+        activeDoctorId = parseInt(docId);
+        window.toggleCustomDoctorDropdown();
+        populateDoctorSelect();
+        loadChatHistory();
+    };
 
     function injectChatWidgetHTML() {
         const existing = document.getElementById('sentra-chat-widget-root');
@@ -89,12 +148,26 @@
                         </div>
                     </div>
 
-                    <!-- Doctor Select -->
-                    <div class="pt-1">
-                        <label class="text-[10px] font-extrabold uppercase text-brand-200 tracking-wider block mb-1">Pilih Dokter Spesialis:</label>
-                        <select id="chat-doctor-select" onchange="window.onDoctorChatChanged(this.value)" class="w-full bg-slate-900/80 border border-white/20 rounded-xl py-2 px-3 font-bold text-white text-xs focus:outline-none focus:border-emerald-400 cursor-pointer">
-                            <option value="" class="text-slate-900">Memuat daftar dokter...</option>
-                        </select>
+                    <!-- Custom Doctor Select Component -->
+                    <div class="relative pt-1">
+                        <label class="text-[10px] font-extrabold uppercase text-emerald-200 tracking-wider block mb-1">Pilih Dokter Spesialis Telemedis:</label>
+                        <button type="button" id="custom-doctor-dropdown-btn" onclick="window.toggleCustomDoctorDropdown()" class="w-full bg-slate-900/60 hover:bg-slate-900/80 border border-white/20 rounded-2xl p-2.5 flex items-center justify-between text-left transition-all backdrop-blur-md shadow-inner cursor-pointer group">
+                            <div class="flex items-center gap-2.5 min-w-0">
+                                <div id="custom-doc-avatar" class="w-8 h-8 rounded-xl bg-emerald-400 text-emerald-950 font-black flex items-center justify-center text-xs shrink-0 shadow-2xs">
+                                    D
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <div id="custom-doc-name" class="text-xs font-extrabold text-white truncate">dr. Arisandy Pratama, M.Ked</div>
+                                    <div id="custom-doc-spec" class="text-[10px] font-bold text-emerald-300 truncate">Dokter Umum</div>
+                                </div>
+                            </div>
+                            <span class="material-symbols-outlined text-[18px] text-emerald-200 group-hover:translate-y-0.5 transition-transform">keyboard_arrow_down</span>
+                        </button>
+
+                        <!-- Custom Dropdown Menu -->
+                        <div id="custom-doctor-dropdown-menu" class="hidden absolute left-0 right-0 top-full mt-2 bg-slate-950/95 backdrop-blur-2xl border border-emerald-500/40 rounded-2xl shadow-2xl p-1.5 z-50 space-y-1 transform transition-all duration-200 opacity-0 scale-95">
+                            <!-- Populated dynamically -->
+                        </div>
                     </div>
                 </div>
 
@@ -204,17 +277,6 @@
         const doc = doctorsList.find(d => d.id == activeDoctorId) || doctorsList[0];
         const sessionId = getSessionId();
 
-        if (localStorage.getItem('cleared_' + sessionId) === 'true') {
-            container.innerHTML = `
-                <div class="text-center text-slate-400 py-16 font-medium space-y-2">
-                    <span class="material-symbols-outlined text-4xl text-slate-300 block">cleaning_services</span>
-                    <p class="text-xs font-bold text-slate-600">Riwayat percakapan telah dibersihkan.</p>
-                    <p class="text-[10px] text-slate-400">Ketik pesan di bawah untuk konsultasi baru dengan Dokter ${doc.namaDokter}.</p>
-                </div>
-            `;
-            return;
-        }
-
         let messages = [];
 
         if (window.API) {
@@ -226,20 +288,21 @@
             } catch(e) {}
         }
 
-        // If no API messages yet, load local storage or show welcome message
-        if (messages.length === 0) {
-            const local = JSON.parse(localStorage.getItem(sessionId) || '[]');
-            if (local.length > 0) {
-                messages = local;
-            } else {
-                messages = [{
-                    id: 0,
-                    senderName: doc.namaDokter,
-                    senderId: doc.id,
-                    pesan: `Halo! Saya ${doc.namaDokter} (${doc.spesialisasi}). Silakan ketik keluhan kesehatan Anda di bawah ini, saya akan membalas pesan Anda langsung.`,
-                    createdAt: new Date().toISOString()
-                }];
-            }
+        const local = JSON.parse(localStorage.getItem(sessionId) || '[]');
+        if (local.length > messages.length) {
+            messages = local;
+        }
+
+        // Prepend Doctor's static welcome greeting if no doctor reply exists yet
+        const hasDoctorMsg = messages.some(m => (m.senderName && m.senderName.includes('dr.')) || m.senderId === doc.id);
+        if (!hasDoctorMsg) {
+            messages = [{
+                id: 0,
+                senderName: doc.namaDokter,
+                senderId: doc.id,
+                pesan: `Halo! Selamat datang di Layanan Konsultasi Telemedis Sentra Farma. 👋\n\nSaya ${doc.namaDokter} (${doc.spesialisasi || 'Spesialis'}). Silakan tuliskan keluhan atau pertanyaan Anda di bawah ini, saya akan membalas pesan Anda.`,
+                createdAt: messages.length > 0 ? messages[0].createdAt : new Date().toISOString()
+            }, ...messages];
         }
 
         renderChatMessages(messages, doc);
@@ -253,7 +316,6 @@
 
         container.innerHTML = list.map(m => {
             const isUser = (m.senderId === user.id) || (m.senderName && m.senderName.includes('Pasien'));
-            const isAi = (m.senderName && m.senderName.includes('AI')) || m.tipePesan === 'AI_TRIAGE';
             const timeStr = m.createdAt ? new Date(m.createdAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
 
             if (isUser) {
@@ -263,19 +325,6 @@
                             ${escapeHtml(m.pesan)}
                         </div>
                         <span class="text-[9px] text-slate-400 font-bold px-1">${timeStr}</span>
-                    </div>
-                `;
-            } else if (isAi) {
-                return `
-                    <div class="flex flex-col items-center my-2">
-                        <div class="bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-300 text-emerald-950 px-4 py-3 rounded-2xl text-xs font-medium max-w-[92%] shadow-2xs space-y-1">
-                            <div class="flex items-center gap-1.5 text-[10px] font-extrabold text-emerald-700">
-                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                                <span>${escapeHtml(m.senderName || 'SentraAI Assistant')}</span>
-                            </div>
-                            <div class="whitespace-pre-line leading-relaxed text-slate-800 font-medium">${escapeHtml(m.pesan)}</div>
-                        </div>
-                        <span class="text-[9px] text-slate-400 font-bold mt-0.5">${timeStr}</span>
                     </div>
                 `;
             } else {
@@ -329,7 +378,7 @@
     window.executePatientClearHistory = async function() {
         window.closePatientClearModal();
         const sessionId = getSessionId();
-        localStorage.setItem('cleared_' + sessionId, 'true');
+        localStorage.removeItem('cleared_' + sessionId);
         localStorage.removeItem(sessionId);
 
         if (window.API) {
@@ -338,17 +387,7 @@
             } catch(e) {}
         }
 
-        const container = document.getElementById('chat-messages-container');
-        const doc = doctorsList.find(d => d.id == activeDoctorId) || doctorsList[0];
-        if (container) {
-            container.innerHTML = `
-                <div class="text-center text-slate-400 py-16 font-medium space-y-2">
-                    <span class="material-symbols-outlined text-4xl text-slate-300 block">cleaning_services</span>
-                    <p class="text-xs font-bold text-slate-600">Riwayat percakapan telah dibersihkan.</p>
-                    <p class="text-[10px] text-slate-400">Ketik pesan di bawah untuk konsultasi baru dengan Dokter ${doc ? doc.namaDokter : ''}.</p>
-                </div>
-            `;
-        }
+        loadChatHistory();
     };
 
     window.sendQuickChip = function(text) {
@@ -383,69 +422,27 @@
             tipePesan: 'TEXT'
         };
 
+        // Track global session keys so doctor chat can list all sessions
+        let masterSessions = JSON.parse(localStorage.getItem('sentra_telemedis_sessions') || '[]');
+        if (!masterSessions.includes(sessionId)) {
+            masterSessions.push(sessionId);
+            localStorage.setItem('sentra_telemedis_sessions', JSON.stringify(masterSessions));
+        }
+
+        // Save locally for instant availability
+        saveLocalMessage(sessionId, payload);
+
         // Save to API
         if (window.API) {
             try {
                 await window.API.post('/clinic/chat/messages', payload);
             } catch(err) {
-                console.warn('Backend API save message failed, saving locally:', err);
-                saveLocalMessage(sessionId, payload);
+                console.warn('Backend API save message failed, saved locally:', err);
             }
-        } else {
-            saveLocalMessage(sessionId, payload);
         }
 
         loadChatHistory();
-
-        // Trigger SentraAI Triage Auto-Reply after 1 second
-        setTimeout(async () => {
-            await triggerAiTriageReply(sessionId, doc, text);
-        }, 1000);
     };
-
-    async function triggerAiTriageReply(sessionId, doc, userText) {
-        const textLower = userText.toLowerCase().trim();
-        let aiPesan = "";
-
-        // Regex Intent Recognition
-        const isGreeting = /^(hai|halo|hi|hallo|pagi|siang|sore|malam|ping|p|tes|test|selamat|permisi|haloo)(\s+(hai|halo|hi|pagi|siang|sore|malam|dok|dokter))?$/i.test(textLower);
-        const isMedicalCheckup = /(berobat|periksa|konsul|konsultasi|sakit|pusing|demam|batuk|pilek|mual|muntah|dada|perut|luka|gatal|lemas|diare|nyeri|sesak|gejala|kurang enak badan|badan panas)/i.test(textLower);
-        const isPrescriptionOnly = /\b(resep|dosis|aturan minum|tebus|racikan|vitamin|paracetamol|salep|sirup)\b/i.test(textLower) || (/\bobat\b/i.test(textLower) && !textLower.includes('berobat'));
-        const isAdminPayment = /(bayar|alur|reservasi|harga|antrian|bpjs|biaya|tarif|jadwal)/i.test(textLower);
-
-        if (isGreeting && !isMedicalCheckup) {
-            aiPesan = `Halo! Selamat datang di Konsultasi Medis Klinik Sentra Farma. 👋\n\nSilakan sebutkan keluhan/gejala kesehatan yang sedang Anda rasakan saat ini, agar dapat saya catat ringkasannya secara otomatis untuk Dokter ${doc.namaDokter}.`;
-        } else if (isMedicalCheckup) {
-            aiPesan = `Baik, keluhan kesehatan Anda ("${userText}") telah dicatat secara otomatis oleh AI Triage.\n\nMohon sebutkan sudah berapa hari dirasakan & apakah ada alergi obat? Ringkasan gejala awal telah diteruskan ke layar Dokter ${doc.namaDokter}.`;
-        } else if (isPrescriptionOnly) {
-            aiPesan = `Terima kasih! Pertanyaan terkait resep & aturan minum obat telah diteruskan ke Dokter ${doc.namaDokter} & Tim Apoteker Sentra Farma secara prioritas.`;
-        } else if (isAdminPayment) {
-            aiPesan = `Untuk alur pendaftaran antrian & info pembayaran klinik (mendukung QRIS, Transfer Bank, & BPJS Kesehatan), Anda dapat mengecek langsung pada menu Antrian Online atau jadwal dokter.`;
-        } else {
-            aiPesan = `Pesan Anda ("${userText}") telah dicatat oleh AI Assistant. Dokter ${doc.namaDokter} akan membalas segera setelah selesai memeriksa pasien di poli.`;
-        }
-
-        const aiPayload = {
-            sessionId: sessionId,
-            senderId: 999,
-            receiverId: doc.id,
-            senderName: 'SentraAI Triage Bot',
-            pesan: aiPesan,
-            tipePesan: 'AI_TRIAGE'
-        };
-
-        if (window.API) {
-            try {
-                await window.API.post('/clinic/chat/messages', aiPayload);
-            } catch(err) {
-                saveLocalMessage(sessionId, aiPayload);
-            }
-        } else {
-            saveLocalMessage(sessionId, aiPayload);
-        }
-
-        loadChatHistory();
-    }
 
     function saveLocalMessage(sessionId, payload) {
         const history = JSON.parse(localStorage.getItem(sessionId) || '[]');
@@ -461,6 +458,6 @@
 
     function escapeHtml(str) {
         if (!str) return '';
-        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 })();
