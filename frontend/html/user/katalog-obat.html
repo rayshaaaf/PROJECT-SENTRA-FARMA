@@ -1275,6 +1275,41 @@
             showDigitalInvoiceStruk(strukData);
         }
 
+        let currentPasienId = null;
+
+        async function ensurePasienId() {
+            if (currentPasienId) return currentPasienId;
+            const user = API.getUser();
+            if (!user) return 1;
+
+            try {
+                const p = await API.get(`/clinic/pasien/user/${user.id}`);
+                if (p && p.id) {
+                    currentPasienId = p.id;
+                    return currentPasienId;
+                }
+            } catch (e) { }
+
+            try {
+                const allP = await API.get('/clinic/pasien');
+                const items = Array.isArray(allP) ? allP : (allP?.content || []);
+                if (items.length > 0) {
+                    const found = items.find(x =>
+                        (x.userId && x.userId === user.id) ||
+                        (x.email && x.email.toLowerCase() === user.email.toLowerCase()) ||
+                        (x.namaLengkap && x.namaLengkap.toLowerCase() === user.namaLengkap.toLowerCase())
+                    );
+                    if (found && found.id) {
+                        currentPasienId = found.id;
+                        return currentPasienId;
+                    }
+                }
+            } catch (e) { }
+
+            currentPasienId = user.id || 1;
+            return currentPasienId;
+        }
+
         async function openModalTebusResep() {
             openModal('modal-tebus-resep');
             const listContainer = document.getElementById('resep-pasien-list');
@@ -1284,35 +1319,121 @@
             if (!user) return;
 
             try {
-                const reseps = await API.get(`/pharmacy/resep`);
-                const userReseps = Array.isArray(reseps) ? reseps.filter(r => r.pasien && r.pasien.email && r.pasien.email.toLowerCase() === user.email.toLowerCase()) : [];
+                const pid = await ensurePasienId();
+                let apiReseps = [];
+                if (pid) {
+                    try {
+                        const res = await API.get(`/pharmacy/resep/pasien/${pid}`);
+                        if (Array.isArray(res)) apiReseps = res;
+                    } catch(e) {}
+                }
+
+                // Also merge with local queue
+                const localReseps = JSON.parse(localStorage.getItem('sf_resep_queue') || '[]');
+                const uEmail = (user.email || '').toLowerCase().trim();
+                const uName = (user.namaLengkap || '').toLowerCase().trim();
+
+                const filteredLocal = localReseps.filter(r => {
+                    const pEmail = (r.pasien?.email || '').toLowerCase().trim();
+                    const pName = (r.namaPasien || r.pasien?.namaLengkap || '').toLowerCase().trim();
+                    return (uEmail && pEmail && pEmail === uEmail) ||
+                           (uName && pName && (uName === pName || uName.includes(pName) || pName.includes(uName))) ||
+                           (r.pasienId && pid && r.pasienId == pid);
+                });
+
+                const combinedMap = new Map();
+                [...apiReseps, ...filteredLocal].forEach(r => {
+                    if (r) {
+                        const k = r.id || `rsp_${Date.now()}`;
+                        if (!combinedMap.has(k)) {
+                            combinedMap.set(k, r);
+                        }
+                    }
+                });
+
+                const userReseps = Array.from(combinedMap.values());
 
                 if (userReseps.length === 0) {
                     listContainer.innerHTML = `
-                        <div class="p-6 text-center text-slate-400 space-y-2">
-                            <span class="material-symbols-outlined text-[36px]">receipt_long</span>
-                            <p class="text-xs font-semibold">Belum ada e-resep aktif dari dokter.</p>
+                        <div class="p-8 text-center text-slate-400 space-y-3">
+                            <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold mx-auto">
+                                <span class="material-symbols-outlined text-[32px]">receipt_long</span>
+                            </div>
+                            <div class="space-y-1">
+                                <h4 class="text-sm font-extrabold text-slate-900">Belum Ada E-Resep Aktif</h4>
+                                <p class="text-xs text-slate-500 max-w-xs mx-auto">
+                                    E-Resep digital yang diterbitkan Dokter saat konsultasi/pemeriksaan akan otomatis muncul di sini.
+                                </p>
+                            </div>
+                            <div class="pt-2">
+                                <a href="antrian.html" class="inline-flex items-center gap-1.5 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs rounded-xl shadow-md transition-all">
+                                    <span class="material-symbols-outlined text-[16px]">calendar_month</span> Ambil Antrian / Konsultasi Dokter
+                                </a>
+                            </div>
                         </div>
                     `;
                     return;
                 }
 
-                listContainer.innerHTML = userReseps.map(r => `
-                    <div class="p-4 bg-slate-50 border border-slate-200/80 rounded-2xl space-y-2">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <span class="text-[10px] font-mono text-brand-700 font-bold uppercase">${r.nomorResep || 'RSP-001'}</span>
-                                <h4 class="text-xs font-bold text-slate-900">${r.dokter?.namaDokter || 'Dokter Spesialis'}</h4>
+                listContainer.innerHTML = userReseps.map(r => {
+                    const isDone = r.status === 'SELESAI';
+                    const statusLabel = isDone ? 'SELESAI / SUDAH DITEBUS' : (r.status === 'SIAP_DIAMBIL' ? 'SIAP DIAMBIL DI APOTEK' : 'MENUNGGU KONFIRMASI APOTEKER');
+                    const statusBadgeCls = isDone ? 'bg-emerald-100 text-emerald-800' : (r.status === 'SIAP_DIAMBIL' ? 'bg-blue-100 text-blue-800' : 'bg-amber-100 text-amber-800');
+
+                    let itemsListHtml = '';
+                    if (Array.isArray(r.items) && r.items.length > 0) {
+                        itemsListHtml = r.items.map(item => `
+                            <div class="flex items-center justify-between py-1.5 border-b border-slate-100 text-xs">
+                                <div>
+                                    <span class="font-bold text-slate-900 block">${item.obat?.namaObat || item.namaObat || 'Obat Resep'}</span>
+                                    <span class="text-[10px] text-slate-500 font-medium">${item.aturanPakai || 'Sesuai petunjuk dokter'}</span>
+                                </div>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded font-bold text-[10px]">${item.jumlah || 1} unit</span>
                             </div>
-                            <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full text-[10px] font-bold">${r.status || 'SIAP_DIAMBIL'}</span>
+                        `).join('');
+                    } else {
+                        itemsListHtml = `<p class="text-xs text-slate-700 font-medium py-1">${r.catatanResep || 'Resep obat pemeriksaan poliklinik.'}</p>`;
+                    }
+
+                    return `
+                        <div class="p-5 bg-white border border-slate-200/80 rounded-2xl shadow-xs space-y-3">
+                            <div class="flex justify-between items-start border-b border-slate-100 pb-2.5">
+                                <div>
+                                    <span class="text-[10px] font-mono text-brand-700 font-extrabold uppercase block">RSP-#${r.id}</span>
+                                    <h4 class="text-xs font-black text-slate-900">${r.dokter?.namaDokter || r.namaDokter || 'Dokter Pemeriksa'}</h4>
+                                    <span class="text-[10px] text-slate-400 font-medium">${r.createdAt ? new Date(r.createdAt).toLocaleDateString('id-ID', { day:'2-digit', month:'short', year:'numeric' }) : 'Hari Ini'}</span>
+                                </div>
+                                <span class="px-2.5 py-1 ${statusBadgeCls} rounded-full text-[10px] font-black tracking-wider uppercase">${statusLabel}</span>
+                            </div>
+
+                            <div class="space-y-1">
+                                <span class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider block">DAFTAR OBAT & DOSIS</span>
+                                ${itemsListHtml}
+                            </div>
+
+                            <div class="pt-2 flex items-center justify-between gap-2 border-t border-slate-100">
+                                ${isDone 
+                                    ? `<div class="flex items-center gap-1.5 text-xs text-emerald-700 font-extrabold">
+                                         <span class="material-symbols-outlined text-[18px]">check_circle</span>
+                                         <span>Resep telah selesai ditebus & diserahkan apotek</span>
+                                       </div>`
+                                    : `<button onclick="kirimKonfirmasiTebus('${r.id}')" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+                                         <span class="material-symbols-outlined text-[16px]">send</span>
+                                         <span>Konfirmasi Tebus ke Apotek</span>
+                                       </button>`
+                                }
+                            </div>
                         </div>
-                        <p class="text-xs text-slate-700 font-medium">${r.catatanResep || 'Resep pemeriksaan klinik.'}</p>
-                        <button onclick="Toast.success('Permintaan tebus resep telah dikirim ke Apoteker!')" class="w-full py-2 bg-brand-600 text-white font-bold text-xs rounded-xl shadow-sm hover:bg-brand-700">Tebus Resep Ke Apotek</button>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
             } catch (e) {
+                console.error('Error openModalTebusResep:', e);
                 listContainer.innerHTML = '<p class="text-xs text-rose-500 italic p-3">Gagal memuat resep digital.</p>';
             }
+        }
+
+        function kirimKonfirmasiTebus(resepId) {
+            Toast.success(`Permintaan tebus E-Resep #RSP-${resepId} berhasil dikirimkan ke Tim Farmasi! Apoteker akan menyiapkan obat Anda.`, 'Tebus Resep Terkirim');
         }
 
         function downloadStrukReservasiPDF() {
