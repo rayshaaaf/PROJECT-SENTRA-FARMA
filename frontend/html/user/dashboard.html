@@ -1321,17 +1321,11 @@
                     }
                 } catch(e) {}
 
-                let localRes = QueueSync.getAllQueues();
+                let localRes = typeof QueueSync !== 'undefined' ? QueueSync.getAllQueues() : [];
                 let patientTickets = [];
                 try {
                     patientTickets = JSON.parse(localStorage.getItem('sf_patient_tickets') || '[]');
                 } catch(e) {}
-
-                if (isApiSuccess && apiRes.length === 0) {
-                    localRes = [];
-                    patientTickets = [];
-                    localStorage.removeItem('sf_active_calling_queue');
-                }
 
                 const map = new Map();
                 [...apiRes, ...localRes, ...patientTickets].forEach(a => {

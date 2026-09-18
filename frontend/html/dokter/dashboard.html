@@ -479,12 +479,6 @@
                     localTickets = JSON.parse(localStorage.getItem('sf_patient_tickets') || '[]');
                 } catch(e) {}
 
-                if (isApiSuccess && antrianList.length === 0) {
-                    syncList = [];
-                    localTickets = [];
-                    localStorage.removeItem('sf_active_calling_queue');
-                }
-
                 const allCombined = [...antrianList, ...syncList, ...localTickets];
 
                 let uniqueList = [];

@@ -194,14 +194,14 @@ public class ClinicServiceImpl implements ClinicService {
         }
 
         long count = antrianRepository.countByTanggalBerobatAndPoliklinikId(tgl, poli.getId());
-        String codePrefix = "A";
+        String codePrefix = "U";
         if (poli.getNamaPoli() != null && !poli.getNamaPoli().isBlank()) {
-            String name = poli.getNamaPoli().trim();
-            if (name.toLowerCase().startsWith("poli ") && name.length() > 5) {
-                codePrefix = name.substring(5, 6).toUpperCase();
-            } else {
-                codePrefix = name.substring(0, 1).toUpperCase();
-            }
+            String p = poli.getNamaPoli().toLowerCase();
+            if (p.contains("gigi")) codePrefix = "G";
+            else if (p.contains("anak") || p.contains("pediatri")) codePrefix = "A";
+            else if (p.contains("kia") || p.contains("kebidanan")) codePrefix = "K";
+            else if (p.contains("ugd") || p.contains("darurat") || p.contains("emergency") || p.contains("tindakan")) codePrefix = "E";
+            else codePrefix = "U";
         }
         String queueNum = String.format("%s-%02d", codePrefix, count + 1);
 

@@ -427,10 +427,13 @@
                 return;
             }
 
+            const todayStr = new Date().toISOString().split('T')[0];
             const payload = {
                 pasienId: isNaN(pasienId) ? pasienId : parseInt(pasienId),
                 dokterId: parseInt(dokterId),
                 poliklinikId: parseInt(poliId),
+                tanggalBerobat: todayStr,
+                tanggalAntrian: todayStr,
                 keluhanUtama,
                 tipe: 'OFFLINE'
             };
@@ -452,6 +455,8 @@
                     namaPasien: pasienNama,
                     namaPoli: poliNama,
                     namaDokter: docNama,
+                    tanggal: todayStr,
+                    tanggalBerobat: todayStr,
                     tipe: 'OFFLINE'
                 });
             } else {
@@ -461,6 +466,8 @@
                     namaPasien: pasienNama,
                     namaPoli: poliNama,
                     namaDokter: docNama,
+                    tanggal: todayStr,
+                    tanggalBerobat: todayStr,
                     tipe: 'OFFLINE',
                     status: antrianRes.status || 'MENUNGGU'
                 });

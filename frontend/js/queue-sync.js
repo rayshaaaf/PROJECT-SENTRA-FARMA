@@ -16,12 +16,19 @@ const QueueSync = (function () {
         const todayMidnight = new Date();
         todayMidnight.setHours(0, 0, 0, 0);
         const resetTime = resetTimeStr ? parseInt(resetTimeStr, 10) : todayMidnight.getTime();
+        const todayStr = new Date().toISOString().split('T')[0];
 
         return list.filter(q => {
             if (!q) return false;
 
-            // Discard items created before resetTime
-            if (typeof q.id === 'number' && q.id < resetTime) {
+            // If queue is explicitly for today or future date, keep it valid
+            const qDate = q.tanggalBerobat || q.tanggal || q.tanggalAntrian;
+            if (qDate && qDate >= todayStr) {
+                return true;
+            }
+
+            // Only discard temporary client timestamp IDs created before resetTime
+            if (typeof q.id === 'number' && q.id >= 1000000000000 && q.id < resetTime) {
                 return false;
             }
             if (typeof q.id === 'string' && /^\d{13}$/.test(q.id) && parseInt(q.id, 10) < resetTime) {
@@ -29,7 +36,7 @@ const QueueSync = (function () {
             }
             if (q.createdAt) {
                 const createdMs = new Date(q.createdAt).getTime();
-                if (!isNaN(createdMs) && createdMs < resetTime) return false;
+                if (!isNaN(createdMs) && createdMs < resetTime && (!qDate || qDate < todayStr)) return false;
             }
 
             return true;
@@ -37,10 +44,9 @@ const QueueSync = (function () {
     }
 
     function syncWithApi(apiList) {
-        if (Array.isArray(apiList) && apiList.length === 0) {
-            localStorage.setItem(STORAGE_LIST_KEY, JSON.stringify([]));
-            localStorage.setItem('sf_patient_tickets', JSON.stringify([]));
-            localStorage.removeItem(STORAGE_ACTIVE_KEY);
+        // Safe sync: do not aggressively wipe local data unless explicitly required
+        if (Array.isArray(apiList) && apiList.length > 0) {
+            // Optional merge if needed
         }
     }
 
@@ -55,8 +61,6 @@ const QueueSync = (function () {
         }
 
         if (!lastDate || lastDate !== todayStr) {
-            // Automatic reset on new morning / new day!
-            resetAllQueues();
             localStorage.setItem(STORAGE_DATE_KEY, todayStr);
         } else if (!localStorage.getItem(STORAGE_LIST_KEY)) {
             localStorage.setItem(STORAGE_LIST_KEY, JSON.stringify([]));
@@ -95,7 +99,7 @@ const QueueSync = (function () {
         if (p.includes('gigi')) return 'G';
         if (p.includes('anak') || p.includes('pediatri')) return 'A';
         if (p.includes('kia') || p.includes('kebidanan')) return 'K';
-        if (p.includes('ugd') || p.includes('darurat') || p.includes('emergency')) return 'E';
+        if (p.includes('ugd') || p.includes('darurat') || p.includes('emergency') || p.includes('tindakan')) return 'E';
         return 'U'; // Default Poli Umum
     }
 
@@ -149,7 +153,7 @@ const QueueSync = (function () {
                 const item = JSON.parse(raw);
                 const resetTimeStr = localStorage.getItem(STORAGE_RESET_TIME_KEY);
                 const resetTime = resetTimeStr ? parseInt(resetTimeStr, 10) : 0;
-                if (item && typeof item.id === 'number' && item.id < resetTime) {
+                if (item && typeof item.id === 'number' && item.id >= 1000000000000 && item.id < resetTime) {
                     localStorage.removeItem(STORAGE_ACTIVE_KEY);
                     return null;
                 }
