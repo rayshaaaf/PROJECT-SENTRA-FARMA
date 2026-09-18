@@ -8,7 +8,18 @@ const API = {
 
     getUser() {
         const userStr = localStorage.getItem('user_data');
-        return userStr ? JSON.parse(userStr) : null;
+        if (!userStr) return null;
+        try {
+            const u = JSON.parse(userStr);
+            const deletedEmails = ['faridmuhamad439@gmail.com', 'geminihpro1@gmail.com', 'andin@gmail.com'];
+            if (u && u.email && deletedEmails.includes(u.email.toLowerCase().trim())) {
+                this.clearSession();
+                return null;
+            }
+            return u;
+        } catch(e) {
+            return null;
+        }
     },
 
     setSession(token, user) {
