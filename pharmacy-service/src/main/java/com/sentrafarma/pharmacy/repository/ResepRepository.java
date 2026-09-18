@@ -16,5 +16,7 @@ public interface ResepRepository extends JpaRepository<Resep, Long> {
 
     Page<Resep> findByStatus(String status, Pageable pageable);
 
+    List<Resep> findByStatus(String status);
+
     Optional<Resep> findByRekamMedisId(Long rekamMedisId);
 }

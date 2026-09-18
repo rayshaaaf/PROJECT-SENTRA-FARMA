@@ -456,6 +456,22 @@
                 }
             } catch (e) { }
 
+            try {
+                const allP = await API.get('/clinic/pasien');
+                const items = Array.isArray(allP) ? allP : (allP?.content || []);
+                if (items.length > 0) {
+                    const found = items.find(x =>
+                        (x.userId && x.userId === user.id) ||
+                        (x.email && x.email.toLowerCase() === user.email.toLowerCase()) ||
+                        (x.namaLengkap && x.namaLengkap.toLowerCase() === user.namaLengkap.toLowerCase())
+                    );
+                    if (found && found.id) {
+                        currentPasienId = found.id;
+                        return currentPasienId;
+                    }
+                }
+            } catch (e) { }
+
             // Fallback: Auto-create Pasien profile if missing in clinic-service
             try {
                 const uniqueNik = (user.nik && String(user.nik).length >= 10) ? String(user.nik) : ('3171' + String(user.id || 1).padStart(4, '0') + String(Date.now()).slice(-8));
@@ -473,6 +489,15 @@
                     return currentPasienId;
                 }
             } catch (err) { }
+
+            try {
+                const allP = await API.get('/clinic/pasien');
+                const items = Array.isArray(allP) ? allP : (allP?.content || []);
+                if (items.length > 0 && items[0].id) {
+                    currentPasienId = items[0].id;
+                    return currentPasienId;
+                }
+            } catch (e) { }
 
             currentPasienId = user.id || 1;
             return currentPasienId;
@@ -717,6 +742,22 @@
                     const res = await API.post('/clinic/antrian', body);
                     if (res && res.nomorAntrian) {
                         numAntrian = res.nomorAntrian;
+                        const itemToSync = {
+                            id: res.id || Date.now(),
+                            nomorAntrian: res.nomorAntrian,
+                            pasien: res.pasien || { namaLengkap: userName, email: user?.email },
+                            namaPasien: userName,
+                            poliklinik: res.poliklinik || { namaPoli: poliText },
+                            namaPoli: poliText,
+                            dokter: res.dokter || { namaDokter: docName },
+                            namaDokter: docName,
+                            tanggal: targetDateStr,
+                            tanggalBerobat: targetDateStr,
+                            tipe: activeTabMode === 'booking' ? 'BOOKING' : 'ONLINE',
+                            status: res.status || 'MENUNGGU'
+                        };
+                        QueueSync.addQueue(itemToSync);
+                        saveLocalTicket(itemToSync);
                     }
                 } catch(e) {}
 
@@ -726,10 +767,15 @@
                         namaPoli: poliText,
                         namaDokter: docName,
                         tanggal: targetDateStr,
+                        tanggalBerobat: targetDateStr,
                         tipe: activeTabMode === 'booking' ? 'BOOKING' : 'ONLINE'
                     });
                     numAntrian = created.nomorAntrian;
+                    saveLocalTicket(created);
                 }
+
+                window.dispatchEvent(new Event('storage'));
+                window.dispatchEvent(new CustomEvent('sf_queue_updated'));
 
                 if (activeTabMode === 'booking') {
                     const jamSesi = document.getElementById('booking-jam-select').value;

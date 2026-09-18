@@ -518,11 +518,13 @@
                 if (typeof QueueSync !== 'undefined') {
                     QueueSync.callQueue(antrianId || num, { nomorAntrian: num, id: antrianId });
                 }
-                await API.patch(`/clinic/antrian/${antrianId}/status?status=DIPERIKSA`, { status: 'DIPERIKSA' }).catch(()=>{});
+                if (antrianId && (typeof antrianId !== 'number' || antrianId < 100000000000)) {
+                    await API.patch(`/clinic/antrian/${antrianId}/status?status=DIPERIKSA`, { status: 'DIPERIKSA' }).catch(()=>{});
+                }
                 Toast.info(`Memanggil Pasien ${num} ke ruang periksa.`, 'Panggil Pasien');
-                window.location.href = `pemeriksaan.html?pasienId=${pasienId || ''}&nomor=${num}`;
+                window.location.href = `pemeriksaan.html?antrianId=${antrianId || ''}&pasienId=${pasienId || ''}&nomor=${num}`;
             } catch(e) {
-                window.location.href = `pemeriksaan.html?pasienId=${pasienId || ''}&nomor=${num}`;
+                window.location.href = `pemeriksaan.html?antrianId=${antrianId || ''}&pasienId=${pasienId || ''}&nomor=${num}`;
             }
         }
     </script>

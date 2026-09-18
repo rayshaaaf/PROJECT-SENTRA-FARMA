@@ -176,15 +176,33 @@
 
         async function loadTvQueue() {
             try {
-                let antrians = [];
+                let apiAntrians = [];
                 try {
                     const list = await API.get('/clinic/antrian/hari-ini');
-                    if (Array.isArray(list) && list.length > 0) antrians = list;
+                    if (Array.isArray(list)) apiAntrians = list;
                 } catch(e) {}
 
-                if (antrians.length === 0) {
-                    antrians = QueueSync.getAllQueues();
-                }
+                const localAntrians = QueueSync.getAllQueues();
+                let patientTickets = [];
+                try {
+                    patientTickets = JSON.parse(localStorage.getItem('sf_patient_tickets') || '[]');
+                } catch(e) {}
+
+                const map = new Map();
+                [...apiAntrians, ...localAntrians, ...patientTickets].forEach(a => {
+                    if (a) {
+                        const key = a.id ? `id_${a.id}` : `${a.nomorAntrian}_${(a.pasien?.namaLengkap || a.namaPasien || '').toLowerCase().trim()}`;
+                        if (!map.has(key)) {
+                            map.set(key, a);
+                        } else {
+                            if (a.status === 'DIPANGGIL' || a.status === 'DIPERIKSA') {
+                                map.set(key, a);
+                            }
+                        }
+                    }
+                });
+
+                let antrians = QueueSync.filterValidQueues(Array.from(map.values()));
 
                 const calling = QueueSync.getActiveCalling() || antrians.find(a => a.status === 'DIPANGGIL') || antrians.find(a => a.status === 'DIPERIKSA') || null;
 

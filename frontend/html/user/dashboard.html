@@ -1138,9 +1138,18 @@
             loadDashboardSummariesAndLogs();
             loadDokterJagaRealtime();
             loadLatestVitals();
-            setInterval(loadRealtimeQueue, 2000);
-            window.addEventListener('storage', loadRealtimeQueue);
-            window.addEventListener('sf_queue_updated', loadRealtimeQueue);
+            setInterval(() => {
+                loadRealtimeQueue();
+                loadDashboardSummariesAndLogs();
+            }, 3000);
+            window.addEventListener('storage', () => {
+                loadRealtimeQueue();
+                loadDashboardSummariesAndLogs();
+            });
+            window.addEventListener('sf_queue_updated', () => {
+                loadRealtimeQueue();
+                loadDashboardSummariesAndLogs();
+            });
         });
 
         function handleLogout() {
@@ -1152,7 +1161,7 @@
         async function ensurePasienId() {
             if (currentPasienId) return currentPasienId;
             const user = API.getUser();
-            if (!user) return null;
+            if (!user) return 1;
 
             try {
                 const p = await API.get(`/clinic/pasien/user/${user.id}`);
@@ -1164,8 +1173,9 @@
 
             try {
                 const allP = await API.get('/clinic/pasien');
-                if (allP && Array.isArray(allP)) {
-                    const found = allP.find(x =>
+                const items = Array.isArray(allP) ? allP : (allP?.content || []);
+                if (items.length > 0) {
+                    const found = items.find(x =>
                         (x.userId && x.userId === user.id) ||
                         (x.email && x.email.toLowerCase() === user.email.toLowerCase()) ||
                         (x.namaLengkap && x.namaLengkap.toLowerCase() === user.namaLengkap.toLowerCase())
@@ -1177,6 +1187,16 @@
                 }
             } catch (e) { }
 
+            try {
+                const allP = await API.get('/clinic/pasien');
+                const items = Array.isArray(allP) ? allP : (allP?.content || []);
+                if (items.length > 0 && items[0].id) {
+                    currentPasienId = items[0].id;
+                    return currentPasienId;
+                }
+            } catch (e) { }
+
+            currentPasienId = user.id || 1;
             return currentPasienId;
         }
 
@@ -1297,11 +1317,15 @@
                 } catch(e) {}
 
                 const localRes = QueueSync.getAllQueues();
+                let patientTickets = [];
+                try {
+                    patientTickets = JSON.parse(localStorage.getItem('sf_patient_tickets') || '[]');
+                } catch(e) {}
 
                 const map = new Map();
-                [...apiRes, ...localRes].forEach(a => {
+                [...apiRes, ...localRes, ...patientTickets].forEach(a => {
                     if (a) {
-                        const key = a.nomorAntrian || a.id;
+                        const key = a.id ? `id_${a.id}` : `${a.nomorAntrian}_${(a.pasien?.namaLengkap || a.namaPasien || '').toLowerCase().trim()}`;
                         if (!map.has(key)) map.set(key, a);
                         else {
                             if (a.status === 'DIPANGGIL' || a.status === 'DIPERIKSA') map.set(key, a);
@@ -1311,6 +1335,7 @@
 
                 let list = Array.from(map.values());
                 list = QueueSync.filterValidQueues(list);
+                list.sort((a, b) => (b.id || 0) - (a.id || 0));
 
                 const activeCalling = QueueSync.getActiveCalling();
                 if (activeCalling && activeCalling.nomorAntrian) {
@@ -1391,9 +1416,10 @@
                         if (myAntrian) {
                             userInfo.innerHTML = `Nomor Tiket Anda: <strong class="text-white font-bold">${myAntrian.nomorAntrian}</strong> (Menunggu Dipanggil)`;
                         } else {
-                            userInfo.innerText = 'Belum ada antrian dipanggil saat ini.';
+                            userInfo.innerText = 'Belum ada antrian dipanggil saat me-refresh.';
                         }
                     }
+                }
             } catch (e) {
                 console.error(e);
             }
@@ -1409,12 +1435,57 @@
 
             try {
                 const pid = await ensurePasienId();
+                let apiQ = [];
                 if (pid) {
-                    const qList = await API.get(`/clinic/antrian/pasien/${pid}`);
-                    if (qList && Array.isArray(qList)) {
-                        totalAntrian = QueueSync.filterValidQueues(qList).length;
+                    try {
+                        const res = await API.get(`/clinic/antrian/pasien/${pid}`);
+                        if (Array.isArray(res)) apiQ = res;
+                    } catch(e) {}
+                }
+                
+                try {
+                    const resToday = await API.get('/clinic/antrian/hari-ini');
+                    if (Array.isArray(resToday)) {
+                        apiQ = [...apiQ, ...resToday];
                     }
+                } catch(e) {}
 
+                const syncQ = typeof QueueSync !== 'undefined' ? QueueSync.getAllQueues() : [];
+                let patientQ = [];
+                try {
+                    patientQ = JSON.parse(localStorage.getItem('sf_patient_tickets') || '[]');
+                } catch(e) {}
+
+                const uName = (user.namaLengkap || '').toLowerCase().trim();
+                const uEmail = (user.email || '').toLowerCase().trim();
+
+                const userSyncList = [...syncQ, ...patientQ].filter(a => {
+                    const pName = (a.pasien?.namaLengkap || a.namaPasien || '').toLowerCase().trim();
+                    const pEmail = (a.pasien?.email || '').toLowerCase().trim();
+                    return (uEmail && pEmail && pEmail === uEmail) ||
+                           (uName && pName && (uName === pName || uName.includes(pName) || pName.includes(uName)));
+                });
+
+                const combinedMap = new Map();
+                [...apiQ, ...userSyncList].forEach(item => {
+                    if (item) {
+                        const pName = (item.pasien?.namaLengkap || item.namaPasien || '').toLowerCase().trim();
+                        const pEmail = (item.pasien?.email || '').toLowerCase().trim();
+                        const isUserMatch = (uEmail && pEmail && pEmail === uEmail) ||
+                                           (uName && pName && (uName === pName || uName.includes(pName) || pName.includes(uName))) ||
+                                           (item.pasien?.id && pid && item.pasien.id == pid) ||
+                                           (item.pasienId && pid && item.pasienId == pid);
+                        if (isUserMatch) {
+                            const k = item.id || item.nomorAntrian;
+                            if (!combinedMap.has(k)) combinedMap.set(k, item);
+                        }
+                    }
+                });
+
+                const validQ = QueueSync.filterValidQueues(Array.from(combinedMap.values()));
+                totalAntrian = validQ.length;
+
+                if (pid) {
                     const mList = await API.get(`/clinic/rekam-medis/pasien/${pid}`);
                     if (mList && Array.isArray(mList)) totalMedis = mList.length;
 
@@ -1422,15 +1493,6 @@
                     if (rList && Array.isArray(rList)) {
                         totalResep = rList.filter(r => r.pasienId === pid || (r.pasien && r.pasien.email && r.pasien.email.toLowerCase() === user.email.toLowerCase())).length;
                     }
-                } else {
-                    const qList = await API.get('/clinic/antrian/hari-ini');
-                    if (qList && Array.isArray(qList)) totalAntrian = qList.length;
-
-                    const mList = await API.get('/clinic/rekam-medis');
-                    if (mList && Array.isArray(mList)) totalMedis = mList.length;
-
-                    const rList = await API.get('/pharmacy/resep');
-                    if (rList && Array.isArray(rList)) totalResep = rList.length;
                 }
             } catch (e) { }
 

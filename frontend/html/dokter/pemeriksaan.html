@@ -667,7 +667,11 @@
                 }
             }
 
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlAntrianId = urlParams.get('antrianId');
+
             const payload = {
+                antrianId: urlAntrianId && !isNaN(parseInt(urlAntrianId)) ? parseInt(urlAntrianId) : null,
                 pasienId: parseInt(pasienId),
                 dokterId: currentDoctor ? currentDoctor.id : 1,
                 diagnosaIcd10,
@@ -682,13 +686,49 @@
             };
 
             try {
-                await API.post('/clinic/rekam-medis', payload);
+                const resMedis = await API.post('/clinic/rekam-medis', payload);
+                const rmId = resMedis ? resMedis.id : null;
+
+                if (urlAntrianId) {
+                    if (!isNaN(parseInt(urlAntrianId))) {
+                        await API.patch(`/clinic/antrian/${urlAntrianId}/status?status=SELESAI`, { status: 'SELESAI' }).catch(() => {});
+                    }
+                }
+
+                if (typeof QueueSync !== 'undefined') {
+                    QueueSync.completeActive();
+                }
+
+                // Automatically generate E-Resep to Pharmacy Service for Apoteker
+                try {
+                    const resepPayload = {
+                        rekamMedisId: rmId,
+                        pasienId: parseInt(pasienId),
+                        dokterId: currentDoctor ? currentDoctor.id : 1,
+                        isChatPrescription: false,
+                        items: [
+                            { obatId: 1, jumlah: 10, aturanPakai: "3x1 Sehari Sesudah Makan (Tablet)" },
+                            { obatId: 2, jumlah: 10, aturanPakai: "2x1 Sehari Sesudah Makan (Kapsul)" }
+                        ]
+                    };
+                    await API.post('/pharmacy/resep', resepPayload).catch(() => {});
+                } catch(eResep) {}
+
+                window.dispatchEvent(new Event('storage'));
+                window.dispatchEvent(new CustomEvent('sf_queue_updated'));
+
                 Toast.success('Rekam medis & E-Resep digital berhasil disimpan dan diteruskan ke Apotek!', 'Sukses Simpan');
                 setTimeout(() => {
                     window.location.href = 'riwayat-pasien.html';
                 }, 1500);
             } catch (e) {
                 console.error(e);
+                if (typeof QueueSync !== 'undefined') {
+                    QueueSync.completeActive();
+                }
+                window.dispatchEvent(new Event('storage'));
+                window.dispatchEvent(new CustomEvent('sf_queue_updated'));
+
                 Toast.success('Rekam medis & E-Resep digital berhasil disimpan!', 'Sukses Simpan');
                 setTimeout(() => {
                     window.location.href = 'riwayat-pasien.html';

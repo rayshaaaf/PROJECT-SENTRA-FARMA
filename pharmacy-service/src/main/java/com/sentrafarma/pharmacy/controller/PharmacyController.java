@@ -107,6 +107,13 @@ public class PharmacyController {
         return ResponseEntity.ok(pharmacyService.getResepQueue(status, page, limit));
     }
 
+    @GetMapping("/resep/status/{status}")
+    @Operation(summary = "Get List E-Resep by Status (e.g. PENDING)")
+    public ResponseEntity<List<Resep>> getResepByStatus(@PathVariable String status) {
+        return ResponseEntity.ok(pharmacyService.getResepByStatus(status));
+    }
+
+    @PatchMapping("/resep/{id}/status")
     @PostMapping("/resep/{id}/fulfill")
     @Operation(summary = "Proses Penebusan Resep & Potong Stok Otomatis")
     public ResponseEntity<Resep> fulfillResep(@PathVariable Long id) {

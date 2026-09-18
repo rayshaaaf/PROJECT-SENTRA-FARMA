@@ -140,6 +140,11 @@ public class PharmacyServiceImpl implements PharmacyService {
     }
 
     @Override
+    public List<Resep> getResepByStatus(String status) {
+        return resepRepository.findByStatus(status);
+    }
+
+    @Override
     @Transactional
     public Resep fulfillResep(Long resepId) {
         Resep resep = resepRepository.findById(resepId)

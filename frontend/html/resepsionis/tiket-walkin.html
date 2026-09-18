@@ -391,6 +391,9 @@
                 });
             }
 
+            window.dispatchEvent(new Event('storage'));
+            window.dispatchEvent(new CustomEvent('sf_queue_updated'));
+
             showTiketModal(antrianRes);
             Toast.success(`Tiket antrian offline ${antrianRes.nomorAntrian} berhasil diterbitkan!`, 'Cetak Tiket Sukses');
         }

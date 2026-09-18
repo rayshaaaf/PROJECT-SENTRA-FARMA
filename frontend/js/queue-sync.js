@@ -16,9 +16,16 @@ const QueueSync = (function () {
         const todayMidnight = new Date();
         todayMidnight.setHours(0, 0, 0, 0);
         const resetTime = resetTimeStr ? parseInt(resetTimeStr, 10) : todayMidnight.getTime();
+        const todayStr = new Date().toISOString().split('T')[0];
 
         return list.filter(q => {
             if (!q) return false;
+
+            // 0. Any item created for today's date is always valid!
+            const qDate = q.tanggal || q.tanggalBerobat || q.tanggalAntrian;
+            if (qDate && qDate === todayStr) {
+                return true;
+            }
 
             // 1. Any item created locally has q.id = Date.now() (13 digits >= 100000000000)
             if (typeof q.id === 'number' && q.id >= 100000000000) {
@@ -92,9 +99,28 @@ const QueueSync = (function () {
 
     function generateNextQueueNumber(poliName) {
         const list = getAllQueues();
+        let patientTickets = [];
+        try {
+            patientTickets = JSON.parse(localStorage.getItem('sf_patient_tickets') || '[]');
+        } catch(e) {}
+
+        const combined = [...list, ...patientTickets];
         const prefix = getPoliPrefix(poliName);
-        const matching = list.filter(q => (q.nomorAntrian || '').startsWith(`${prefix}-`));
-        const nextSeq = matching.length + 1;
+
+        let maxSeq = 0;
+        combined.forEach(q => {
+            if (q && q.nomorAntrian) {
+                const match = q.nomorAntrian.match(new RegExp(`^${prefix}-(\\d+)`, 'i'));
+                if (match) {
+                    const seq = parseInt(match[1], 10);
+                    if (!isNaN(seq) && seq > maxSeq) {
+                        maxSeq = seq;
+                    }
+                }
+            }
+        });
+
+        const nextSeq = maxSeq + 1;
         return `${prefix}-${String(nextSeq).padStart(2, '0')}`;
     }
 
@@ -243,7 +269,7 @@ const QueueSync = (function () {
         const numAntrian = data.nomorAntrian || generateNextQueueNumber(poliName);
 
         const newQueue = {
-            id: Date.now(),
+            id: data.id || Date.now(),
             nomorAntrian: numAntrian,
             pasien: data.pasien || { namaLengkap: data.namaPasien || 'Pasien Walk-in' },
             namaPasien: data.namaPasien || data.pasien?.namaLengkap || 'Pasien Walk-in',
@@ -252,11 +278,17 @@ const QueueSync = (function () {
             dokter: data.dokter || { namaDokter: data.namaDokter || 'Dokter Jaga' },
             namaDokter: data.namaDokter || data.dokter?.namaDokter || 'Dokter Jaga',
             tipe: data.tipe || 'ONLINE',
-            status: 'MENUNGGU',
-            tanggal: data.tanggal || new Date().toISOString().split('T')[0]
+            status: data.status || 'MENUNGGU',
+            tanggal: data.tanggal || data.tanggalBerobat || new Date().toISOString().split('T')[0]
         };
 
-        list.push(newQueue);
+        const existingIdx = list.findIndex(q => q.id == newQueue.id || (q.nomorAntrian === newQueue.nomorAntrian && (q.tanggal === newQueue.tanggal || q.tanggalBerobat === newQueue.tanggal)));
+        if (existingIdx >= 0) {
+            list[existingIdx] = newQueue;
+        } else {
+            list.push(newQueue);
+        }
+
         saveAllQueues(list);
         return newQueue;
     }

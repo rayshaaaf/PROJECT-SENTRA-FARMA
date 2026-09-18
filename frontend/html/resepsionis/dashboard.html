@@ -343,11 +343,15 @@
                 } catch(e) {}
 
                 const localAntrians = QueueSync.getAllQueues();
+                let patientTickets = [];
+                try {
+                    patientTickets = JSON.parse(localStorage.getItem('sf_patient_tickets') || '[]');
+                } catch(e) {}
 
                 const map = new Map();
-                [...apiAntrians, ...localAntrians].forEach(a => {
+                [...apiAntrians, ...localAntrians, ...patientTickets].forEach(a => {
                     if (a) {
-                        const key = a.nomorAntrian || a.id;
+                        const key = a.id ? `id_${a.id}` : `${a.nomorAntrian}_${(a.pasien?.namaLengkap || a.namaPasien || '').toLowerCase().trim()}`;
                         if (!map.has(key)) {
                             map.set(key, a);
                         } else {
@@ -414,17 +418,26 @@
             }
         }
 
-        function panggilAntrianBerikutnya() {
+        async function panggilAntrianBerikutnya() {
             const result = QueueSync.callNext();
-            if (result) loadAntrianLive();
+            if (result) {
+                if (result.id && (typeof result.id !== 'number' || result.id < 100000000000)) {
+                    await API.patch(`/clinic/antrian/${result.id}/status?status=DIPANGGIL`, { status: 'DIPANGGIL' }).catch(() => {});
+                }
+                loadAntrianLive();
+            }
         }
 
         function panggilUlangAntrian() {
             QueueSync.callRepeat();
         }
 
-        function selesaikanAntrianAktif() {
+        async function selesaikanAntrianAktif() {
+            const active = QueueSync.getActiveCalling();
             const result = QueueSync.completeActive();
+            if (active && active.id && (typeof active.id !== 'number' || active.id < 100000000000)) {
+                await API.patch(`/clinic/antrian/${active.id}/status?status=SELESAI`, { status: 'SELESAI' }).catch(() => {});
+            }
             if (result) loadAntrianLive();
         }
 
@@ -435,9 +448,12 @@
             }
         }
 
-        function panggilSpesifik(id) {
+        async function panggilSpesifik(id) {
             const foundItem = currentAntrianList.find(a => a.id == id || String(a.id) === String(id) || a.nomorAntrian === id);
             QueueSync.callQueue(id, foundItem);
+            if (foundItem && foundItem.id && (typeof foundItem.id !== 'number' || foundItem.id < 100000000000)) {
+                await API.patch(`/clinic/antrian/${foundItem.id}/status?status=DIPANGGIL`, { status: 'DIPANGGIL' }).catch(() => {});
+            }
             loadAntrianLive();
         }
 

@@ -264,6 +264,9 @@
         document.addEventListener('DOMContentLoaded', async () => {
             initProfile();
             await loadDashResep();
+            setInterval(loadDashResep, 3000);
+            window.addEventListener('storage', loadDashResep);
+            window.addEventListener('sf_queue_updated', loadDashResep);
         });
 
         function initProfile() {

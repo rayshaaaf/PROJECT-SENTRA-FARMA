@@ -322,6 +322,9 @@
         document.addEventListener('DOMContentLoaded', async () => {
             initProfile();
             await loadResepList();
+            setInterval(loadResepList, 3000);
+            window.addEventListener('storage', loadResepList);
+            window.addEventListener('sf_queue_updated', loadResepList);
         });
 
         function initProfile() {
@@ -376,11 +379,12 @@
             try {
                 await API.patch(`/pharmacy/resep/${id}/status`, { status: 'SELESAI' });
                 Toast.success(`E-Resep RSP-#${id} berhasil ditebus & stok obat otomatis dipotong!`, 'Resep Selesai');
-                loadResepList();
             } catch(err) {
                 Toast.success(`E-Resep RSP-#${id} berhasil diproses dan dikonfirmasi!`, 'Resep Selesai');
-                loadResepList();
             }
+            window.dispatchEvent(new Event('storage'));
+            window.dispatchEvent(new CustomEvent('sf_queue_updated'));
+            loadResepList();
         }
 
         function openEtiketModal(resepId, namaPasien, catatan) {

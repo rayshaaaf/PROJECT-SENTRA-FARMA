@@ -25,6 +25,7 @@ public interface PharmacyService {
     Resep createResep(ResepCreateRequest req);
     List<Resep> getResepByPasien(Long pasienId);
     Page<Resep> getResepQueue(String status, int page, int limit);
+    List<Resep> getResepByStatus(String status);
     Resep fulfillResep(Long resepId);
 
     // Transaksi Kasir POS
