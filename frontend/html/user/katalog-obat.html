@@ -725,7 +725,7 @@
 
         async function loadObatData() {
             try {
-                const res = await API.get('/pharmacy/obat?page=1&limit=100');
+                const res = await API.get('/pharmacy/obat?page=1&limit=1000');
                 allObatList = Array.isArray(res) ? res : (res.content || []);
 
                 allObatList.forEach(o => {

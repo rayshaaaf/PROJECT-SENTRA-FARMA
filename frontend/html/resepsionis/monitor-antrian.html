@@ -179,7 +179,10 @@
                 let apiAntrians = [];
                 try {
                     const list = await API.get('/clinic/antrian/hari-ini');
-                    if (Array.isArray(list)) apiAntrians = list;
+                    if (Array.isArray(list)) {
+                        apiAntrians = list;
+                        if (list.length === 0) QueueSync.syncWithApi([]);
+                    }
                 } catch(e) {}
 
                 const localAntrians = QueueSync.getAllQueues();

@@ -1313,7 +1313,10 @@
                 let apiRes = [];
                 try {
                     const res = await API.get('/clinic/antrian/hari-ini');
-                    if (Array.isArray(res)) apiRes = res;
+                    if (Array.isArray(res)) {
+                        apiRes = res;
+                        if (res.length === 0) QueueSync.syncWithApi([]);
+                    }
                 } catch(e) {}
 
                 const localRes = QueueSync.getAllQueues();

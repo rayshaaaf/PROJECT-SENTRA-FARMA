@@ -707,7 +707,7 @@
 
                 let validObatList = [];
                 try {
-                    const obats = await API.get('/pharmacy/obat');
+                    const obats = await API.get('/pharmacy/obat?page=1&limit=1000');
                     if (Array.isArray(obats) && obats.length > 0) validObatList = obats;
                     else if (obats && obats.content && Array.isArray(obats.content)) validObatList = obats.content;
                 } catch(eObat) {}

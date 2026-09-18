@@ -16,36 +16,32 @@ const QueueSync = (function () {
         const todayMidnight = new Date();
         todayMidnight.setHours(0, 0, 0, 0);
         const resetTime = resetTimeStr ? parseInt(resetTimeStr, 10) : todayMidnight.getTime();
-        const todayStr = new Date().toISOString().split('T')[0];
 
         return list.filter(q => {
             if (!q) return false;
 
-            // 0. Any item created for today's date is always valid!
-            const qDate = q.tanggal || q.tanggalBerobat || q.tanggalAntrian;
-            if (qDate && qDate === todayStr) {
-                return true;
+            // Discard items created before resetTime
+            if (typeof q.id === 'number' && q.id < resetTime) {
+                return false;
             }
-
-            // 1. Any item created locally has q.id = Date.now() (13 digits >= 100000000000)
-            if (typeof q.id === 'number' && q.id >= 100000000000) {
-                return q.id >= resetTime;
+            if (typeof q.id === 'string' && /^\d{13}$/.test(q.id) && parseInt(q.id, 10) < resetTime) {
+                return false;
             }
-
-            // 2. Items with string timestamp IDs
-            if (typeof q.id === 'string' && /^\d{13}$/.test(q.id)) {
-                return parseInt(q.id, 10) >= resetTime;
-            }
-
-            // 3. Database items with createdAt
             if (q.createdAt) {
                 const createdMs = new Date(q.createdAt).getTime();
-                if (!isNaN(createdMs)) return createdMs >= resetTime;
+                if (!isNaN(createdMs) && createdMs < resetTime) return false;
             }
 
-            // 4. Database / offline items created in active session without timestamp ID or createdAt
             return true;
         });
+    }
+
+    function syncWithApi(apiList) {
+        if (Array.isArray(apiList) && apiList.length === 0) {
+            localStorage.setItem(STORAGE_LIST_KEY, JSON.stringify([]));
+            localStorage.setItem('sf_patient_tickets', JSON.stringify([]));
+            localStorage.removeItem(STORAGE_ACTIVE_KEY);
+        }
     }
 
     function init() {
@@ -309,6 +305,7 @@ const QueueSync = (function () {
         completeActive,
         addQueue,
         resetAllQueues,
-        filterValidQueues
+        filterValidQueues,
+        syncWithApi
     };
 })();
