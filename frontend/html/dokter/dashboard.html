@@ -550,11 +550,14 @@
         async function panggilDanPeriksa(antrianId, num, pasienId) {
             try {
                 if (typeof QueueSync !== 'undefined') {
-                    QueueSync.callQueue(antrianId || num, { nomorAntrian: num, id: antrianId });
+                    QueueSync.callQueue(antrianId || num, { nomorAntrian: num, id: antrianId, status: 'DIPERIKSA' });
                 }
-                if (antrianId && (typeof antrianId !== 'number' || antrianId < 100000000000)) {
-                    await API.patch(`/clinic/antrian/${antrianId}/status?status=DIPERIKSA`, { status: 'DIPERIKSA' }).catch(()=>{});
+                const numId = parseInt(antrianId, 10);
+                if (!isNaN(numId) && numId > 0 && numId < 100000000000) {
+                    await API.patch(`/clinic/antrian/${numId}/status?status=DIPERIKSA`, { status: 'DIPERIKSA' }).catch(()=>{});
                 }
+                window.dispatchEvent(new Event('storage'));
+                window.dispatchEvent(new CustomEvent('sf_queue_updated'));
                 Toast.info(`Memanggil Pasien ${num} ke ruang periksa.`, 'Panggil Pasien');
                 window.location.href = `pemeriksaan.html?antrianId=${antrianId || ''}&pasienId=${pasienId || ''}&nomor=${num}`;
             } catch(e) {

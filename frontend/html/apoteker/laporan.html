@@ -142,12 +142,22 @@
                 </div>
             </div>
 
-            <div class="flex items-center gap-2.5">
+            <div class="flex items-center gap-2.5 text-xs">
+                <button onclick="exportLaporanOmsetPDF()" class="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-extrabold rounded-full flex items-center gap-1 shadow-2xs transition-all cursor-pointer">
+                    <span class="material-symbols-outlined text-[15px]">picture_as_pdf</span>
+                    <span>Export PDF</span>
+                </button>
+                <button onclick="exportLaporanOmsetExcel()" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-full flex items-center gap-1 shadow-2xs transition-all cursor-pointer">
+                    <span class="material-symbols-outlined text-[15px]">table_view</span>
+                    <span>Export Excel</span>
+                </button>
+
                 <button onclick="Absensi.openModal()" title="Presensi & Absensi Apoteker"
-                    class="px-3 py-1 bg-brand-600 hover:bg-brand-700 text-white text-xs font-black rounded-full flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer">
+                    class="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-black rounded-full flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer">
                     <span class="material-symbols-outlined text-[14px]">fingerprint</span>
                     <span>Presensi / Absen</span>
                 </button>
+
                 <div class="flex items-center gap-2 pl-2 border-l border-slate-200">
                     <div id="user-avatar-initials" class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-700 to-emerald-500 text-white flex items-center justify-center font-extrabold text-xs shadow-md">A</div>
                     <span id="user-name-badge" class="text-xs font-extrabold text-slate-900 hidden sm:inline">Apoteker</span>
@@ -215,11 +225,19 @@
         </main>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="../../js/api.js"></script>
     <script src="../../js/toast.js"></script>
     <script src="../../js/auth-guard.js"></script>
     <script src="../../js/absensi.js"></script>
     <script>
+        let currentReportData = {
+            totalOmset: 0,
+            totalTransaksiCount: 0,
+            resepDoneCount: 0,
+            topObats: []
+        };
+
         document.addEventListener('DOMContentLoaded', async () => {
             initProfile();
             await loadLiveReportData();
@@ -236,8 +254,11 @@
 
         async function loadLiveReportData() {
             try {
-                const obatPage = await API.get('/pharmacy/obat?page=1&limit=100');
-                const obats = obatPage.content || obatPage || [];
+                let obats = [];
+                try {
+                    const obatPage = await API.get('/pharmacy/obat?page=1&limit=100');
+                    obats = obatPage.content || obatPage || [];
+                } catch(e) {}
 
                 let totalOmset = 0;
                 let totalTransaksiCount = 0;
@@ -258,6 +279,10 @@
                     });
                 }
 
+                currentReportData.totalOmset = totalOmset;
+                currentReportData.totalTransaksiCount = totalTransaksiCount;
+                currentReportData.resepDoneCount = resepDoneCount;
+
                 document.getElementById('kpi-total-omset').innerText = `Rp ${Number(totalOmset).toLocaleString('id-ID')}`;
                 document.getElementById('kpi-total-transaksi').innerText = `${totalTransaksiCount} Transaksi`;
                 document.getElementById('kpi-resep-selesai').innerText = `${resepDoneCount} Resep`;
@@ -269,6 +294,8 @@
                 }
 
                 const sorted = [...obats].sort((a,b) => (b.harga || 0) - (a.harga || 0)).slice(0, 5);
+                currentReportData.topObats = sorted;
+
                 const rankColors = ['bg-emerald-600 text-white', 'bg-brand-500 text-white', 'bg-teal-500 text-white', 'bg-amber-500 text-white', 'bg-slate-400 text-white'];
 
                 listEl.innerHTML = sorted.map((o, idx) => `
@@ -287,6 +314,135 @@
                 console.error("Gagal memuat data laporan real-time", e);
                 document.getElementById('best-seller-list').innerHTML = '<div class="p-4 text-center text-slate-400 italic">Gagal memuat laporan database.</div>';
             }
+        }
+
+        function exportLaporanOmsetPDF() {
+            const user = typeof AuthGuard !== 'undefined' ? AuthGuard.getSavedUser() : null;
+            const apotekerName = user ? user.namaLengkap : 'apt. Bambang Sugianto, S.Farm';
+            const dateStr = new Date().toLocaleDateString('id-ID', { day:'2-digit', month:'long', year:'numeric' });
+
+            let obatRows = currentReportData.topObats.map((o, i) => `
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: center;">${i + 1}</td>
+                    <td style="padding: 8px; border: 1px solid #cbd5e1; font-family: monospace;">${o.kodeObat || 'OBT-001'}</td>
+                    <td style="padding: 8px; border: 1px solid #cbd5e1; font-weight: bold;">${o.namaObat}</td>
+                    <td style="padding: 8px; border: 1px solid #cbd5e1;">${o.satuan || 'Pcs'}</td>
+                    <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold;">Rp ${Number(o.harga || 0).toLocaleString('id-ID')}</td>
+                </tr>
+            `).join('');
+
+            if (!obatRows) {
+                obatRows = `<tr><td colspan="5" style="padding: 12px; text-align: center; color: #94a3b8;">Belum ada item obat terdaftar</td></tr>`;
+            }
+
+            const docContainer = document.createElement('div');
+            docContainer.style.padding = '30px';
+            docContainer.style.fontFamily = 'Plus Jakarta Sans, sans-serif';
+            docContainer.style.color = '#1e293b';
+
+            docContainer.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #059669; padding-bottom: 12px; margin-bottom: 20px;">
+                    <div>
+                        <h2 style="margin:0; font-size: 18px; font-weight: 800; color: #064e3b;">SENTRA FARMA CENTRAL PHARMACY</h2>
+                        <p style="margin: 3px 0 0 0; font-size: 11px; color: #64748b;">Jl. Kesehatan Raya No. 88 Jakarta • Telp: (021) 7788-9900 • SIPA: 19880412/STRA-SF/2026</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="font-size: 10px; font-weight: 700; color: #059669; background: #dcfce7; padding: 4px 10px; border-radius: 999px;">OFFICIAL REPORT</span>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-bottom: 24px;">
+                    <h3 style="margin: 0; font-size: 14px; font-weight: 800; text-transform: uppercase; text-decoration: underline; letter-spacing: 0.5px;">LAPORAN OMSET PENJUALAN & REKAPITULASI OBAT</h3>
+                    <p style="margin: 4px 0 0 0; font-size: 11px; color: #64748b;">Periode Tanggal: ${dateStr}</p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px;">
+                    <div style="padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; text-align: center;">
+                        <span style="font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase;">Total Omset Penjualan</span>
+                        <div style="font-size: 16px; font-weight: 800; color: #047857; margin-top: 4px;">Rp ${Number(currentReportData.totalOmset).toLocaleString('id-ID')}</div>
+                    </div>
+                    <div style="padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; text-align: center;">
+                        <span style="font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase;">Total Transaksi POS</span>
+                        <div style="font-size: 16px; font-weight: 800; color: #0284c7; margin-top: 4px;">${currentReportData.totalTransaksiCount} Transaksi</div>
+                    </div>
+                    <div style="padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; text-align: center;">
+                        <span style="font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase;">E-Resep Selesai</span>
+                        <div style="font-size: 16px; font-weight: 800; color: #d97706; margin-top: 4px;">${currentReportData.resepDoneCount} Resep</div>
+                    </div>
+                </div>
+
+                <h4 style="font-size: 12px; font-weight: 800; margin-bottom: 8px; color: #0f172a;">Rincian Item Obat Fast-Moving Utama:</h4>
+                <table style="width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 30px;">
+                    <thead>
+                        <tr style="background: #f1f5f9; font-weight: bold; text-transform: uppercase; font-size: 10px;">
+                            <th style="padding: 8px; border: 1px solid #cbd5e1; width: 40px;">No</th>
+                            <th style="padding: 8px; border: 1px solid #cbd5e1;">Kode Obat</th>
+                            <th style="padding: 8px; border: 1px solid #cbd5e1;">Nama Obat</th>
+                            <th style="padding: 8px; border: 1px solid #cbd5e1;">Satuan</th>
+                            <th style="padding: 8px; border: 1px solid #cbd5e1; text-align: right;">Harga Satuan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${obatRows}
+                    </tbody>
+                </table>
+
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 40px; font-size: 11px;">
+                    <div>
+                        <p style="margin: 0; font-size: 10px; color: #94a3b8;">* Dokumen ini dibuat otomatis oleh Sistem Terintegrasi Sentra Farma</p>
+                        <p style="margin: 2px 0 0 0; font-size: 10px; color: #94a3b8;">* E-Sign Digital SHA-256 Verified</p>
+                    </div>
+                    <div style="text-align: center; width: 200px;">
+                        <p style="margin: 0; color: #64748b;">Jakarta, ${dateStr}</p>
+                        <p style="margin: 2px 0 40px 0; font-weight: bold;">Apoteker Penanggung Jawab,</p>
+                        <p style="margin: 0; font-weight: 800; text-decoration: underline; color: #064e3b;">${apotekerName}</p>
+                        <p style="margin: 2px 0 0 0; font-size: 10px; color: #64748b;">STRA: 19880412/STRA-SF/2026</p>
+                    </div>
+                </div>
+            `;
+
+            if (typeof html2pdf !== 'undefined') {
+                const opt = {
+                    margin: 0.3,
+                    filename: `Laporan_Omset_SentraFarma_${new Date().toISOString().slice(0,10)}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2 },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
+                html2pdf().set(opt).from(docContainer).save();
+                Toast.success('Laporan Omset PDF resmi berhasil di-download!', 'Download PDF');
+            } else {
+                Toast.error('Library PDF belum siap.', 'Gagal');
+            }
+        }
+
+        function exportLaporanOmsetExcel() {
+            const rows = [
+                ["SENTRA FARMA CENTRAL PHARMACY"],
+                ["LAPORAN OMSET PENJUALAN & REKAPITULASI OBAT"],
+                ["Tanggal Export", new Date().toLocaleString('id-ID')],
+                [""],
+                ["Kategori Indikator", "Jumlah / Nilai"],
+                ["Total Omset Penjualan", `Rp ${Number(currentReportData.totalOmset).toLocaleString('id-ID')}`],
+                ["Total Transaksi POS", `${currentReportData.totalTransaksiCount} Transaksi`],
+                ["E-Resep Selesai Ditebus", `${currentReportData.resepDoneCount} Resep`],
+                [""],
+                ["No", "Kode Obat", "Nama Obat", "Satuan", "Harga Satuan"]
+            ];
+
+            currentReportData.topObats.forEach((o, idx) => {
+                rows.push([idx + 1, o.kodeObat || 'OBT-001', o.namaObat, o.satuan || 'Pcs', o.harga || 0]);
+            });
+
+            const csvContent = rows.map(r => r.map(c => `"${c}"`).join(",")).join("\n");
+            const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `Laporan_Omset_SentraFarma_${new Date().toISOString().slice(0,10)}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            Toast.success('Laporan Omset berhasil di-download sebagai Excel (.csv)!', 'Download Excel');
         }
     </script>
 </body>

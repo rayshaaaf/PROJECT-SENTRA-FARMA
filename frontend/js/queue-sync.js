@@ -76,15 +76,21 @@ const QueueSync = (function () {
         localStorage.setItem(STORAGE_LIST_KEY, JSON.stringify([]));
         localStorage.removeItem(STORAGE_ACTIVE_KEY);
         localStorage.removeItem('sf_patient_tickets');
+        localStorage.removeItem('sf_resep_queue');
+        localStorage.removeItem('sf_pasien_struk_history');
 
-        if (typeof API !== 'undefined' && API.post) {
-            API.post('/clinic/antrian/reset', {}).catch(() => { });
+        if (typeof API !== 'undefined') {
+            if (API.post) API.post('/clinic/antrian/reset', {}).catch(() => { });
+            if (API.delete) {
+                API.delete('/clinic/antrian/all').catch(() => { });
+                API.delete('/pharmacy/reset-history').catch(() => { });
+            }
         }
 
         window.dispatchEvent(new Event('storage'));
         window.dispatchEvent(new CustomEvent('sf_queue_updated'));
         if (typeof Toast !== 'undefined') {
-            Toast.success('Seluruh nomor antrian hari ini berhasil di-reset ke 0!', 'Reset Antrian Sukses');
+            Toast.success('Seluruh data antrian, resep, dan transaksi berhasil dibersihkan!', 'Reset Data Sukses');
         }
     }
 

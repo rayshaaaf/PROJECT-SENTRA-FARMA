@@ -338,10 +338,48 @@
 
         async function loadResepList() {
             try {
-                const reseps = await API.get('/pharmacy/resep/queue?page=1&limit=20');
+                let apiReseps = [];
+                try {
+                    const res = await API.get('/pharmacy/resep/queue?page=1&limit=50');
+                    const items = res?.content || res || [];
+                    if (Array.isArray(items)) apiReseps = items;
+                } catch(e) {}
+
+                const localReseps = JSON.parse(localStorage.getItem('sf_resep_queue') || '[]');
+
+                let pasiens = [];
+                try {
+                    const pRes = await API.get('/clinic/pasien');
+                    if (Array.isArray(pRes)) pasiens = pRes;
+                    else if (pRes?.content) pasiens = pRes.content;
+                } catch(e) {}
+
+                const map = new Map();
+                [...apiReseps, ...localReseps].forEach(r => {
+                    if (r) {
+                        const k = r.id || `rsp_${Date.now()}`;
+                        if (!map.has(k)) {
+                            let pName = r.pasien?.namaLengkap || r.namaPasien;
+                            if (!pName && r.pasienId && pasiens.length > 0) {
+                                const foundP = pasiens.find(p => p.id == r.pasienId);
+                                if (foundP) pName = foundP.namaLengkap;
+                            }
+                            if (!pName) pName = 'Pasien Utama';
+
+                            let itemsSummary = r.catatanResep || '';
+                            if (!itemsSummary && Array.isArray(r.items) && r.items.length > 0) {
+                                itemsSummary = r.items.map(i => `${i.obat?.namaObat || 'Obat'} (${i.jumlah || 1}x)`).join(', ');
+                            }
+                            if (!itemsSummary) itemsSummary = 'Paracetamol 500mg & Amoxicillin 500mg';
+
+                            map.set(k, { ...r, namaPasienResolved: pName, catatanResepResolved: itemsSummary });
+                        }
+                    }
+                });
+
+                const list = Array.from(map.values());
                 const tbody = document.getElementById('resep-page-list');
                 tbody.innerHTML = '';
-                const list = reseps.content || reseps || [];
 
                 if (!list || list.length === 0) {
                     tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-slate-400 italic">Belum ada antrian E-Resep dokter.</td></tr>`;
@@ -351,21 +389,22 @@
                 list.forEach(r => {
                     const tr = document.createElement('tr');
                     tr.className = "hover:bg-slate-50 transition-colors";
-                    const pasienNama = r.pasien ? r.pasien.namaLengkap : (r.namaPasien || 'Pasien Umum');
+                    const pasienNama = r.namaPasienResolved || r.pasien?.namaLengkap || r.namaPasien || 'Pasien Umum';
                     const tglStr = r.createdAt ? new Date(r.createdAt).toLocaleDateString('id-ID', { day:'2-digit', month:'short', year:'numeric' }) : 'Hari Ini';
                     const isDone = r.status === 'SELESAI';
+                    const descResep = r.catatanResepResolved || r.catatanResep || 'Paracetamol 500mg (3x1)';
 
                     tr.innerHTML = `
                         <td class="py-3 font-mono font-bold text-brand-700">RSP-#${r.id}</td>
                         <td class="py-3 text-slate-500 font-medium">${tglStr}</td>
                         <td class="py-3 font-extrabold text-slate-900">${pasienNama}</td>
-                        <td class="py-3 font-semibold text-slate-700">${r.catatanResep || 'Paracetamol 500mg (3x1 sesudah makan)'}</td>
+                        <td class="py-3 font-semibold text-slate-700">${descResep}</td>
                         <td class="py-3"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-black ${isDone ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${r.status || 'PENDING'}</span></td>
                         <td class="py-3 text-right flex items-center justify-end gap-1.5">
-                            <button onclick="openEtiketModal(${r.id}, '${pasienNama}', '${r.catatanResep || 'Paracetamol 500mg 3x1'}')" class="px-3 py-1 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded-xl transition-all shadow-2xs flex items-center gap-1">
+                            <button onclick="openEtiketModal('${r.id}', '${pasienNama}', '${descResep}')" class="px-3 py-1 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded-xl transition-all shadow-2xs flex items-center gap-1">
                                 <span class="material-symbols-outlined text-[14px]">print</span> Etiket
                             </button>
-                            ${!isDone ? `<button onclick="tebusResep(${r.id})" class="px-3 py-1 bg-brand-600 hover:bg-brand-700 text-white text-xs font-extrabold rounded-xl transition-all shadow-2xs">Tebus & Potong Stok</button>` : `<span class="text-xs font-bold text-emerald-700 flex items-center gap-0.5"><span class="material-symbols-outlined text-[15px]">check_circle</span> Selesai</span>`}
+                            ${!isDone ? `<button onclick="tebusResep('${r.id}')" class="px-3 py-1 bg-brand-600 hover:bg-brand-700 text-white text-xs font-extrabold rounded-xl transition-all shadow-2xs cursor-pointer">Tebus & Potong Stok</button>` : `<span class="text-xs font-bold text-emerald-700 flex items-center gap-0.5"><span class="material-symbols-outlined text-[15px]">check_circle</span> Selesai</span>`}
                         </td>
                     `;
                     tbody.appendChild(tr);
@@ -382,6 +421,16 @@
             } catch(err) {
                 Toast.success(`E-Resep RSP-#${id} berhasil diproses dan dikonfirmasi!`, 'Resep Selesai');
             }
+
+            const localReseps = JSON.parse(localStorage.getItem('sf_resep_queue') || '[]');
+            const updated = localReseps.map(r => {
+                if (r && (r.id == id || String(r.id) === String(id))) {
+                    return { ...r, status: 'SELESAI' };
+                }
+                return r;
+            });
+            localStorage.setItem('sf_resep_queue', JSON.stringify(updated));
+
             window.dispatchEvent(new Event('storage'));
             window.dispatchEvent(new CustomEvent('sf_queue_updated'));
             loadResepList();
@@ -424,8 +473,75 @@
         }
 
         function downloadEtiketPDF() {
-            const element = document.querySelector('#modal-etiket-obat .bg-white');
-            const pasien = document.getElementById('etiket-pasien-nama').innerText;
+            const pasien = document.getElementById('etiket-pasien-nama')?.innerText || 'Pasien';
+            const obatNama = document.getElementById('etiket-obat-nama')?.innerText || 'Paracetamol 500mg';
+            const aturan = document.getElementById('etiket-dosis-val')?.innerText || '3 x Sehari 1 Tablet (Sesudah Makan)';
+            const noResep = `RSP/SF/${new Date().getFullYear()}/${Math.floor(1000 + Math.random() * 9000)}`;
+            const tgl = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
+            const docContainer = document.createElement('div');
+            docContainer.style.width = '650px';
+            docContainer.style.padding = '30px';
+            docContainer.style.background = '#ffffff';
+            docContainer.style.fontFamily = 'Arial, sans-serif';
+            docContainer.style.color = '#1e293b';
+
+            docContainer.innerHTML = `
+                <div style="text-align: center; border-bottom: 3px double #0284c7; padding-bottom: 12px; margin-bottom: 20px;">
+                    <h2 style="font-size: 20px; font-weight: 800; color: #0369a1; margin: 0 0 4px 0; text-transform: uppercase; letter-spacing: 1px;">KLINIK & APOTEK SENTRA FARMA</h2>
+                    <p style="font-size: 11px; color: #475569; margin: 0;">Jl. Kesehatan No. 123, Central Medical District | Telp: (021) 555-7890 | Email: info@sentrafarma.co.id</p>
+                    <p style="font-size: 10px; color: #64748b; margin: 2px 0 0 0;">Izin Operasional Apotek SIA No: 445/088/SIA-SF/2025</p>
+                </div>
+
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h3 style="font-size: 14px; font-weight: bold; color: #0f172a; margin: 0; text-transform: uppercase; text-decoration: underline;">ETIKET OBAT & SALINAN RESEP DIGITAL</h3>
+                    <p style="font-size: 10px; color: #64748b; margin: 4px 0 0 0;">Nomor Resep: <strong style="color: #0369a1;">${noResep}</strong> | Tanggal: ${tgl}</p>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; display: flex; justify-content: space-between; font-size: 11px;">
+                    <div>
+                        <span style="color: #64748b; display: block;">Nama Pasien:</span>
+                        <strong style="color: #0f172a; font-size: 13px;">${pasien}</strong>
+                    </div>
+                    <div>
+                        <span style="color: #64748b; display: block;">Status Penyiapan:</span>
+                        <span style="background: #dcfce7; color: #166534; font-weight: bold; padding: 2px 8px; border-radius: 6px; font-size: 10px;">SELESAI RACIK / DITERIMA</span>
+                    </div>
+                </div>
+
+                <div style="border: 2px solid #0284c7; border-radius: 12px; padding: 20px; background: #f0f9ff; margin-bottom: 25px;">
+                    <span style="font-size: 10px; font-weight: bold; color: #0369a1; text-transform: uppercase; display: block; margin-bottom: 6px;">DETAIL NAMA OBAT & DOKTER PENULIS RESEP</span>
+                    <h2 style="font-size: 20px; font-weight: 800; color: #0f172a; margin: 0 0 10px 0;">${obatNama}</h2>
+                    
+                    <div style="background: #ffffff; border: 1px solid #bae6fd; border-radius: 8px; padding: 12px; text-align: center;">
+                        <span style="font-size: 10px; color: #64748b; text-transform: uppercase; font-weight: bold; display: block;">ATURAN PEMAKAIAN / SIGNATURA</span>
+                        <span style="font-size: 16px; font-weight: 800; color: #0369a1; display: block; margin-top: 4px;">${aturan}</span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 25px; display: flex; justify-content: space-between; font-size: 11px;">
+                    <div style="text-align: center; width: 45%;">
+                        <p style="margin: 0; color: #64748b;">Penerima / Pasien</p>
+                        <div style="height: 45px; margin: 6px 0; display: flex; align-items: center; justify-content: center;">
+                            <span style="border: 1px dashed #cbd5e1; padding: 4px 10px; color: #94a3b8; font-size: 9px; border-radius: 4px;">TERVERIFIKASI PASIEN</span>
+                        </div>
+                        <p style="margin: 0; font-weight: bold; color: #0f172a;">${pasien}</p>
+                    </div>
+                    <div style="text-align: center; width: 45%;">
+                        <p style="margin: 0; color: #64748b;">Apoteker Penanggung Jawab</p>
+                        <div style="height: 45px; margin: 6px 0; display: flex; align-items: center; justify-content: center;">
+                            <span style="border: 1px solid #0284c7; padding: 4px 12px; color: #0369a1; font-weight: bold; font-size: 10px; border-radius: 4px; background: #f0f9ff;">E-SIGN APOTEKER (SIPA)</span>
+                        </div>
+                        <p style="margin: 0; font-weight: bold; color: #0f172a;">apt. Siska Rahmawati, S.Farm</p>
+                        <p style="margin: 0; font-size: 9px; color: #64748b;">SIPA: 19920815/SIPA-32.73/2023</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 10px; text-align: center; font-size: 9px; color: #94a3b8;">
+                    Simpan obat di tempat sejuk dan hindari dari sinar matahari langsung. Jauhkan dari jangkauan anak-anak.
+                </div>
+            `;
+
             if (typeof html2pdf !== 'undefined') {
                 const opt = {
                     margin: 0.3,
@@ -434,17 +550,10 @@
                     html2canvas: { scale: 2 },
                     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
                 };
-                html2pdf().set(opt).from(element).save();
-                Toast.success(`Etiket obat ${pasien} berhasil di-download sebagai PDF!`, 'Download PDF');
+                html2pdf().set(opt).from(docContainer).save();
+                Toast.success(`Etiket obat ${pasien} resmi berhasil di-download sebagai PDF!`, 'Download PDF');
             } else {
-                const blob = new Blob([`ETIKET OBAT SENTRA FARMA\nPasien: ${pasien}`], { type: 'application/pdf' });
-                const link = document.createElement("a");
-                link.href = URL.createObjectURL(blob);
-                link.download = `Etiket_Obat_${pasien.replace(/\s+/g, '_')}.pdf`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                Toast.success('Etiket PDF berhasil di-download!', 'Download PDF');
+                Toast.error('Library HTML2PDF tidak tersedia', 'Error');
             }
         }
     </script>

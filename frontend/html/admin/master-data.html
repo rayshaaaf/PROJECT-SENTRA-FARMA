@@ -318,7 +318,18 @@
         async function loadPoliMaster() {
             try {
                 const res = await API.get('/clinic/poliklinik');
-                poliList = Array.isArray(res) ? res : (res.content || []);
+                const items = Array.isArray(res) ? res : (res.content || []);
+                if (items && items.length > 0) {
+                    poliList = items;
+                } else {
+                    poliList = [
+                        { id: 1, namaPoli: 'Poli Umum', deskripsi: 'Pelayanan kesehatan umum & berobat jalan' },
+                        { id: 2, namaPoli: 'Poli Gigi & Mulut', deskripsi: 'Pemeriksaan & perawatan karang gigi' },
+                        { id: 3, namaPoli: 'Poli KIA & KB', deskripsi: 'Pemeriksaan kehamilan ANC & KB' },
+                        { id: 4, namaPoli: 'Poli Anak', deskripsi: 'Konsultasi & imunisasi tumbuh kembang' },
+                        { id: 5, namaPoli: 'Unit Emergency', deskripsi: 'Pertolongan gawat darurat 24 jam' }
+                    ];
+                }
                 renderPoliGrid();
             } catch(e) {
                 poliList = [
@@ -339,7 +350,7 @@
 
             poliList.forEach((p, idx) => {
                 const poliNum = idx + 1;
-                const cleanName = (p.namaPoli || '').replace(/^Poli\s*\d*\s*\(?/i, '').replace(/\)$/, '').trim();
+                const cleanName = (p.namaPoli || '').trim();
                 const card = document.createElement('div');
                 card.className = "p-3 bg-slate-50 border border-slate-200/80 rounded-2xl space-y-1.5 hover:bg-white transition-all shadow-2xs";
                 card.innerHTML = `
@@ -348,7 +359,7 @@
                         <span class="px-1.5 py-0.2 bg-emerald-100 text-emerald-800 font-extrabold text-[8px] rounded uppercase">OPERASIONAL</span>
                     </div>
                     <div>
-                        <h4 class="font-black text-slate-900 text-xs truncate">Poli ${poliNum} — ${cleanName}</h4>
+                        <h4 class="font-black text-slate-900 text-xs truncate">${cleanName}</h4>
                         <p class="text-[9.5px] text-slate-500 font-medium truncate">${p.deskripsi || 'Layanan Klinik Sentra Farma'}</p>
                     </div>
                 `;
@@ -403,7 +414,7 @@
 
             try {
                 await API.post('/clinic/poliklinik', payload);
-                Toast.success(`Poliklinik ${namaPoli} berhasil ditambahkan!`, 'Poliklinik Dibuat');
+                Toast.success(`Poliklinik ${namaPoli} berhasil ditambahkan ke database!`, 'Poliklinik Dibuat');
                 closeModalCreatePoli();
                 await loadPoliMaster();
             } catch(e) {

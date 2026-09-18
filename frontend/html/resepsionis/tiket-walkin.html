@@ -418,8 +418,75 @@
         }
 
         function downloadTiketPDF() {
-            const element = document.querySelector('#modal-tiket-fisik .bg-white');
-            const noAntrian = document.getElementById('tiket-nomor-code').innerText;
+            const noAntrian = document.getElementById('tiket-nomor-code')?.innerText || 'A-001';
+            const namaPasien = document.getElementById('tiket-pasien-nama')?.innerText || 'Pasien';
+            const namaPoli = document.getElementById('tiket-poli-nama')?.innerText || 'Poliklinik Umum';
+            const dokterPoli = document.getElementById('tiket-dokter-nama')?.innerText || 'Dokter Spesialis';
+            const estimasiPanggil = document.getElementById('tiket-waktu-estimasi')?.innerText || '10:00 WIB';
+
+            const docContainer = document.createElement('div');
+            docContainer.style.width = '650px';
+            docContainer.style.padding = '30px';
+            docContainer.style.background = '#ffffff';
+            docContainer.style.fontFamily = 'Arial, sans-serif';
+            docContainer.style.color = '#1e293b';
+
+            docContainer.innerHTML = `
+                <div style="text-align: center; border-bottom: 3px double #0284c7; padding-bottom: 12px; margin-bottom: 20px;">
+                    <h2 style="font-size: 20px; font-weight: 800; color: #0369a1; margin: 0 0 4px 0; text-transform: uppercase; letter-spacing: 1px;">KLINIK & APOTEK SENTRA FARMA</h2>
+                    <p style="font-size: 11px; color: #475569; margin: 0;">Jl. Kesehatan No. 123, Central Medical District | Telp: (021) 555-7890 | Email: info@sentrafarma.co.id</p>
+                    <p style="font-size: 10px; color: #64748b; margin: 2px 0 0 0;">Layanan Pendaftaran Walk-in & Online Pasien</p>
+                </div>
+
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h3 style="font-size: 14px; font-weight: bold; color: #0f172a; margin: 0; text-transform: uppercase; text-decoration: underline;">TIKET ANTRIAN PENDAFTARAN PASIEN</h3>
+                    <p style="font-size: 10px; color: #64748b; margin: 4px 0 0 0;">Cetak Tanggal: ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })} | Jam: ${new Date().toLocaleTimeString('id-ID')}</p>
+                </div>
+
+                <div style="background: #f0f9ff; border: 2px solid #0284c7; border-radius: 12px; padding: 25px; text-align: center; margin-bottom: 20px;">
+                    <span style="font-size: 11px; font-weight: bold; color: #0369a1; text-transform: uppercase; tracking-wide: 1px; display: block;">NOMOR ANTRIAN ANDA</span>
+                    <h1 style="font-size: 54px; font-weight: 900; color: #0369a1; margin: 8px 0; letter-spacing: 2px;">${noAntrian}</h1>
+                    <p style="font-size: 12px; font-weight: bold; color: #0f172a; margin: 0;">${namaPoli}</p>
+                    <p style="font-size: 11px; color: #64748b; margin: 2px 0 0 0;">DPJP: ${dokterPoli}</p>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; font-size: 11px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                        <span style="color: #64748b;">Nama Pasien:</span>
+                        <strong style="color: #0f172a; font-size: 12px;">${namaPasien}</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                        <span style="color: #64748b;">Estimasi Jam Panggilan:</span>
+                        <span style="color: #0369a1; font-weight: bold;">${estimasiPanggil}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: #64748b;">Lokasi Ruang Tunggu:</span>
+                        <span style="color: #166534; font-weight: bold;">Lantai 1 - Counter Poliklinik</span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 25px; display: flex; justify-content: space-between; font-size: 11px;">
+                    <div style="text-align: center; width: 45%;">
+                        <p style="margin: 0; color: #64748b;">Pasien / Penanggung Jawab</p>
+                        <div style="height: 40px; margin: 6px 0; display: flex; align-items: center; justify-content: center;">
+                            <span style="border: 1px dashed #cbd5e1; padding: 4px 8px; color: #94a3b8; font-size: 9px; border-radius: 4px;">KARTU TIKET ASLI</span>
+                        </div>
+                        <p style="margin: 0; font-weight: bold; color: #0f172a;">${namaPasien}</p>
+                    </div>
+                    <div style="text-align: center; width: 45%;">
+                        <p style="margin: 0; color: #64748b;">Petugas Resepsionis</p>
+                        <div style="height: 40px; margin: 6px 0; display: flex; align-items: center; justify-content: center;">
+                            <span style="border: 1px solid #0284c7; padding: 4px 10px; color: #0369a1; font-weight: bold; font-size: 9px; border-radius: 4px; background: #f0f9ff;">OFFICIAL COUNTER STAMP</span>
+                        </div>
+                        <p style="margin: 0; font-weight: bold; color: #0f172a;">Front Desk Sentra Farma</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 10px; text-align: center; font-size: 9px; color: #94a3b8;">
+                    Harap memperhatikan layar monitor pemanggilan antrian di ruang tunggu. Tiket ini wajib ditunjukkan saat dipanggil.
+                </div>
+            `;
+
             if (typeof html2pdf !== 'undefined') {
                 const opt = {
                     margin: 0.3,
@@ -428,17 +495,10 @@
                     html2canvas: { scale: 2 },
                     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
                 };
-                html2pdf().set(opt).from(element).save();
-                Toast.success(`Tiket Antrian ${noAntrian} berhasil di-download sebagai PDF!`, 'Download PDF');
+                html2pdf().set(opt).from(docContainer).save();
+                Toast.success(`Tiket Antrian ${noAntrian} resmi berhasil di-download sebagai PDF!`, 'Download PDF');
             } else {
-                const blob = new Blob([`TIKET ANTRIAN SENTRA FARMA\nNomor: ${noAntrian}`], { type: 'application/pdf' });
-                const link = document.createElement("a");
-                link.href = URL.createObjectURL(blob);
-                link.download = `Tiket_Antrian_${noAntrian}.pdf`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                Toast.success('Tiket PDF berhasil di-download!', 'Download PDF');
+                Toast.error('Library HTML2PDF tidak tersedia', 'Error');
             }
         }
     </script>

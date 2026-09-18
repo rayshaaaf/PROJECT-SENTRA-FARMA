@@ -414,8 +414,116 @@
         }
 
         function downloadStrukPOSPDF() {
-            const element = document.querySelector('#modal-struk-kasir .bg-white');
-            const noNota = document.getElementById('struk-pos-no').innerText;
+            const noNota = document.getElementById('struk-pos-no')?.innerText || '#POS-1001';
+            const tglNota = document.getElementById('struk-pos-tgl')?.innerText || new Date().toLocaleString('id-ID');
+            const totalBelanja = document.getElementById('struk-pos-total')?.innerText || 'Rp 0';
+            const tunai = document.getElementById('struk-pos-bayar')?.innerText || totalBelanja;
+            const kembalian = document.getElementById('struk-pos-kembali')?.innerText || 'Rp 0';
+
+            const itemsContainer = document.getElementById('struk-pos-items');
+            const itemNodes = itemsContainer ? Array.from(itemsContainer.children) : [];
+
+            let rowsHtml = '';
+            itemNodes.forEach((node, idx) => {
+                const name = node.querySelector('.font-bold')?.innerText || 'Obat';
+                const sub = node.querySelector('.text-slate-500')?.innerText || '1 x Rp 0';
+                const total = node.querySelector('.font-extrabold')?.innerText || 'Rp 0';
+
+                rowsHtml += `
+                    <tr style="border-bottom: 1px solid #e2e8f0; font-size: 11px;">
+                        <td style="padding: 8px; text-align: center; color: #64748b;">${idx + 1}</td>
+                        <td style="padding: 8px; color: #0f172a; font-weight: bold;">${name}</td>
+                        <td style="padding: 8px; color: #64748b;">${sub}</td>
+                        <td style="padding: 8px; text-align: right; color: #0369a1; font-weight: bold;">${total}</td>
+                    </tr>
+                `;
+            });
+
+            if (!rowsHtml) {
+                rowsHtml = `<tr><td colspan="4" style="padding: 15px; text-align: center; color: #94a3b8; font-style: italic;">Item belanja tidak ditemukan.</td></tr>`;
+            }
+
+            const docContainer = document.createElement('div');
+            docContainer.style.width = '650px';
+            docContainer.style.padding = '30px';
+            docContainer.style.background = '#ffffff';
+            docContainer.style.fontFamily = 'Arial, sans-serif';
+            docContainer.style.color = '#1e293b';
+
+            docContainer.innerHTML = `
+                <div style="text-align: center; border-bottom: 3px double #0284c7; padding-bottom: 12px; margin-bottom: 20px;">
+                    <h2 style="font-size: 20px; font-weight: 800; color: #0369a1; margin: 0 0 4px 0; text-transform: uppercase; letter-spacing: 1px;">KLINIK & APOTEK SENTRA FARMA</h2>
+                    <p style="font-size: 11px; color: #475569; margin: 0;">Jl. Kesehatan No. 123, Central Medical District | Telp: (021) 555-7890 | Email: info@sentrafarma.co.id</p>
+                    <p style="font-size: 10px; color: #64748b; margin: 2px 0 0 0;">Izin Operasional Apotek SIA No: 445/088/SIA-SF/2025</p>
+                </div>
+
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h3 style="font-size: 14px; font-weight: bold; color: #0f172a; margin: 0; text-transform: uppercase; text-decoration: underline;">NOTA KUITANSI PEMBAYARAN KASIR</h3>
+                    <p style="font-size: 10px; color: #64748b; margin: 4px 0 0 0;">No. Nota: <strong style="color: #0369a1;">${noNota}</strong> | Tanggal: ${tglNota}</p>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; display: flex; justify-content: space-between; font-size: 11px;">
+                    <div>
+                        <span style="color: #64748b; display: block;">Kasir Melayani:</span>
+                        <strong style="color: #0f172a; font-size: 12px;">Kasir Utama Apotek</strong>
+                    </div>
+                    <div>
+                        <span style="color: #64748b; display: block;">Status Pembayaran:</span>
+                        <span style="background: #dcfce7; color: #166534; font-weight: bold; padding: 2px 8px; border-radius: 6px; font-size: 10px;">LUNAS (PAID)</span>
+                    </div>
+                </div>
+
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                    <thead>
+                        <tr style="background: #f0f9ff; border-top: 2px solid #0284c7; border-bottom: 2px solid #0284c7; font-size: 10px; text-transform: uppercase; color: #0369a1;">
+                            <th style="padding: 8px; text-align: center; width: 40px;">No</th>
+                            <th style="padding: 8px; text-align: left;">Nama Produk / Obat</th>
+                            <th style="padding: 8px; text-align: left;">Qty x Harga</th>
+                            <th style="padding: 8px; text-align: right;">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rowsHtml}
+                    </tbody>
+                </table>
+
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 14px; margin-bottom: 25px; font-size: 12px;">
+                    <div style="display: flex; justify-content: space-between; font-weight: bold; color: #0f172a; margin-bottom: 4px;">
+                        <span>TOTAL BELANJA:</span>
+                        <span style="color: #0369a1; font-size: 14px;">${totalBelanja}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; color: #64748b; font-size: 11px; margin-bottom: 4px;">
+                        <span>UANG DITERIMA:</span>
+                        <span>${tunai}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; color: #166534; font-weight: bold; font-size: 11px;">
+                        <span>KEMBALIAN:</span>
+                        <span>${kembalian}</span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 25px; display: flex; justify-content: space-between; font-size: 11px;">
+                    <div style="text-align: center; width: 45%;">
+                        <p style="margin: 0; color: #64748b;">Pelanggan / Pembeli</p>
+                        <div style="height: 45px; margin: 6px 0; display: flex; align-items: center; justify-content: center;">
+                            <span style="border: 1px dashed #cbd5e1; padding: 4px 10px; color: #94a3b8; font-size: 9px; border-radius: 4px;">KASIR TRANSAKSI</span>
+                        </div>
+                        <p style="margin: 0; font-weight: bold; color: #0f172a;">Pelanggan Umum</p>
+                    </div>
+                    <div style="text-align: center; width: 45%;">
+                        <p style="margin: 0; color: #64748b;">Kasir Penanggung Jawab</p>
+                        <div style="height: 45px; margin: 6px 0; display: flex; align-items: center; justify-content: center;">
+                            <span style="border: 1px solid #166534; padding: 4px 12px; color: #166534; font-weight: bold; font-size: 10px; border-radius: 4px; background: #dcfce7;">STAMP LUNAS POS</span>
+                        </div>
+                        <p style="margin: 0; font-weight: bold; color: #0f172a;">Apotek Sentra Farma</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 10px; text-align: center; font-size: 9px; color: #94a3b8;">
+                    Terima kasih telah berbelanja obat di Apotek Sentra Farma. Barang yang sudah dibeli tidak dapat ditukar/dikembalikan.
+                </div>
+            `;
+
             if (typeof html2pdf !== 'undefined') {
                 const opt = {
                     margin: 0.3,
@@ -424,17 +532,10 @@
                     html2canvas: { scale: 2 },
                     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
                 };
-                html2pdf().set(opt).from(element).save();
-                Toast.success('Struk nota kasir berhasil di-download sebagai PDF!', 'Download PDF');
+                html2pdf().set(opt).from(docContainer).save();
+                Toast.success('Struk nota kasir resmi berhasil di-download sebagai PDF!', 'Download PDF');
             } else {
-                const blob = new Blob([`STRUK NOTA KASIR SENTRA FARMA\nNo: ${noNota}`], { type: 'application/pdf' });
-                const link = document.createElement("a");
-                link.href = URL.createObjectURL(blob);
-                link.download = `Struk_Kasir_${noNota.replace(/#/g, '')}.pdf`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                Toast.success('Struk PDF berhasil di-download!', 'Download PDF');
+                Toast.error('Library HTML2PDF tidak tersedia', 'Error');
             }
         }
     </script>

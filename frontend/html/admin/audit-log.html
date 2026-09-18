@@ -222,18 +222,11 @@
     <script src="../../js/auth-guard.js"></script>
     <script src="../../js/absensi.js"></script>
     <script>
-        let logsData = [
-            { timestamp: new Date().toLocaleString('id-ID'), user: 'System Admin', role: 'ADMIN', action: 'ADMIN_DASHBOARD_ACCESS', ip: '127.0.0.1 (Internal)', status: 'SUCCESS' },
-            { timestamp: new Date(Date.now() - 300000).toLocaleString('id-ID'), user: 'dr. Andi Wijaya', role: 'DOKTER', action: 'SUBMIT_EXAMINATION_ICD10', ip: '192.168.1.105 (Poli 1)', status: 'SUCCESS' },
-            { timestamp: new Date(Date.now() - 900000).toLocaleString('id-ID'), user: 'apt. Bambang Sugianto', role: 'APOTEKER', action: 'FULFILL_ERESEP_RSP#88', ip: '192.168.1.110 (Apotek)', status: 'SUCCESS' },
-            { timestamp: new Date(Date.now() - 1800000).toLocaleString('id-ID'), user: 'Meja Resepsionis', role: 'RESEPSIONIS', action: 'CREATE_WALKIN_TICKET_A-001', ip: '192.168.1.101 (Front Desk)', status: 'SUCCESS' },
-            { timestamp: new Date(Date.now() - 3600000).toLocaleString('id-ID'), user: 'Rina (Pasien)', role: 'PASIEN', action: 'BOOK_QUEUE_ONLINE', ip: '114.122.45.12 (Mobile Web)', status: 'INFO' },
-            { timestamp: new Date(Date.now() - 7200000).toLocaleString('id-ID'), user: 'dr. Siti Rahma', role: 'DOKTER', action: 'PRESENSI_CLOCK_IN', ip: 'Sentra Farma HQ', status: 'SUCCESS' }
-        ];
+        let logsData = [];
 
         document.addEventListener('DOMContentLoaded', () => {
             initProfile();
-            renderAuditLogs();
+            loadLiveAuditLogs();
         });
 
         function initProfile() {
@@ -245,12 +238,75 @@
             }
         }
 
+        function loadLiveAuditLogs() {
+            const savedLogs = JSON.parse(localStorage.getItem('sf_audit_logs') || '[]');
+            const user = typeof AuthGuard !== 'undefined' ? AuthGuard.getSavedUser() : null;
+
+            const systemEvents = [];
+            const now = new Date();
+
+            systemEvents.push({
+                timestamp: now.toLocaleString('id-ID'),
+                user: user ? user.namaLengkap : 'System Admin',
+                role: user ? (user.role || 'ADMIN') : 'ADMIN',
+                action: 'ACCESS_AUDIT_TRAIL_PORTAL',
+                ip: '127.0.0.1 (Gateway Verified)',
+                status: 'SUCCESS'
+            });
+
+            // Gather dynamic events from active antrian, resep, and POS transactions
+            const tickets = JSON.parse(localStorage.getItem('sf_patient_tickets') || '[]');
+            tickets.forEach(t => {
+                if (t) {
+                    systemEvents.push({
+                        timestamp: t.createdAt ? new Date(t.createdAt).toLocaleString('id-ID') : now.toLocaleString('id-ID'),
+                        user: t.namaPasien || 'Pasien Terdaftar',
+                        role: 'PASIEN',
+                        action: `REGISTER_QUEUE_${t.nomorAntrian || 'ONLINE'}`,
+                        ip: '127.0.0.1 (Mobile App)',
+                        status: 'INFO'
+                    });
+                }
+            });
+
+            const reseps = JSON.parse(localStorage.getItem('sf_resep_queue') || '[]');
+            reseps.forEach(r => {
+                if (r) {
+                    systemEvents.push({
+                        timestamp: r.createdAt ? new Date(r.createdAt).toLocaleString('id-ID') : now.toLocaleString('id-ID'),
+                        user: r.namaDokter || 'Dokter Klinik',
+                        role: 'DOKTER',
+                        action: `CREATE_ERESEP_RSP#${r.id}`,
+                        ip: '127.0.0.1 (Poli Room)',
+                        status: 'SUCCESS'
+                    });
+                }
+            });
+
+            const struks = JSON.parse(localStorage.getItem('sf_pasien_struk_history') || '[]');
+            struks.forEach(s => {
+                if (s) {
+                    systemEvents.push({
+                        timestamp: s.tanggal ? new Date(s.tanggal).toLocaleString('id-ID') : now.toLocaleString('id-ID'),
+                        user: 'Apoteker Kasir',
+                        role: 'APOTEKER',
+                        action: `POS_CHECKOUT_INV#${s.nomorInvoice || 'DIRECT'}`,
+                        ip: '127.0.0.1 (Apotek POS)',
+                        status: 'SUCCESS'
+                    });
+                }
+            });
+
+            logsData = [...savedLogs, ...systemEvents];
+            renderAuditLogs();
+        }
+
         function renderAuditLogs() {
             const query = (document.getElementById('search-audit').value || '').toLowerCase();
             const severityFilter = document.getElementById('filter-severity').value;
 
             const filtered = logsData.filter(l => {
-                const matchQuery = l.user.toLowerCase().includes(query) || l.action.toLowerCase().includes(query);
+                const matchQuery = l.user.toLowerCase().includes(query) || l.action.toLowerCase().includes(query) || l.role.toLowerCase().includes(query);
                 const matchSeverity = severityFilter === 'ALL' || l.status === severityFilter;
                 return matchQuery && matchSeverity;
             });

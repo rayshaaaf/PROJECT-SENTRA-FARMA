@@ -70,6 +70,14 @@ public class PharmacyServiceImpl implements PharmacyService {
     @Override
     @Transactional
     public Obat saveObat(Obat obat) {
+        if (obat.getKategori() != null && obat.getKategori().getId() != null) {
+            kategoriRepository.findById(obat.getKategori().getId()).ifPresent(obat::setKategori);
+        }
+        if (obat.getKategori() == null || obat.getKategori().getId() == null) {
+            KategoriObat defaultKat = kategoriRepository.findAll().stream().findFirst()
+                    .orElseGet(() -> kategoriRepository.save(KategoriObat.builder().namaKategori("Obat Bebas").deskripsi("Obat Bebas").build()));
+            obat.setKategori(defaultKat);
+        }
         return obatRepository.save(obat);
     }
 
@@ -77,14 +85,33 @@ public class PharmacyServiceImpl implements PharmacyService {
     @Transactional
     public Obat updateObat(Long id, Obat updated) {
         Obat existing = getObatById(id);
-        existing.setNamaObat(updated.getNamaObat());
-        existing.setKategori(updated.getKategori());
-        existing.setSatuan(updated.getSatuan());
-        existing.setHarga(updated.getHarga());
-        existing.setStok(updated.getStok());
-        existing.setMinStok(updated.getMinStok());
-        existing.setTanggalKadaluarsa(updated.getTanggalKadaluarsa());
-        existing.setFotoUrl(updated.getFotoUrl());
+        if (updated.getNamaObat() != null) {
+            existing.setNamaObat(updated.getNamaObat());
+        }
+        if (updated.getKodeObat() != null) {
+            existing.setKodeObat(updated.getKodeObat());
+        }
+        if (updated.getKategori() != null && updated.getKategori().getId() != null) {
+            kategoriRepository.findById(updated.getKategori().getId()).ifPresent(existing::setKategori);
+        }
+        if (updated.getSatuan() != null) {
+            existing.setSatuan(updated.getSatuan());
+        }
+        if (updated.getHarga() != null) {
+            existing.setHarga(updated.getHarga());
+        }
+        if (updated.getStok() != null) {
+            existing.setStok(updated.getStok());
+        }
+        if (updated.getMinStok() != null) {
+            existing.setMinStok(updated.getMinStok());
+        }
+        if (updated.getTanggalKadaluarsa() != null) {
+            existing.setTanggalKadaluarsa(updated.getTanggalKadaluarsa());
+        }
+        if (updated.getFotoUrl() != null) {
+            existing.setFotoUrl(updated.getFotoUrl());
+        }
         return obatRepository.save(existing);
     }
 

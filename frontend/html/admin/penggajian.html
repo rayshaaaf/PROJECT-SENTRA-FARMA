@@ -1064,9 +1064,109 @@
         }
 
         function downloadSlipPDF() {
-            const element = document.getElementById('modal-slip-content');
-            const name = document.getElementById('slip-nama').innerText;
+            const name = document.getElementById('slip-nama')?.innerText || 'Karyawan';
+            const role = document.getElementById('slip-role')?.innerText || 'Pegawai';
             const selectedMonth = getSelectedMonth();
+            const gajipok = document.getElementById('slip-gaji-pokok')?.innerText || 'Rp 0';
+            const tunjmedis = document.getElementById('slip-tunjangan-medis')?.innerText || 'Rp 0';
+            const tunjjab = document.getElementById('slip-tunjangan-jabatan')?.innerText || 'Rp 0';
+            const potBPJS = document.getElementById('slip-potongan-bpjs')?.innerText || 'Rp 0';
+            const potPPH = document.getElementById('slip-potongan-pph')?.innerText || 'Rp 0';
+            const totalGaji = document.getElementById('slip-total-gaji')?.innerText || 'Rp 0';
+
+            const docContainer = document.createElement('div');
+            docContainer.style.width = '750px';
+            docContainer.style.padding = '30px';
+            docContainer.style.background = '#ffffff';
+            docContainer.style.fontFamily = 'Arial, sans-serif';
+            docContainer.style.color = '#1e293b';
+
+            docContainer.innerHTML = `
+                <div style="text-align: center; border-bottom: 3px double #0284c7; padding-bottom: 12px; margin-bottom: 20px;">
+                    <h2 style="font-size: 20px; font-weight: 800; color: #0369a1; margin: 0 0 4px 0; text-transform: uppercase; letter-spacing: 1px;">KLINIK & APOTEK SENTRA FARMA</h2>
+                    <p style="font-size: 11px; color: #475569; margin: 0;">Jl. Kesehatan No. 123, Central Medical District | Telp: (021) 555-7890 | Email: hr@sentrafarma.co.id</p>
+                    <p style="font-size: 10px; color: #64748b; margin: 2px 0 0 0;">Departemen Keuangan & HRD Management</p>
+                </div>
+
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h3 style="font-size: 14px; font-weight: bold; color: #0f172a; margin: 0; text-transform: uppercase; text-decoration: underline;">SLIP GAJI RESMI KARYAWAN</h3>
+                    <p style="font-size: 10px; color: #64748b; margin: 4px 0 0 0;">Periode Penggajian: <strong style="color: #0369a1;">${selectedMonth}</strong></p>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; display: flex; justify-content: space-between; font-size: 11px;">
+                    <div>
+                        <span style="color: #64748b; display: block;">Nama Karyawan:</span>
+                        <strong style="color: #0f172a; font-size: 13px;">${name}</strong>
+                    </div>
+                    <div>
+                        <span style="color: #64748b; display: block;">Jabatan / Posisi:</span>
+                        <strong style="color: #0369a1;">${role}</strong>
+                    </div>
+                    <div>
+                        <span style="color: #64748b; display: block;">Status Pembayaran:</span>
+                        <span style="background: #dcfce7; color: #166534; font-weight: bold; padding: 2px 8px; border-radius: 6px; font-size: 10px;">DIBAYARKAN (TRANSFER)</span>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 20px; margin-bottom: 20px; font-size: 11px;">
+                    <!-- PENERIMAAN -->
+                    <div style="flex: 1; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; background: #f0f9ff;">
+                        <span style="font-weight: bold; color: #0369a1; text-transform: uppercase; font-size: 10px; display: block; border-bottom: 1px solid #bae6fd; padding-bottom: 6px; margin-bottom: 8px;">1. PENERIMAAN / PENDAPATAN</span>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 4px; color: #334155;">
+                            <span>Gaji Pokok</span>
+                            <span style="font-weight: bold;">${gajipok}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 4px; color: #334155;">
+                            <span>Tunjangan Medis / Shift</span>
+                            <span style="font-weight: bold;">${tunjmedis}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; color: #334155;">
+                            <span>Tunjangan Jabatan</span>
+                            <span style="font-weight: bold;">${tunjjab}</span>
+                        </div>
+                    </div>
+
+                    <!-- POTONGAN -->
+                    <div style="flex: 1; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; background: #fff1f2;">
+                        <span style="font-weight: bold; color: #be123c; text-transform: uppercase; font-size: 10px; display: block; border-bottom: 1px solid #fecdd3; padding-bottom: 6px; margin-bottom: 8px;">2. POTONGAN RESMI</span>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 4px; color: #334155;">
+                            <span>BPJS Kesehatan & Ketenagakerjaan</span>
+                            <span style="font-weight: bold; color: #be123c;">${potBPJS}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; color: #334155;">
+                            <span>PPh 21 Pajak Penghasilan</span>
+                            <span style="font-weight: bold; color: #be123c;">${potPPH}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: #0f172a; color: #ffffff; border-radius: 8px; padding: 16px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 12px; font-weight: bold; text-transform: uppercase; tracking-wide: 1px;">TOTAL GAJI BERSIH DITERIMA (TAKE HOME PAY):</span>
+                    <span style="font-size: 18px; font-weight: 800; color: #38bdf8;">${totalGaji}</span>
+                </div>
+
+                <div style="margin-top: 30px; display: flex; justify-content: space-between; font-size: 11px;">
+                    <div style="text-align: center; width: 45%;">
+                        <p style="margin: 0; color: #64748b;">Penerima Gaji</p>
+                        <div style="height: 50px; margin: 8px 0; display: flex; align-items: center; justify-content: center;">
+                            <span style="border: 1px dashed #cbd5e1; padding: 4px 10px; color: #94a3b8; font-size: 9px; border-radius: 4px;">TERVERIFIKASI SISTEM PAYROLL</span>
+                        </div>
+                        <p style="margin: 0; font-weight: bold; color: #0f172a;">${name}</p>
+                    </div>
+                    <div style="text-align: center; width: 45%;">
+                        <p style="margin: 0; color: #64748b;">Manager Finance & HRD</p>
+                        <div style="height: 50px; margin: 8px 0; display: flex; align-items: center; justify-content: center;">
+                            <span style="border: 1px solid #0284c7; padding: 4px 12px; color: #0369a1; font-weight: bold; font-size: 10px; border-radius: 4px; background: #f0f9ff;">E-SIGN HEAD OF HRD</span>
+                        </div>
+                        <p style="margin: 0; font-weight: bold; color: #0f172a;">Siti Aminah, S.E., M.M.</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 25px; border-top: 1px solid #e2e8f0; padding-top: 10px; text-align: center; font-size: 9px; color: #94a3b8;">
+                    Slip gaji ini bersifat rahasia dan diterbitkan secara sah oleh Sistem Payroll Sentra Farma.
+                </div>
+            `;
+
             if (typeof html2pdf !== 'undefined') {
                 const opt = {
                     margin: 0.3,
@@ -1075,17 +1175,10 @@
                     html2canvas: { scale: 2 },
                     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
                 };
-                html2pdf().set(opt).from(element).save();
-                Toast.success(`Slip gaji ${name} (${selectedMonth}) berhasil di-download sebagai PDF!`, 'Download PDF');
+                html2pdf().set(opt).from(docContainer).save();
+                Toast.success(`Slip gaji ${name} (${selectedMonth}) resmi berhasil di-download sebagai PDF!`, 'Download PDF');
             } else {
-                const blob = new Blob([`SLIP GAJI RESMI SENTRA FARMA\nNama: ${name}\nPeriode: ${selectedMonth}`], { type: 'application/pdf' });
-                const link = document.createElement("a");
-                link.href = URL.createObjectURL(blob);
-                link.download = `Slip_Gaji_${name.replace(/\s+/g, '_')}_${selectedMonth.replace(/\s+/g, '_')}.pdf`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                Toast.success('Slip Gaji PDF berhasil di-download!', 'Download PDF');
+                Toast.error('Library HTML2PDF tidak tersedia', 'Error');
             }
         }
 

@@ -288,21 +288,52 @@
                 }
                 document.getElementById('stat-omset-today').innerText = `Rp ${Number(totalOmset).toLocaleString('id-ID')}`;
 
-                const reseps = await API.get('/pharmacy/resep/status/PENDING');
+                let apiReseps = [];
+                try {
+                    const res = await API.get('/pharmacy/resep/status/PENDING');
+                    if (Array.isArray(res)) apiReseps = res;
+                    else if (res && Array.isArray(res.content)) apiReseps = res.content;
+                } catch(e) {}
+
+                const localReseps = JSON.parse(localStorage.getItem('sf_resep_queue') || '[]');
+
+                let pasiens = [];
+                try {
+                    const pRes = await API.get('/clinic/pasien');
+                    if (Array.isArray(pRes)) pasiens = pRes;
+                    else if (pRes?.content) pasiens = pRes.content;
+                } catch(e) {}
+
+                const map = new Map();
+                [...apiReseps, ...localReseps].forEach(r => {
+                    if (r) {
+                        const k = r.id ? String(r.id) : `rsp_${Date.now()}`;
+                        if (!map.has(k)) {
+                            let pName = r.pasien?.namaLengkap || r.namaPasien;
+                            if (!pName && r.pasienId && pasiens.length > 0) {
+                                const foundP = pasiens.find(p => p.id == r.pasienId);
+                                if (foundP) pName = foundP.namaLengkap;
+                            }
+                            if (!pName) pName = 'Pasien Utama';
+                            map.set(k, { ...r, namaPasienResolved: pName });
+                        }
+                    }
+                });
+
+                const list = Array.from(map.values()).filter(r => !r.status || String(r.status).toUpperCase() === 'PENDING');
                 const tbody = document.getElementById('dash-resep-list');
                 tbody.innerHTML = '';
-                const count = reseps ? reseps.length : 0;
-                document.getElementById('stat-pending-count').innerText = count;
+                document.getElementById('stat-pending-count').innerText = list.length;
 
-                if (!reseps || reseps.length === 0) {
+                if (list.length === 0) {
                     tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-slate-400 italic">Belum ada antrian resep pending hari ini.</td></tr>`;
                     return;
                 }
 
-                reseps.slice(0, 5).forEach(r => {
+                list.slice(0, 5).forEach(r => {
                     const tr = document.createElement('tr');
                     tr.className = "hover:bg-slate-50 transition-colors";
-                    const pasienNama = r.pasien ? r.pasien.namaLengkap : (r.namaPasien || 'Pasien Utama');
+                    const pasienNama = r.namaPasienResolved || r.pasien?.namaLengkap || r.namaPasien || 'Pasien Utama';
                     const tglStr = r.createdAt ? new Date(r.createdAt).toLocaleDateString('id-ID') : 'Hari Ini';
                     tr.innerHTML = `
                         <td class="py-3 font-mono font-bold text-brand-700">RSP-#${r.id}</td>

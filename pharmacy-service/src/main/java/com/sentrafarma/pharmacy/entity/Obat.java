@@ -12,7 +12,7 @@ public class Obat {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "kategori_id", nullable = false)
+    @JoinColumn(name = "kategori_id", nullable = true)
     private KategoriObat kategori;
 
     @Column(name = "kode_obat", nullable = false, unique = true)

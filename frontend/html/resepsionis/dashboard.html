@@ -350,14 +350,17 @@
 
                 const map = new Map();
                 [...apiAntrians, ...localAntrians, ...patientTickets].forEach(a => {
-                    if (a) {
-                        const key = a.id ? `id_${a.id}` : `${a.nomorAntrian}_${(a.pasien?.namaLengkap || a.namaPasien || '').toLowerCase().trim()}`;
+                    if (a && a.nomorAntrian) {
+                        const poliName = (a.poliklinik?.namaPoli || a.namaPoli || '').toLowerCase().trim();
+                        const key = `${a.nomorAntrian}_${poliName}`;
                         if (!map.has(key)) {
-                            map.set(key, a);
+                            map.set(key, { ...a });
                         } else {
-                            if (a.status === 'DIPANGGIL' || a.status === 'DIPERIKSA') {
-                                map.set(key, a);
-                            }
+                            const existing = map.get(key);
+                            // Order of priority: SELESAI > DIPERIKSA > DIPANGGIL > MENUNGGU
+                            const statusWeight = (st) => st === 'SELESAI' ? 4 : (st === 'DIPERIKSA' ? 3 : (st === 'DIPANGGIL' ? 2 : 1));
+                            const bestItem = statusWeight(a.status) >= statusWeight(existing.status) ? a : existing;
+                            map.set(key, { ...existing, ...a, status: bestItem.status });
                         }
                     }
                 });
