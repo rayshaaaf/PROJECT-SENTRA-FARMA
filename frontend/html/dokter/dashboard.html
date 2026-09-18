@@ -457,21 +457,29 @@
         async function loadAntrianDokter() {
             try {
                 let antrianList = [];
+                let isApiSuccess = false;
                 try {
                     const res = await API.get('/clinic/antrian/hari-ini');
                     if (Array.isArray(res)) {
                         antrianList = res;
+                        isApiSuccess = true;
                         if (res.length === 0 && typeof QueueSync !== 'undefined') {
                             QueueSync.syncWithApi([]);
                         }
                     }
                 } catch(e) {}
 
-                const syncList = typeof QueueSync !== 'undefined' ? QueueSync.getAllQueues() : [];
+                let syncList = typeof QueueSync !== 'undefined' ? QueueSync.getAllQueues() : [];
                 let localTickets = [];
                 try {
                     localTickets = JSON.parse(localStorage.getItem('sf_patient_tickets') || '[]');
                 } catch(e) {}
+
+                if (isApiSuccess && antrianList.length === 0) {
+                    syncList = [];
+                    localTickets = [];
+                    localStorage.removeItem('sf_active_calling_queue');
+                }
 
                 const allCombined = [...antrianList, ...syncList, ...localTickets];
 

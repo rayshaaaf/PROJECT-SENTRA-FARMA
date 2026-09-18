@@ -177,19 +177,27 @@
         async function loadTvQueue() {
             try {
                 let apiAntrians = [];
+                let isApiSuccess = false;
                 try {
                     const list = await API.get('/clinic/antrian/hari-ini');
                     if (Array.isArray(list)) {
                         apiAntrians = list;
+                        isApiSuccess = true;
                         if (list.length === 0) QueueSync.syncWithApi([]);
                     }
                 } catch(e) {}
 
-                const localAntrians = QueueSync.getAllQueues();
+                let localAntrians = QueueSync.getAllQueues();
                 let patientTickets = [];
                 try {
                     patientTickets = JSON.parse(localStorage.getItem('sf_patient_tickets') || '[]');
                 } catch(e) {}
+
+                if (isApiSuccess && apiAntrians.length === 0) {
+                    localAntrians = [];
+                    patientTickets = [];
+                    localStorage.removeItem('sf_active_calling_queue');
+                }
 
                 const map = new Map();
                 [...apiAntrians, ...localAntrians, ...patientTickets].forEach(a => {

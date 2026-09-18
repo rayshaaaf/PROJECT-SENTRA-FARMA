@@ -1311,19 +1311,27 @@
         async function loadRealtimeQueue() {
             try {
                 let apiRes = [];
+                let isApiSuccess = false;
                 try {
                     const res = await API.get('/clinic/antrian/hari-ini');
                     if (Array.isArray(res)) {
                         apiRes = res;
+                        isApiSuccess = true;
                         if (res.length === 0) QueueSync.syncWithApi([]);
                     }
                 } catch(e) {}
 
-                const localRes = QueueSync.getAllQueues();
+                let localRes = QueueSync.getAllQueues();
                 let patientTickets = [];
                 try {
                     patientTickets = JSON.parse(localStorage.getItem('sf_patient_tickets') || '[]');
                 } catch(e) {}
+
+                if (isApiSuccess && apiRes.length === 0) {
+                    localRes = [];
+                    patientTickets = [];
+                    localStorage.removeItem('sf_active_calling_queue');
+                }
 
                 const map = new Map();
                 [...apiRes, ...localRes, ...patientTickets].forEach(a => {
@@ -1344,13 +1352,15 @@
                 list = QueueSync.filterValidQueues(list);
                 list.sort((a, b) => (b.id || 0) - (a.id || 0));
 
-                const activeCalling = QueueSync.getActiveCalling();
-                if (activeCalling && activeCalling.nomorAntrian) {
+                if (list.length === 0) {
+                    localStorage.removeItem('sf_active_calling_queue');
+                }
+
+                const activeCalling = list.length > 0 ? QueueSync.getActiveCalling() : null;
+                if (activeCalling && activeCalling.nomorAntrian && list.length > 0) {
                     const match = list.find(a => a.nomorAntrian === activeCalling.nomorAntrian || a.id == activeCalling.id || String(a.id) === String(activeCalling.id));
                     if (match) {
                         match.status = activeCalling.status || 'DIPANGGIL';
-                    } else {
-                        list.unshift(activeCalling);
                     }
                 }
 
@@ -1390,7 +1400,7 @@
                     if (actStat) actStat.innerText = 'Status: -';
                 }
 
-                const serving = activeCalling || (list ? list.find(a => a.status === 'DIPANGGIL' || a.status === 'DIPERIKSA') : null);
+                const serving = (list && list.length > 0) ? (activeCalling || list.find(a => a.status === 'DIPANGGIL' || a.status === 'DIPERIKSA') || null) : null;
 
                 if (serving) {
                     const servNum = document.getElementById('live-serving-num');
@@ -1415,7 +1425,7 @@
                     const servStat = document.getElementById('live-serving-status');
                     const userInfo = document.getElementById('live-user-info');
 
-                    if (servNum) servNum.innerText = '-';
+                    if (servNum) servNum.innerText = '---';
                     if (servPoli) servPoli.innerText = 'Poli Klinik';
                     if (servStat) servStat.innerText = 'Belum Dipanggil';
 
