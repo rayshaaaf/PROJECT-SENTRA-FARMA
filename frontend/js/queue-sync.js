@@ -145,10 +145,23 @@ const QueueSync = (function () {
     function getActiveCalling() {
         try {
             const raw = localStorage.getItem(STORAGE_ACTIVE_KEY);
-            if (raw) return JSON.parse(raw);
+            if (raw) {
+                const item = JSON.parse(raw);
+                const resetTimeStr = localStorage.getItem(STORAGE_RESET_TIME_KEY);
+                const resetTime = resetTimeStr ? parseInt(resetTimeStr, 10) : 0;
+                if (item && typeof item.id === 'number' && item.id < resetTime) {
+                    localStorage.removeItem(STORAGE_ACTIVE_KEY);
+                    return null;
+                }
+                return item;
+            }
         } catch (e) { }
 
         const list = getAllQueues();
+        if (list.length === 0) {
+            localStorage.removeItem(STORAGE_ACTIVE_KEY);
+            return null;
+        }
         return list.find(q => q.status === 'DIPANGGIL') || null;
     }
 

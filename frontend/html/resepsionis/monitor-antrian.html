@@ -206,8 +206,11 @@
                 });
 
                 let antrians = QueueSync.filterValidQueues(Array.from(map.values()));
+                if (antrians.length === 0) {
+                    localStorage.removeItem('sf_active_calling_queue');
+                }
 
-                const calling = QueueSync.getActiveCalling() || antrians.find(a => a.status === 'DIPANGGIL') || antrians.find(a => a.status === 'DIPERIKSA') || null;
+                const calling = antrians.length > 0 ? (QueueSync.getActiveCalling() || antrians.find(a => a.status === 'DIPANGGIL') || antrians.find(a => a.status === 'DIPERIKSA') || null) : null;
 
                 if (calling) {
                     document.getElementById('tv-calling-number').innerText = calling.nomorAntrian || 'U-01';

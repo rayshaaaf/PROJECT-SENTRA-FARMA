@@ -387,7 +387,10 @@
                 document.getElementById('kpi-dipanggil-count').innerText = pCount;
                 document.getElementById('kpi-selesai-count').innerText = sCount;
 
-                const activeCalling = QueueSync.getActiveCalling() || antrians.find(a => a.status === 'DIPANGGIL') || null;
+                if (antrians.length === 0) {
+                    localStorage.removeItem('sf_active_calling_queue');
+                }
+                const activeCalling = antrians.length > 0 ? (QueueSync.getActiveCalling() || antrians.find(a => a.status === 'DIPANGGIL') || null) : null;
 
                 if (activeCalling) {
                     document.getElementById('control-active-num').innerText = activeCalling.nomorAntrian || '---';
