@@ -1329,37 +1329,33 @@
 
                 const map = new Map();
                 [...apiRes, ...localRes, ...patientTickets].forEach(a => {
-                    if (a && a.nomorAntrian) {
-                        const poliName = (a.poliklinik?.namaPoli || a.namaPoli || '').toLowerCase().trim();
-                        const key = `${a.nomorAntrian}_${poliName}`;
+                    if (a) {
+                        const key = a.id ? `id_${a.id}` : `${a.nomorAntrian}_${(a.pasien?.namaLengkap || a.namaPasien || '').toLowerCase().trim()}`;
                         if (!map.has(key)) {
-                            map.set(key, { ...a });
+                            map.set(key, a);
                         } else {
-                            const existing = map.get(key);
-                            const activeStatus = (a.status === 'DIPANGGIL' || a.status === 'DIPERIKSA') ? a.status : (existing.status === 'DIPANGGIL' || existing.status === 'DIPERIKSA' ? existing.status : a.status);
-                            map.set(key, { ...existing, ...a, status: activeStatus });
+                            if (a.status === 'DIPANGGIL' || a.status === 'DIPERIKSA') {
+                                map.set(key, a);
+                            }
                         }
                     }
                 });
 
-                let list = Array.from(map.values());
-                list = QueueSync.filterValidQueues(list);
-                list.sort((a, b) => (b.id || 0) - (a.id || 0));
-
+                let list = QueueSync.filterValidQueues(Array.from(map.values()));
                 if (list.length === 0) {
                     localStorage.removeItem('sf_active_calling_queue');
                 }
 
-                const activeCalling = list.length > 0 ? QueueSync.getActiveCalling() : null;
-                if (activeCalling && activeCalling.nomorAntrian && list.length > 0) {
-                    const match = list.find(a => a.nomorAntrian === activeCalling.nomorAntrian || a.id == activeCalling.id || String(a.id) === String(activeCalling.id));
-                    if (match) {
-                        match.status = activeCalling.status || 'DIPANGGIL';
-                    }
-                }
+                // 1. Determine currently calling / serving queue (EXACT SAME AS MONITOR TV)
+                const serving = list.length > 0 ? (QueueSync.getActiveCalling() || list.find(a => a.status === 'DIPANGGIL') || list.find(a => a.status === 'DIPERIKSA') || null) : null;
 
+                const servNum = document.getElementById('live-serving-num');
+                const servPoli = document.getElementById('live-serving-poli');
+                const servStat = document.getElementById('live-serving-status');
+                const userInfo = document.getElementById('live-user-info');
+
+                // 2. Identify active ticket for logged-in user
                 const user = API.getUser();
-
                 let myAntrian = null;
                 if (user && list && list.length > 0) {
                     const userName = (user.namaLengkap || '').toLowerCase().trim();
@@ -1374,60 +1370,49 @@
                     });
                 }
 
-                if (activeCalling && myAntrian && (myAntrian.nomorAntrian === activeCalling.nomorAntrian || myAntrian.id == activeCalling.id)) {
-                    myAntrian.status = activeCalling.status || 'DIPANGGIL';
+                if (serving && myAntrian && (myAntrian.nomorAntrian === serving.nomorAntrian || String(myAntrian.id) === String(serving.id))) {
+                    myAntrian.status = serving.status || 'DIPANGGIL';
                 }
 
+                // 3. Update Hero Card Ticket Pass
+                const actNum = document.getElementById('active-ticket-num');
+                const actPoli = document.getElementById('active-ticket-poli');
+                const actStat = document.getElementById('active-ticket-status');
                 if (myAntrian) {
-                    const actNum = document.getElementById('active-ticket-num');
-                    const actPoli = document.getElementById('active-ticket-poli');
-                    const actStat = document.getElementById('active-ticket-status');
                     if (actNum) actNum.innerText = myAntrian.nomorAntrian;
                     if (actPoli) actPoli.innerText = `${myAntrian.poliklinik?.namaPoli || myAntrian.namaPoli || 'Poli Klinik'}`;
                     if (actStat) actStat.innerText = `Status: ${myAntrian.status}`;
                 } else {
-                    const actNum = document.getElementById('active-ticket-num');
-                    const actPoli = document.getElementById('active-ticket-poli');
-                    const actStat = document.getElementById('active-ticket-status');
                     if (actNum) actNum.innerText = '-';
                     if (actPoli) actPoli.innerText = 'Belum Ada Antrian';
                     if (actStat) actStat.innerText = 'Status: -';
                 }
 
-                const serving = (list && list.length > 0) ? (activeCalling || list.find(a => a.status === 'DIPANGGIL' || a.status === 'DIPERIKSA') || null) : null;
-
+                // 4. Update Sidebar Live Serving Widget (Identical to TV Monitor)
                 if (serving) {
-                    const servNum = document.getElementById('live-serving-num');
-                    const servPoli = document.getElementById('live-serving-poli');
-                    const servStat = document.getElementById('live-serving-status');
-                    const userInfo = document.getElementById('live-user-info');
-
                     if (servNum) servNum.innerText = serving.nomorAntrian || '---';
                     if (servPoli) servPoli.innerText = serving.poliklinik?.namaPoli || serving.namaPoli || 'Poli Umum';
                     if (servStat) servStat.innerText = `${serving.status || 'DIPANGGIL'}`;
 
                     if (userInfo) {
-                        if (myAntrian) {
-                            userInfo.innerHTML = `Nomor Tiket Anda: <strong class="text-white font-bold">${myAntrian.nomorAntrian}</strong> (${myAntrian.status})`;
+                        const pasienNama = serving.pasien?.namaLengkap || serving.namaPasien || 'Pasien';
+                        const dokterNama = serving.dokter?.namaDokter || serving.namaDokter || 'Dokter Jaga';
+                        if (myAntrian && (myAntrian.nomorAntrian === serving.nomorAntrian || String(myAntrian.id) === String(serving.id))) {
+                            userInfo.innerHTML = `🌟 Giliran Anda! <strong class="text-white font-bold">${serving.nomorAntrian}</strong> • Segera menuju ruang dokter (${dokterNama})`;
                         } else {
-                            userInfo.innerHTML = `Antrian Dipanggil: <strong class="text-emerald-300 font-bold">${serving.nomorAntrian}</strong> (${serving.pasien?.namaLengkap || serving.namaPasien || 'Pasien'})`;
+                            userInfo.innerHTML = `Sedang Dipanggil: <strong class="text-white font-bold">${serving.nomorAntrian}</strong> (${pasienNama}) • ${dokterNama}`;
                         }
                     }
                 } else {
-                    const servNum = document.getElementById('live-serving-num');
-                    const servPoli = document.getElementById('live-serving-poli');
-                    const servStat = document.getElementById('live-serving-status');
-                    const userInfo = document.getElementById('live-user-info');
-
                     if (servNum) servNum.innerText = '---';
                     if (servPoli) servPoli.innerText = 'Poli Klinik';
                     if (servStat) servStat.innerText = 'Belum Dipanggil';
 
                     if (userInfo) {
                         if (myAntrian) {
-                            userInfo.innerHTML = `Nomor Tiket Anda: <strong class="text-white font-bold">${myAntrian.nomorAntrian}</strong> (Menunggu Dipanggil)`;
+                            userInfo.innerHTML = `Nomor Tiket Anda: <strong class="text-white font-bold">${myAntrian.nomorAntrian}</strong> (${myAntrian.status})`;
                         } else {
-                            userInfo.innerText = 'Belum ada antrian dipanggil saat me-refresh.';
+                            userInfo.innerText = 'Belum ada antrian dipanggil saat ini.';
                         }
                     }
                 }
