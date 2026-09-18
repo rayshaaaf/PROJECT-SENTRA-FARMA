@@ -31,6 +31,10 @@
         }
     </script>
     <style>
+        * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
         .material-symbols-outlined, .material-icons, .material-icons-outlined {
             font-family: 'Material Symbols Outlined', 'Material Icons Outlined', 'Material Icons' !important;
             font-weight: normal;
@@ -116,38 +120,38 @@
     <aside
         class="left-dock fixed left-6 top-1/2 -translate-y-1/2 w-20 bg-white/95 backdrop-blur-2xl border border-slate-200/80 shadow-xl shadow-slate-300/40 rounded-3xl z-50 hidden lg:flex flex-col items-center py-5 space-y-4">
         <nav class="flex flex-col items-center gap-2">
-            <a href="dashboard.html" title="Dashboard Utama"
+            <a href="dashboard.html"
                 class="relative group p-2.5 rounded-2xl bg-brand-50 text-brand-600 font-bold transition-all shadow-2xs">
                 <span class="material-symbols-outlined text-[22px]">dashboard</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Dashboard</span>
             </a>
-            <a href="pemeriksaan.html" title="Ruang Periksa Pasien"
+            <a href="pemeriksaan.html"
                 class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">stethoscope</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Ruang Periksa</span>
             </a>
-            <a href="jadwal.html" title="Jadwal Shift Dokter"
+            <a href="jadwal.html"
                 class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">calendar_month</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Jadwal Shift</span>
             </a>
-            <a href="riwayat-pasien.html" title="Arsip Riwayat Pasien"
+            <a href="riwayat-pasien.html"
                 class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">folder_shared</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Riwayat Pasien</span>
             </a>
-            <a href="chat.html" title="Live Chat Konsultasi"
+            <a href="chat.html"
                 class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">forum</span>
                 <span id="doctor-chat-badge" class="hidden absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white text-[9px] font-black rounded-full items-center justify-center animate-pulse border border-white shadow-xs">0</span>
                 <span id="doctor-chat-tooltip" class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Live Chat</span>
             </a>
-            <a href="laporan-harian.html" title="Laporan Harian & Berkas Dokter"
+            <a href="laporan-harian.html"
                 class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">assignment</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Laporan Harian</span>
             </a>
-            <button onclick="Absensi.openModal()" title="Presensi & Absensi Dokter"
+            <button onclick="Absensi.openModal()"
                 class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all cursor-pointer">
                 <span class="material-symbols-outlined text-[22px]">fingerprint</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Presensi Dokter</span>
@@ -157,12 +161,12 @@
         <div class="w-8 h-px bg-slate-200/70"></div>
 
         <div class="flex flex-col items-center gap-2">
-            <a href="profil.html" title="Profil Dokter"
+            <a href="profil.html"
                 class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">person</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Profil Saya</span>
             </a>
-            <button onclick="handleLogout()" title="Logout"
+            <button onclick="handleLogout()"
                 class="relative group p-2.5 rounded-2xl text-rose-400 hover:text-rose-600 hover:bg-rose-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">logout</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-rose-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Logout</span>
@@ -235,7 +239,7 @@
         </header>
 
         <!-- MAIN WORKSPACE CONTAINER (FLEX-1 FIT SCREEN WITH INTERNAL BOX SCROLLING) -->
-        <main class="p-6 max-w-6xl mx-auto w-full flex-1 flex flex-col justify-between overflow-hidden gap-5">
+        <main class="p-6 w-full flex-1 flex flex-col justify-between overflow-hidden gap-5">
 
             <!-- HERO BANNER -->
             <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-gradient-to-br from-brand-900 via-brand-800 to-emerald-950 p-6 rounded-3xl text-white shadow-xl border border-emerald-500/20 relative overflow-hidden shrink-0">
@@ -300,21 +304,21 @@
                 </a>
 
                 <a href="riwayat-pasien.html" class="p-3.5 bg-white rounded-2xl border border-slate-200/80 shadow-2xs hover:border-brand-300 transition-all flex items-center gap-3 group">
-                    <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold shrink-0">
+                    <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center font-bold shrink-0">
                         <span class="material-symbols-outlined text-[20px]">folder_shared</span>
                     </div>
                     <div class="min-w-0">
-                        <h3 class="text-xs font-extrabold text-slate-900 group-hover:text-purple-700 transition-colors truncate">Riwayat Pasien</h3>
+                        <h3 class="text-xs font-extrabold text-slate-900 group-hover:text-teal-700 transition-colors truncate">Riwayat Pasien</h3>
                         <p class="text-[10px] text-slate-500 font-medium truncate">Database rekam medis</p>
                     </div>
                 </a>
 
                 <a href="chat.html" class="p-3.5 bg-white rounded-2xl border border-slate-200/80 shadow-2xs hover:border-brand-300 transition-all flex items-center gap-3 group">
-                    <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold shrink-0">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold shrink-0">
                         <span class="material-symbols-outlined text-[20px]">forum</span>
                     </div>
                     <div class="min-w-0">
-                        <h3 class="text-xs font-extrabold text-slate-900 group-hover:text-indigo-700 transition-colors truncate">Live Chat</h3>
+                        <h3 class="text-xs font-extrabold text-slate-900 group-hover:text-emerald-700 transition-colors truncate">Live Chat</h3>
                         <p class="text-[10px] text-slate-500 font-medium truncate">Konsultasi real-time</p>
                     </div>
                 </a>
@@ -343,7 +347,7 @@
                         </div>
                     </div>
 
-                    <button onclick="loadAntrianDokter()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] rounded-xl flex items-center gap-1 transition-colors">
+                    <button onclick="loadAntrianDokter()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] rounded-xl flex items-center gap-1 transition-colors cursor-pointer">
                         <span class="material-symbols-outlined text-[14px]">refresh</span> Refresh
                     </button>
                 </div>
@@ -368,35 +372,22 @@
             </section>
 
         </main>
-
-        <!-- FOOTER -->
-        <footer class="mt-auto py-3 px-6 border-t border-slate-200/60 bg-white/60 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 shrink-0">
-            <div class="flex items-center gap-2">
-                <img src="../../assets/logo.png" alt="Sentra Farma" class="h-5 w-auto object-contain opacity-80" />
-                <span class="font-bold text-slate-700">© 2026 Sentra Farma Medika.</span>
-                <span class="hidden md:inline text-slate-400">Pusat Layanan Kesehatan Digital.</span>
-            </div>
-            <div class="flex items-center gap-4 text-[11px] font-semibold">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100/80 text-emerald-800 font-bold border border-emerald-200/60">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>System Active 24/7 v2.4</span>
-                </span>
-                <a href="#" class="hover:text-emerald-700 transition-colors">Bantuan & Support</a>
-                <a href="#" class="hover:text-emerald-700 transition-colors">Kebijakan Privasi</a>
-            </div>
-        </footer>
     </div>
 
     <script src="../../js/api.js"></script>
     <script src="../../js/toast.js"></script>
     <script src="../../js/auth-guard.js"></script>
     <script src="../../js/absensi.js"></script>
+    <script src="../../js/queue-sync.js"></script>
     <script>
         let currentDoctor = null;
 
         document.addEventListener('DOMContentLoaded', async () => {
             await initDoctorData();
             loadAntrianDokter();
+            window.addEventListener('storage', loadAntrianDokter);
+            window.addEventListener('sf_queue_updated', loadAntrianDokter);
+            setInterval(loadAntrianDokter, 3000);
         });
 
         function handleLogout() {
@@ -451,33 +442,66 @@
 
         async function loadAntrianDokter() {
             try {
-                const docIdParam = currentDoctor ? `?dokterId=${currentDoctor.id}` : '';
-                const antrianList = await API.get(`/clinic/antrian/hari-ini${docIdParam}`);
+                let antrianList = [];
+                try {
+                    const docIdParam = currentDoctor ? `?dokterId=${currentDoctor.id}` : '';
+                    const res = await API.get(`/clinic/antrian/hari-ini${docIdParam}`);
+                    if (Array.isArray(res)) antrianList = res;
+                } catch(e) {}
+
+                const syncList = typeof QueueSync !== 'undefined' ? QueueSync.getAllQueues() : [];
+                let localTickets = [];
+                try {
+                    localTickets = JSON.parse(localStorage.getItem('sf_patient_tickets') || '[]');
+                } catch(e) {}
+
+                const allCombined = [...antrianList, ...syncList, ...localTickets];
+
+                let uniqueList = [];
+                const seen = new Set();
+                allCombined.forEach(item => {
+                    if (!item) return;
+                    const key = item.id || item.nomorAntrian;
+                    if (key && !seen.has(key)) {
+                        seen.add(key);
+                        uniqueList.push(item);
+                    }
+                });
+
+                if (typeof QueueSync !== 'undefined') {
+                    uniqueList = QueueSync.filterValidQueues(uniqueList);
+                }
+
                 const tbody = document.getElementById('antrian-list');
                 tbody.innerHTML = '';
 
-                if (!antrianList || antrianList.length === 0) {
+                if (!uniqueList || uniqueList.length === 0) {
                     tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-slate-400 italic font-medium">Belum ada antrian pasien hari ini.</td></tr>`;
                     document.getElementById('kpi-queue-count').innerText = '0';
                     document.getElementById('kpi-done-count').innerText = '0';
                     return;
                 }
 
-                document.getElementById('kpi-queue-count').innerText = antrianList.length;
-                const doneCount = antrianList.filter(a => a.status === 'SELESAI' || a.status === 'DIPERIKSA').length;
+                document.getElementById('kpi-queue-count').innerText = uniqueList.length;
+                const doneCount = uniqueList.filter(a => a.status === 'SELESAI' || a.status === 'DIPERIKSA').length;
                 document.getElementById('kpi-done-count').innerText = doneCount;
 
-                antrianList.forEach(a => {
+                uniqueList.forEach(a => {
                     const tr = document.createElement('tr');
                     tr.className = "hover:bg-slate-50/80 transition-colors";
+                    const pName = a.pasien?.namaLengkap || a.namaPasien || 'Pasien';
+                    const pNik = a.pasien?.nik || a.nik || '-';
+                    const pType = a.tipe || 'ONLINE';
+                    const pStatus = a.status || 'MENUNGGU';
+
                     tr.innerHTML = `
                         <td class="py-3 font-bold text-brand-700 font-mono">${a.nomorAntrian}</td>
-                        <td class="py-3 font-extrabold text-slate-900">${a.pasien?.namaLengkap || 'Pasien'}</td>
-                        <td class="py-3 text-slate-500 font-mono text-[11px]">${a.pasien?.nik || '-'}</td>
-                        <td class="py-3"><span class="px-2 py-0.5 rounded text-[9px] font-black font-mono uppercase ${a.tipe === 'ONLINE' ? 'bg-sky-100 text-sky-800' : 'bg-amber-100 text-amber-800'}">${a.tipe}</span></td>
-                        <td class="py-3"><span class="px-2.5 py-0.5 rounded-full text-[9px] font-black ${a.status === 'SELESAI' ? 'bg-emerald-100 text-emerald-800' : (a.status === 'DIPERIKSA' ? 'bg-amber-100 text-amber-800' : 'bg-brand-100 text-brand-800')}">${a.status}</span></td>
+                        <td class="py-3 font-extrabold text-slate-900">${pName}</td>
+                        <td class="py-3 text-slate-500 font-mono text-[11px]">${pNik}</td>
+                        <td class="py-3"><span class="px-2 py-0.5 rounded text-[9px] font-black font-mono uppercase ${pType === 'ONLINE' ? 'bg-sky-100 text-sky-800' : 'bg-amber-100 text-amber-800'}">${pType}</span></td>
+                        <td class="py-3"><span class="px-2.5 py-0.5 rounded-full text-[9px] font-black ${pStatus === 'SELESAI' ? 'bg-emerald-100 text-emerald-800' : (pStatus === 'DIPERIKSA' ? 'bg-amber-100 text-amber-800' : 'bg-brand-100 text-brand-800')}">${pStatus}</span></td>
                         <td class="py-3 text-right">
-                            <button onclick="panggilDanPeriksa(${a.id}, '${a.nomorAntrian}', ${a.pasien?.id || 'null'})" class="px-3 py-1 bg-brand-600 hover:bg-brand-700 text-white text-[11px] font-extrabold rounded-xl transition-all shadow-2xs flex items-center gap-1 ml-auto">
+                            <button onclick="panggilDanPeriksa('${a.id || a.nomorAntrian}', '${a.nomorAntrian}', '${a.pasien?.id || a.pasienId || ''}')" class="px-3 py-1 bg-brand-600 hover:bg-brand-700 text-white text-[11px] font-extrabold rounded-xl transition-all shadow-2xs flex items-center gap-1 ml-auto cursor-pointer">
                                 <span class="material-symbols-outlined text-[14px]">campaign</span> Periksa
                             </button>
                         </td>
@@ -491,10 +515,15 @@
 
         async function panggilDanPeriksa(antrianId, num, pasienId) {
             try {
-                await API.patch(`/clinic/antrian/${antrianId}/status?status=DIPERIKSA`, { status: 'DIPERIKSA' });
+                if (typeof QueueSync !== 'undefined') {
+                    QueueSync.callQueue(antrianId || num, { nomorAntrian: num, id: antrianId });
+                }
+                await API.patch(`/clinic/antrian/${antrianId}/status?status=DIPERIKSA`, { status: 'DIPERIKSA' }).catch(()=>{});
                 Toast.info(`Memanggil Pasien ${num} ke ruang periksa.`, 'Panggil Pasien');
-                window.location.href = `pemeriksaan.html?pasienId=${pasienId || ''}`;
-            } catch(e) {}
+                window.location.href = `pemeriksaan.html?pasienId=${pasienId || ''}&nomor=${num}`;
+            } catch(e) {
+                window.location.href = `pemeriksaan.html?pasienId=${pasienId || ''}&nomor=${num}`;
+            }
         }
     </script>
 </body>

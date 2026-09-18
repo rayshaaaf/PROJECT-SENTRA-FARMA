@@ -11,7 +11,9 @@
     <!-- Google Fonts & Material Symbols -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
@@ -35,7 +37,13 @@
         }
     </script>
     <style>
-        .material-symbols-outlined, .material-icons, .material-icons-outlined {
+        * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .material-symbols-outlined,
+        .material-icons,
+        .material-icons-outlined {
             font-family: 'Material Symbols Outlined', 'Material Icons Outlined', 'Material Icons' !important;
             font-weight: normal;
             font-style: normal;
@@ -51,6 +59,7 @@
             font-feature-settings: 'liga';
             -webkit-font-smoothing: antialiased;
         }
+
         html,
         body {
             min-height: 100vh;
@@ -226,12 +235,15 @@
             class="h-24 flex items-center justify-between px-6 sm:px-10 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100/60 transition-all">
             <div class="flex items-center gap-4">
                 <!-- Brand Logo Link (Moderately Enlarged) -->
-                <a href="dashboard.html" class="flex items-center gap-3 group cursor-pointer shrink-0" title="Sentra Farma">
-                    <img src="../../assets/logo.png" alt="Sentra Farma" class="h-16 sm:h-20 md:h-22 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform" />
+                <a href="dashboard.html" class="flex items-center gap-3 group cursor-pointer shrink-0"
+                    title="Sentra Farma">
+                    <img src="../../assets/logo.png" alt="Sentra Farma"
+                        class="h-16 sm:h-20 md:h-22 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform" />
                 </a>
                 <div class="h-10 w-px bg-slate-200/80 hidden sm:block"></div>
-                <div> 
-                    <h1 class="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight flex items-center gap-2.5">
+                <div>
+                    <h1
+                        class="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight flex items-center gap-2.5">
                         <span>Portal Layanan Pasien Digital</span>
                         <span
                             class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-extrabold rounded-full border border-emerald-200/80 flex items-center gap-1.5 shadow-2xs">
@@ -258,7 +270,7 @@
         </header>
 
         <!-- MAIN WORKSPACE -->
-        <main class="p-6 sm:p-8 space-y-7 max-w-6xl mx-auto">
+        <main class="p-6 sm:p-8 space-y-7 w-full">
 
             <!-- HERO WELCOME BANNER (SENTRA FARMA RICH EMERALD GREEN) -->
             <div
@@ -293,7 +305,7 @@
                             <span class="text-slate-900 font-extrabold">Booking Antrian</span>
                         </a>
                         <button onclick="window.toggleSentraChatWindow()"
-                            class="px-4 py-2 bg-white text-brand-950 font-extrabold text-xs rounded-xl hover:bg-emerald-50 transition-all shadow-md flex items-center gap-1.5 group/btn">
+                            class="px-4 py-2 bg-white text-brand-950 font-extrabold text-xs rounded-xl hover:bg-emerald-50 transition-all shadow-md flex items-center gap-1.5 group/btn cursor-pointer">
                             <span
                                 class="material-symbols-outlined text-[16px] text-brand-700 group-hover/btn:scale-110 transition-transform">support_agent</span>
                             <span class="text-slate-900 font-extrabold">Tanya Dokter (Live Chat)</span>
@@ -303,6 +315,18 @@
                             <span
                                 class="material-symbols-outlined text-[16px] text-brand-700 group-hover/btn:scale-110 transition-transform">medication</span>
                             <span class="text-slate-900 font-extrabold">Katalog Apotek</span>
+                        </a>
+                        <a href="katalog-obat.html?action=resep"
+                            class="px-4 py-2 bg-white text-brand-950 font-extrabold text-xs rounded-xl hover:bg-emerald-50 transition-all shadow-md flex items-center gap-1.5 group/btn">
+                            <span
+                                class="material-symbols-outlined text-[16px] text-brand-700 group-hover/btn:scale-110 transition-transform">receipt_long</span>
+                            <span class="text-slate-900 font-extrabold">Tebus Resep Dokter</span>
+                        </a>
+                        <a href="katalog-obat.html?action=cart"
+                            class="px-4 py-2 bg-white text-brand-950 font-extrabold text-xs rounded-xl hover:bg-emerald-50 transition-all shadow-md flex items-center gap-1.5 group/btn">
+                            <span
+                                class="material-symbols-outlined text-[16px] text-brand-700 group-hover/btn:scale-110 transition-transform">shopping_cart</span>
+                            <span class="text-slate-900 font-extrabold">Keranjang Saya</span>
                         </a>
                     </div>
                 </div>
@@ -340,7 +364,7 @@
                     <span class="font-extrabold text-slate-900 uppercase text-[10px] tracking-wider shrink-0">Info
                         Pelayanan & Operasional:</span>
                     <span class="text-slate-600 text-xs leading-relaxed">
-                        Poliklinik Spesialis (Umum, Anak, THT, & Penyakit Dalam) buka setiap hari pukul 08:00 - 20:00
+                        Poliklinik Spesialis (Umum, Anak, THT, & Penyakit Dalam) buka setiap hari pukul 07:00 - 20:00
                         WIB. Layanan Kasir & Depo Farmasi Buka 24 Jam Non-Stop. Gunakan Struk QR Reservasi Online untuk
                         Penebusan Obat Kilat.
                     </span>
@@ -486,7 +510,8 @@
                                 class="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-extrabold flex items-center gap-1">
                                 <span class="material-symbols-outlined text-[14px]">info</span> Belum Ada Data
                             </span>
-                            <span id="vital-bp-time" class="text-xs text-slate-400 font-medium">Belum ada pemeriksaan medis</span>
+                            <span id="vital-bp-time" class="text-xs text-slate-400 font-medium">Belum ada pemeriksaan
+                                medis</span>
                         </div>
 
                         <!-- Sparkline Animation -->
@@ -541,8 +566,7 @@
                                 <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Berat
                                     Badan</span>
                                 <div class="flex items-baseline gap-1 mt-0.5">
-                                    <span id="vital-weight-val"
-                                        class="text-2xl font-extrabold text-slate-900">-</span>
+                                    <span id="vital-weight-val" class="text-2xl font-extrabold text-slate-900">-</span>
                                     <span class="text-xs text-slate-400 font-medium">kg</span>
                                 </div>
                             </div>
@@ -579,7 +603,7 @@
                             <h4 class="text-xs font-bold text-slate-900 leading-snug">Jadwal Operasional Klinik & Apotek
                                 24 Jam</h4>
                             <p class="text-[11px] text-slate-600 leading-relaxed font-medium">
-                                Poliklinik Spesialis beroperasi Setiap Hari (Senin - Minggu) pukul <strong>08:00 - 20:00
+                                Poliklinik Spesialis beroperasi Setiap Hari (Senin - Minggu) pukul <strong>07:00 - 20:00
                                     WIB</strong>. Layanan Penebusan Obat Apotek Buka 24 Jam Non-Stop.
                             </p>
                         </div>
@@ -662,19 +686,18 @@
                         class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-2xs hover:border-brand-400 hover:shadow-md transition-all space-y-2 group">
                         <div class="flex items-center justify-between">
                             <span
-                                class="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-extrabold text-[9px] rounded-md uppercase">BUKA</span>
-                            <span class="text-[10px] text-slate-400 font-mono font-semibold">08:00 - 20:00</span>
+                                class="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-extrabold text-[9px] rounded-md uppercase">24 JAM</span>
+                            <span class="text-[10px] text-slate-400 font-mono font-semibold">3 Shift Berkelanjutan</span>
                         </div>
                         <div>
                             <h4
                                 class="text-xs font-extrabold text-slate-900 group-hover:text-brand-700 transition-colors">
                                 Poliklinik Umum</h4>
-                            <p class="text-[10px] text-slate-500 font-medium">dr. Arisandy Pratama, M.Ked</p>
+                            <p class="text-[10px] text-slate-500 font-medium">dr. Arisandy / dr. Sabrina / dr. Ghazi</p>
                         </div>
                         <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px]">
                             <span class="text-emerald-600 font-bold flex items-center gap-1"><span
-                                    class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Dokter
-                                Standby</span>
+                                    class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Dokter Standby</span>
                             <a href="antrian.html" class="text-brand-600 font-bold hover:underline">Daftar →</a>
                         </div>
                     </div>
@@ -685,18 +708,17 @@
                         <div class="flex items-center justify-between">
                             <span
                                 class="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-extrabold text-[9px] rounded-md uppercase">BUKA</span>
-                            <span class="text-[10px] text-slate-400 font-mono font-semibold">09:00 - 15:00</span>
+                            <span class="text-[10px] text-slate-400 font-mono font-semibold">08:00 - 21:00</span>
                         </div>
                         <div>
                             <h4
                                 class="text-xs font-extrabold text-slate-900 group-hover:text-brand-700 transition-colors">
-                                Poliklinik Anak (Pediatri)</h4>
-                            <p class="text-[10px] text-slate-500 font-medium">dr. Anisa Rahmawati, Sp.A</p>
+                                Poli Gigi & Mulut</h4>
+                            <p class="text-[10px] text-slate-500 font-medium">drg. Mahendra / drg. Zhafira</p>
                         </div>
                         <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px]">
                             <span class="text-emerald-600 font-bold flex items-center gap-1"><span
-                                    class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Dokter
-                                Standby</span>
+                                    class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Dokter Standby</span>
                             <a href="antrian.html" class="text-brand-600 font-bold hover:underline">Daftar →</a>
                         </div>
                     </div>
@@ -707,18 +729,17 @@
                         <div class="flex items-center justify-between">
                             <span
                                 class="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-extrabold text-[9px] rounded-md uppercase">BUKA</span>
-                            <span class="text-[10px] text-slate-400 font-mono font-semibold">10:00 - 16:00</span>
+                            <span class="text-[10px] text-slate-400 font-mono font-semibold">08:00 - 20:00</span>
                         </div>
                         <div>
                             <h4
                                 class="text-xs font-extrabold text-slate-900 group-hover:text-brand-700 transition-colors">
-                                Poliklinik THT</h4>
-                            <p class="text-[10px] text-slate-500 font-medium">dr. Budi Santoso, Sp.THT</p>
+                                Poli KIA & KB</h4>
+                            <p class="text-[10px] text-slate-500 font-medium">dr. Kalila Kirana / dr. Naura</p>
                         </div>
                         <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px]">
                             <span class="text-emerald-600 font-bold flex items-center gap-1"><span
-                                    class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Dokter
-                                Standby</span>
+                                    class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Dokter Standby</span>
                             <a href="antrian.html" class="text-brand-600 font-bold hover:underline">Daftar →</a>
                         </div>
                     </div>
@@ -729,18 +750,17 @@
                         <div class="flex items-center justify-between">
                             <span
                                 class="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-extrabold text-[9px] rounded-md uppercase">BUKA</span>
-                            <span class="text-[10px] text-slate-400 font-mono font-semibold">13:00 - 18:00</span>
+                            <span class="text-[10px] text-slate-400 font-mono font-semibold">08:00 - 20:00</span>
                         </div>
                         <div>
                             <h4
                                 class="text-xs font-extrabold text-slate-900 group-hover:text-brand-700 transition-colors">
-                                Poli Penyakit Dalam</h4>
-                            <p class="text-[10px] text-slate-500 font-medium">dr. Hendra Wijaya, Sp.PD</p>
+                                Poliklinik Anak (Pediatri)</h4>
+                            <p class="text-[10px] text-slate-500 font-medium">dr. Aurelia, Sp.A / dr. Tristan, Sp.A</p>
                         </div>
                         <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px]">
                             <span class="text-emerald-600 font-bold flex items-center gap-1"><span
-                                    class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Dokter
-                                Standby</span>
+                                    class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Dokter Standby</span>
                             <a href="antrian.html" class="text-brand-600 font-bold hover:underline">Daftar →</a>
                         </div>
                     </div>
@@ -766,7 +786,8 @@
                             1</div>
                         <div>
                             <h4 class="text-xs font-bold text-slate-900">Booking Antrian (Online & Walk-in Offline)</h4>
-                            <p class="text-[11px] text-slate-500 leading-snug mt-0.5 font-medium">Daftar online via web atau langsung walk-in di klinik via resepsionis.</p>
+                            <p class="text-[11px] text-slate-500 leading-snug mt-0.5 font-medium">Daftar online via web
+                                atau langsung walk-in di klinik via resepsionis.</p>
                         </div>
                     </div>
 
@@ -909,20 +930,103 @@
                 </div>
             </section>
 
-            <!-- FOOTER -->
-            <footer class="mt-auto py-3 px-6 border-t border-slate-200/60 bg-white/60 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 shrink-0 rounded-2xl">
-                <div class="flex items-center gap-2">
-                    <img src="../../assets/logo.png" alt="Sentra Farma" class="h-5 w-auto object-contain opacity-80" />
-                    <span class="font-bold text-slate-700">© 2026 Sentra Farma Medika.</span>
-                    <span class="hidden md:inline text-slate-400">Pusat Layanan Kesehatan Digital.</span>
+            <!-- PROFESSIONAL SENTRA FARMA FOOTER BANNER -->
+            <footer
+                class="mt-8 mb-4 rounded-3xl bg-gradient-to-r from-emerald-700 via-teal-700 to-emerald-900 text-white p-6 sm:p-8 shadow-xl relative overflow-hidden shrink-0 border border-emerald-600/40">
+                <!-- Glow Background Effect -->
+                <div
+                    class="absolute -right-16 -top-16 w-64 h-64 bg-teal-400/20 rounded-full blur-3xl pointer-events-none">
                 </div>
-                <div class="flex items-center gap-4 text-[11px] font-semibold">
-                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100/80 text-emerald-800 font-bold border border-emerald-200/60">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <span>System Active 24/7 v2.4</span>
-                    </span>
-                    <a href="#" class="hover:text-emerald-700 transition-colors">Bantuan & Support</a>
-                    <a href="#" class="hover:text-emerald-700 transition-colors">Kebijakan Privasi</a>
+
+                <div
+                    class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 pb-6 border-b border-white/15 relative z-10 text-xs">
+                    <!-- Column 1: Jam Operasional & Dokter Jaga -->
+                    <div class="space-y-2.5">
+                        <h4 class="font-extrabold text-sm text-white flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[20px] text-emerald-300">schedule</span>
+                            <span>Jam Operasional Klinik</span>
+                        </h4>
+                        <ul class="space-y-2 text-emerald-50/90 font-medium text-[11px]">
+                            <li class="flex items-center gap-2">
+                                <span
+                                    class="material-symbols-outlined text-[15px] text-emerald-300">calendar_month</span>
+                                <span>Senin - Minggu (Pelayanan 24 Jam)</span>
+                            </li>
+                            <li class="flex items-center gap-2 pt-0.5">
+                                <span class="material-symbols-outlined text-[15px] text-emerald-300">call</span>
+                                <span>Emergency CS: (021) 5578-8999 / 0831-5175-8339</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-[15px] text-emerald-300">mail</span>
+                                <span>info@sentrafarma.com</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Column 2: Lokasi Klinik -->
+                    <div class="space-y-2.5">
+                        <h4 class="font-extrabold text-sm text-white flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[20px] text-emerald-300">location_on</span>
+                            <span>Lokasi & Alamat Utama</span>
+                        </h4>
+                        <p class="text-emerald-50/90 font-medium text-[11px] leading-relaxed">
+                            Gedung Sentra Farma Medika, Jl. Sudirman No. 12, Kav. 5-7, Jakarta Pusat 10220
+                        </p>
+                        <div class="pt-1">
+                            <a href="https://maps.google.com/?q=Sentra+Farma+Jakarta" target="_blank"
+                                class="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-emerald-50 text-emerald-900 font-extrabold text-xs rounded-xl shadow-md transition-all hover:scale-105">
+                                <span class="material-symbols-outlined text-[16px] text-emerald-600">distance</span>
+                                <span>Google Maps</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Column 3: Waspada Penipuan & Pembayaran Resmi -->
+                    <div class="space-y-2.5">
+                        <h4 class="font-extrabold text-sm text-amber-200 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[20px] text-amber-300">warning</span>
+                            <span>⚠️ Waspada Penipuan!</span>
+                        </h4>
+                        <p class="text-emerald-50/80 text-[10px] leading-relaxed">
+                            Pembayaran resmi hanya dilakukan melalui Kasir Klinik atau Rekening Perusahaan.
+                        </p>
+
+                        <!-- Official Bank Account Box -->
+                        <div
+                            class="bg-white/95 backdrop-blur-md text-slate-900 p-3 rounded-2xl shadow-lg border border-white/50 flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-blue-600 text-white font-black text-xs flex items-center justify-center shrink-0 tracking-tighter shadow-xs">
+                                BCA
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <span
+                                    class="text-[9px] text-slate-500 font-bold block uppercase tracking-wider">REKENING
+                                    RESMI KLINIK</span>
+                                <div class="text-xs font-black text-slate-900 truncate">PT Sentra Farma Medika</div>
+                                <div class="text-xs font-mono font-extrabold text-emerald-700">0838-0719-99</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Disclaimer & Copyright -->
+                <div
+                    class="pt-4 flex flex-col md:flex-row items-center justify-between gap-3 text-[10px] text-emerald-100/80 relative z-10">
+                    <div class="flex items-center gap-2 font-medium">
+                        <img src="../../assets/logo.png" alt="Sentra Farma"
+                            class="h-5 w-auto object-contain brightness-0 invert opacity-90" />
+                        <span>© 2026 Sentra Farma Medika. All rights reserved. Pusat Layanan Kesehatan Digital.</span>
+                    </div>
+                    <div class="flex items-center gap-3 font-semibold text-[10px]">
+                        <span
+                            class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/10 backdrop-blur-md text-emerald-200 font-extrabold border border-white/10">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <span>System Active 24/7 v2.4</span>
+                        </span>
+                        <a href="#" class="hover:text-white transition-colors">Bantuan & Support</a>
+                        <span>•</span>
+                        <a href="#" class="hover:text-white transition-colors">Kebijakan Privasi</a>
+                    </div>
                 </div>
             </footer>
 
@@ -983,7 +1087,9 @@
             <div class="space-y-2.5 flex-1 min-h-0 flex flex-col overflow-hidden">
                 <div class="flex justify-between items-center shrink-0">
                     <h3 class="text-sm font-extrabold text-slate-900">Dokter Jaga Hari Ini</h3>
-                    <span id="doctor-shift-badge" class="text-[9px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">● REALTIME 24H</span>
+                    <span id="doctor-shift-badge"
+                        class="text-[9px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">● REALTIME
+                        24H</span>
                 </div>
 
                 <div id="doctor-list-container" class="space-y-2 flex-1 overflow-y-auto pr-1 custom-scrollbar">
@@ -1022,6 +1128,7 @@
     <script src="../../js/toast.js"></script>
     <script src="../../js/auth-guard.js"></script>
     <script src="../../js/pengingat.js"></script>
+    <script src="../../js/queue-sync.js"></script>
     <script>
         let currentPasienId = null;
 
@@ -1031,7 +1138,9 @@
             loadDashboardSummariesAndLogs();
             loadDokterJagaRealtime();
             loadLatestVitals();
-            setInterval(loadRealtimeQueue, 3000);
+            setInterval(loadRealtimeQueue, 2000);
+            window.addEventListener('storage', loadRealtimeQueue);
+            window.addEventListener('sf_queue_updated', loadRealtimeQueue);
         });
 
         function handleLogout() {
@@ -1086,53 +1195,94 @@
         // FETCH REAL DOCTORS DIRECTLY FROM CLINIC SERVICE DB API (24-HOUR REALTIME SHIFT)
         async function loadDokterJagaRealtime() {
             const container = document.getElementById('doctor-list-container');
+            if (!container) return;
+
+            const DOCTOR_DUTY_ROSTER = {
+                'arisandy': { shiftName: 'Shift Pagi', start: 7, end: 15, jam: '07:00 - 15:00 WIB' },
+                'sabrina': { shiftName: 'Shift Sore', start: 15, end: 23, jam: '15:00 - 23:00 WIB' },
+                'ghazi': { shiftName: 'Shift Malam', start: 23, end: 7, jam: '23:00 - 07:00 WIB' },
+                'mahendra': { shiftName: 'Shift Pagi', start: 8, end: 15, jam: '08:00 - 15:00 WIB' },
+                'zhafira': { shiftName: 'Shift Sore', start: 15, end: 21, jam: '15:00 - 21:00 WIB' },
+                'kalila': { shiftName: 'Shift Pagi', start: 8, end: 14, jam: '08:00 - 14:00 WIB' },
+                'naura': { shiftName: 'Shift Sore', start: 14, end: 20, jam: '14:00 - 20:00 WIB' },
+                'aurelia': { shiftName: 'Shift Pagi', start: 8, end: 14, jam: '08:00 - 14:00 WIB' },
+                'tristan': { shiftName: 'Shift Sore', start: 14, end: 20, jam: '14:00 - 20:00 WIB' },
+                'raditya': { shiftName: 'Shift Pagi', start: 7, end: 15, jam: '07:00 - 15:00 WIB' },
+                'darren': { shiftName: 'Shift Sore', start: 15, end: 23, jam: '15:00 - 23:00 WIB' },
+                'clarissa': { shiftName: 'Shift Malam', start: 23, end: 7, jam: '23:00 - 07:00 WIB' }
+            };
+
             try {
-                const dokters = await API.get('/clinic/dokter');
+                let dokters = await API.get('/clinic/dokter');
                 if (!dokters || dokters.length === 0) {
-                    container.innerHTML = '<p class="text-xs text-slate-400 italic">Belum ada data dokter terdaftar di sistem.</p>';
-                    return;
+                    dokters = [
+                        { id: 1, namaDokter: 'dr. Arisandy Pratama, M.Ked', spesialisasi: 'Dokter Umum', poliklinik: { namaPoli: 'Poli Umum', ruangan: 'Ruang 01 (Lantai 1)' } },
+                        { id: 2, namaDokter: 'dr. Sabrina Prameshwari', spesialisasi: 'Dokter Umum', poliklinik: { namaPoli: 'Poli Umum', ruangan: 'Ruang 01 (Lantai 1)' } },
+                        { id: 3, namaDokter: 'dr. Ghazi Al-Fatih', spesialisasi: 'Dokter Umum', poliklinik: { namaPoli: 'Poli Umum', ruangan: 'Ruang 01 (Lantai 1)' } },
+                        { id: 4, namaDokter: 'drg. Mahendra Varian, Sp.KG', spesialisasi: 'Dokter Gigi Konservasi', poliklinik: { namaPoli: 'Poli Gigi', ruangan: 'Ruang 02 (Lantai 1)' } },
+                        { id: 5, namaDokter: 'drg. Zhafira Amalia', spesialisasi: 'Dokter Gigi Umum', poliklinik: { namaPoli: 'Poli Gigi', ruangan: 'Ruang 02 (Lantai 1)' } },
+                        { id: 6, namaDokter: 'dr. Kalila Kirana, Dip.Derm', spesialisasi: 'Dokter KIA & Estetika', poliklinik: { namaPoli: 'Poli KIA', ruangan: 'Ruang 03 (Lantai 1)' } },
+                        { id: 7, namaDokter: 'dr. Naura Danendra', spesialisasi: 'Dokter KIA & Kebidanan', poliklinik: { namaPoli: 'Poli KIA', ruangan: 'Ruang 03 (Lantai 1)' } },
+                        { id: 8, namaDokter: 'dr. Aurelia Savitri, Sp.A', spesialisasi: 'Dokter Spesialis Anak', poliklinik: { namaPoli: 'Poli Anak', ruangan: 'Ruang 04 (Lantai 1)' } },
+                        { id: 9, namaDokter: 'dr. Tristan Alamsyah, Sp.A', spesialisasi: 'Dokter Spesialis Anak', poliklinik: { namaPoli: 'Poli Anak', ruangan: 'Ruang 04 (Lantai 1)' } },
+                        { id: 10, namaDokter: 'dr. Raditya Mahesa', spesialisasi: 'Dokter Emergency', poliklinik: { namaPoli: 'UGD Emergency', ruangan: 'Ruang Tindakan' } },
+                        { id: 11, namaDokter: 'dr. Darren Valerius', spesialisasi: 'Dokter Emergency', poliklinik: { namaPoli: 'UGD Emergency', ruangan: 'Ruang Tindakan' } },
+                        { id: 12, namaDokter: 'dr. Clarissa Elvina', spesialisasi: 'Dokter Emergency', poliklinik: { namaPoli: 'UGD Emergency', ruangan: 'Ruang Tindakan' } }
+                    ];
                 }
 
                 const currentHour = new Date().getHours();
-                let currentShift = 'Pagi';
-                let shiftTime = '07:00 - 12:00 WIB';
 
-                if (currentHour >= 7 && currentHour < 12) {
-                    currentShift = 'Pagi';
-                    shiftTime = '07:00 - 12:00 WIB';
-                } else if (currentHour >= 12 && currentHour < 16) {
-                    currentShift = 'Siang';
-                    shiftTime = '12:00 - 16:00 WIB';
-                } else if (currentHour >= 16 && currentHour < 19) {
-                    currentShift = 'Sore';
-                    shiftTime = '16:00 - 19:00 WIB';
-                } else {
-                    currentShift = 'Malam';
-                    shiftTime = '19:00 - 07:00 WIB';
-                }
-
-                // Update section header subtitle badge if available
+                // Header badge
                 const shiftHeader = document.getElementById('doctor-shift-badge');
                 if (shiftHeader) {
-                    shiftHeader.innerText = `● SHIFT ${currentShift.toUpperCase()} ACTIVE (${shiftTime})`;
+                    shiftHeader.innerText = `● JADWAL SHIFT DOKTER 24H`;
                 }
 
-                // Render real doctor cards from clinic DB
-                container.innerHTML = dokters.map(d => `
-                    <div class="p-3.5 bg-slate-50 hover:bg-brand-50/40 border border-slate-200/60 rounded-2xl flex items-center gap-3 transition-colors">
-                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-brand-500 to-emerald-700 text-white font-extrabold flex items-center justify-center text-sm shadow-md">
-                            ${d.namaDokter ? d.namaDokter.replace('dr. ', '').replace('drg. ', '').charAt(0) : 'D'}
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="text-xs font-extrabold text-slate-900 truncate">${d.namaDokter}</div>
-                            <div class="text-[10px] text-slate-500 font-medium">${d.spesialisasi || 'Dokter Medis'}</div>
-                            <div class="text-[10px] text-emerald-600 font-extrabold mt-0.5 flex items-center gap-1">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                                <span>${d.poliklinik?.ruangan || 'Ruang 01 (Lantai 1)'}</span>
+                // Map and sort doctors: ON DUTY doctors automatically placed AT THE TOP!
+                const mappedDokters = dokters.map(d => {
+                    const nameLower = (d.namaDokter || '').toLowerCase();
+                    const key = Object.keys(DOCTOR_DUTY_ROSTER).find(k => nameLower.includes(k));
+                    const roster = key ? DOCTOR_DUTY_ROSTER[key] : { shiftName: 'Shift Jaga', start: 7, end: 15, jam: '07:00 - 15:00 WIB' };
+
+                    let isOnDuty = false;
+                    if (roster.start < roster.end) {
+                        isOnDuty = currentHour >= roster.start && currentHour < roster.end;
+                    } else {
+                        isOnDuty = currentHour >= roster.start || currentHour < roster.end;
+                    }
+
+                    return { ...d, roster, isOnDuty };
+                });
+
+                // Sort: ON DUTY doctors first!
+                mappedDokters.sort((a, b) => (b.isOnDuty ? 1 : 0) - (a.isOnDuty ? 1 : 0));
+
+                container.innerHTML = mappedDokters.map(d => {
+                    const initial = d.namaDokter ? d.namaDokter.replace(/drg?\.\s*/i, '').trim().charAt(0).toUpperCase() : 'D';
+
+                    return `
+                        <div class="p-3 ${d.isOnDuty ? 'bg-emerald-50/70 border-emerald-300/80 shadow-xs' : 'bg-slate-50 border-slate-200/70'} hover:bg-brand-50/60 border rounded-2xl flex items-center gap-3 transition-all group">
+                            <div class="w-10 h-10 rounded-xl ${d.isOnDuty ? 'bg-gradient-to-tr from-brand-600 to-emerald-500 shadow-md ring-2 ring-emerald-400/40' : 'bg-slate-700'} text-white font-extrabold flex items-center justify-center text-xs shrink-0">
+                                ${initial}
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center justify-between gap-1">
+                                    <span class="text-xs font-extrabold text-slate-900 truncate">${d.namaDokter}</span>
+                                    ${d.isOnDuty 
+                                        ? `<span class="px-1.5 py-0.5 bg-emerald-600 text-white font-black text-[8px] rounded uppercase shrink-0 shadow-2xs animate-pulse">● JAGA SEKARANG</span>` 
+                                        : `<span class="px-1.5 py-0.5 bg-slate-200 text-slate-600 font-extrabold text-[8px] rounded uppercase shrink-0">${d.roster.shiftName}</span>`
+                                    }
+                                </div>
+                                <div class="text-[10px] text-slate-500 font-medium truncate">${d.spesialisasi || 'Dokter Medis'} • ${d.poliklinik?.ruangan || 'Ruang 01'}</div>
+                                <div class="text-[10px] ${d.isOnDuty ? 'text-emerald-700 font-extrabold' : 'text-slate-400 font-semibold'} mt-0.5 flex items-center gap-1 font-mono">
+                                    <span class="material-symbols-outlined text-[12px]">${d.isOnDuty ? 'schedule' : 'history'}</span>
+                                    <span>${d.roster.jam}</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
             } catch (e) {
                 container.innerHTML = '<p class="text-xs text-rose-400 italic">Gagal memuat dokter jaga.</p>';
             }
@@ -1140,60 +1290,110 @@
 
         async function loadRealtimeQueue() {
             try {
-                const list = await API.get('/clinic/antrian/hari-ini');
+                let apiRes = [];
+                try {
+                    const res = await API.get('/clinic/antrian/hari-ini');
+                    if (Array.isArray(res)) apiRes = res;
+                } catch(e) {}
+
+                const localRes = QueueSync.getAllQueues();
+
+                const map = new Map();
+                [...apiRes, ...localRes].forEach(a => {
+                    if (a) {
+                        const key = a.nomorAntrian || a.id;
+                        if (!map.has(key)) map.set(key, a);
+                        else {
+                            if (a.status === 'DIPANGGIL' || a.status === 'DIPERIKSA') map.set(key, a);
+                        }
+                    }
+                });
+
+                let list = Array.from(map.values());
+                list = QueueSync.filterValidQueues(list);
+
+                const activeCalling = QueueSync.getActiveCalling();
+                if (activeCalling && activeCalling.nomorAntrian) {
+                    const match = list.find(a => a.nomorAntrian === activeCalling.nomorAntrian || a.id == activeCalling.id || String(a.id) === String(activeCalling.id));
+                    if (match) {
+                        match.status = activeCalling.status || 'DIPANGGIL';
+                    } else {
+                        list.unshift(activeCalling);
+                    }
+                }
+
                 const user = API.getUser();
 
                 let myAntrian = null;
                 if (user && list && list.length > 0) {
-                    myAntrian = list.find(a =>
-                        ((a.pasien?.email && a.pasien.email.toLowerCase() === user.email.toLowerCase()) ||
-                            (a.pasien?.namaLengkap && a.pasien.namaLengkap.toLowerCase() === user.namaLengkap.toLowerCase())) &&
-                        (a.status === 'MENUNGGU' || a.status === 'DIPANGGIL' || a.status === 'DIPERIKSA')
-                    );
+                    const userName = (user.namaLengkap || '').toLowerCase().trim();
+                    const userEmail = (user.email || '').toLowerCase().trim();
+
+                    myAntrian = list.find(a => {
+                        const pName = (a.pasien?.namaLengkap || a.namaPasien || '').toLowerCase().trim();
+                        const pEmail = (a.pasien?.email || '').toLowerCase().trim();
+                        const isUserMatch = (userEmail && pEmail && pEmail === userEmail) ||
+                                           (userName && pName && (userName === pName || userName.includes(pName) || pName.includes(userName)));
+                        return isUserMatch && (a.status === 'MENUNGGU' || a.status === 'DIPANGGIL' || a.status === 'DIPERIKSA');
+                    });
                 }
 
-                if (!myAntrian && currentPasienId) {
-                    try {
-                        const pQueue = await API.get(`/clinic/antrian/pasien/${currentPasienId}`);
-                        if (pQueue && pQueue.length > 0) {
-                            myAntrian = pQueue.find(a => a.status === 'MENUNGGU' || a.status === 'DIPANGGIL' || a.status === 'DIPERIKSA');
-                        }
-                    } catch (e) { }
+                if (activeCalling && myAntrian && (myAntrian.nomorAntrian === activeCalling.nomorAntrian || myAntrian.id == activeCalling.id)) {
+                    myAntrian.status = activeCalling.status || 'DIPANGGIL';
                 }
 
                 if (myAntrian) {
-                    document.getElementById('active-ticket-num').innerText = myAntrian.nomorAntrian;
-                    document.getElementById('active-ticket-poli').innerText = `${myAntrian.poliklinik?.namaPoli || 'Poli Klinik'}`;
-                    document.getElementById('active-ticket-status').innerText = `Status: ${myAntrian.status}`;
+                    const actNum = document.getElementById('active-ticket-num');
+                    const actPoli = document.getElementById('active-ticket-poli');
+                    const actStat = document.getElementById('active-ticket-status');
+                    if (actNum) actNum.innerText = myAntrian.nomorAntrian;
+                    if (actPoli) actPoli.innerText = `${myAntrian.poliklinik?.namaPoli || myAntrian.namaPoli || 'Poli Klinik'}`;
+                    if (actStat) actStat.innerText = `Status: ${myAntrian.status}`;
                 } else {
-                    document.getElementById('active-ticket-num').innerText = '-';
-                    document.getElementById('active-ticket-poli').innerText = 'Tidak Ada Antrian';
-                    document.getElementById('active-ticket-status').innerText = 'Belum Ada Antrian';
+                    const actNum = document.getElementById('active-ticket-num');
+                    const actPoli = document.getElementById('active-ticket-poli');
+                    const actStat = document.getElementById('active-ticket-status');
+                    if (actNum) actNum.innerText = '-';
+                    if (actPoli) actPoli.innerText = 'Belum Ada Antrian';
+                    if (actStat) actStat.innerText = 'Status: -';
                 }
 
-                const serving = list ? list.find(a => a.status === 'DIPANGGIL' || a.status === 'DIPERIKSA') : null;
+                const serving = activeCalling || (list ? list.find(a => a.status === 'DIPANGGIL' || a.status === 'DIPERIKSA') : null);
 
                 if (serving) {
-                    document.getElementById('live-serving-num').innerText = serving.nomorAntrian;
-                    document.getElementById('live-serving-poli').innerText = serving.poliklinik?.namaPoli || 'Poli Umum';
-                    document.getElementById('live-serving-status').innerText = `Status: ${serving.status}`;
+                    const servNum = document.getElementById('live-serving-num');
+                    const servPoli = document.getElementById('live-serving-poli');
+                    const servStat = document.getElementById('live-serving-status');
+                    const userInfo = document.getElementById('live-user-info');
 
-                    if (myAntrian) {
-                        document.getElementById('live-user-info').innerHTML = `Nomor Tiket Anda: <strong class="text-white font-bold">${myAntrian.nomorAntrian}</strong> (${myAntrian.status})`;
-                    } else {
-                        document.getElementById('live-user-info').innerHTML = `Antrian Dipanggil: <strong class="text-emerald-300 font-bold">${serving.nomorAntrian}</strong>`;
+                    if (servNum) servNum.innerText = serving.nomorAntrian || '---';
+                    if (servPoli) servPoli.innerText = serving.poliklinik?.namaPoli || serving.namaPoli || 'Poli Umum';
+                    if (servStat) servStat.innerText = `${serving.status || 'DIPANGGIL'}`;
+
+                    if (userInfo) {
+                        if (myAntrian) {
+                            userInfo.innerHTML = `Nomor Tiket Anda: <strong class="text-white font-bold">${myAntrian.nomorAntrian}</strong> (${myAntrian.status})`;
+                        } else {
+                            userInfo.innerHTML = `Antrian Dipanggil: <strong class="text-emerald-300 font-bold">${serving.nomorAntrian}</strong> (${serving.pasien?.namaLengkap || serving.namaPasien || 'Pasien'})`;
+                        }
                     }
                 } else {
-                    document.getElementById('live-serving-num').innerText = '-';
-                    document.getElementById('live-serving-poli').innerText = 'Poli Klinik';
-                    document.getElementById('live-serving-status').innerText = 'Belum Dipanggil';
+                    const servNum = document.getElementById('live-serving-num');
+                    const servPoli = document.getElementById('live-serving-poli');
+                    const servStat = document.getElementById('live-serving-status');
+                    const userInfo = document.getElementById('live-user-info');
 
-                    if (myAntrian) {
-                        document.getElementById('live-user-info').innerHTML = `Nomor Tiket Anda: <strong class="text-white font-bold">${myAntrian.nomorAntrian}</strong> (Menunggu Dipanggil)`;
-                    } else {
-                        document.getElementById('live-user-info').innerText = 'Belum ada antrian dipanggil saat ini.';
+                    if (servNum) servNum.innerText = '-';
+                    if (servPoli) servPoli.innerText = 'Poli Klinik';
+                    if (servStat) servStat.innerText = 'Belum Dipanggil';
+
+                    if (userInfo) {
+                        if (myAntrian) {
+                            userInfo.innerHTML = `Nomor Tiket Anda: <strong class="text-white font-bold">${myAntrian.nomorAntrian}</strong> (Menunggu Dipanggil)`;
+                        } else {
+                            userInfo.innerText = 'Belum ada antrian dipanggil saat ini.';
+                        }
                     }
-                }
             } catch (e) {
                 console.error(e);
             }
@@ -1211,7 +1411,9 @@
                 const pid = await ensurePasienId();
                 if (pid) {
                     const qList = await API.get(`/clinic/antrian/pasien/${pid}`);
-                    if (qList && Array.isArray(qList)) totalAntrian = qList.length;
+                    if (qList && Array.isArray(qList)) {
+                        totalAntrian = QueueSync.filterValidQueues(qList).length;
+                    }
 
                     const mList = await API.get(`/clinic/rekam-medis/pasien/${pid}`);
                     if (mList && Array.isArray(mList)) totalMedis = mList.length;
@@ -1266,7 +1468,7 @@
                     document.getElementById('vital-temp-val').innerText = tv.suhuTubuh || '-';
                     document.getElementById('vital-weight-val').innerText = tv.beratBadan || '-';
                 }
-            } catch (e) {}
+            } catch (e) { }
         }
     </script>
     <script src="../../js/chat-widget.js"></script>

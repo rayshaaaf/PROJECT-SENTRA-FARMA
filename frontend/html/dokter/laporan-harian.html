@@ -12,7 +12,10 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../css/custom-select.css" />
+    <script src="../../js/custom-select.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -30,6 +33,10 @@
         }
     </script>
     <style>
+        * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
         .material-symbols-outlined, .material-icons, .material-icons-outlined {
             font-family: 'Material Symbols Outlined', 'Material Icons Outlined', 'Material Icons' !important;
             font-weight: normal;
@@ -113,32 +120,32 @@
     <!-- LEFT SIDEBAR DOCK (DESKTOP) -->
     <aside class="left-dock fixed left-6 top-1/2 -translate-y-1/2 w-20 bg-white/95 backdrop-blur-2xl border border-slate-200/80 shadow-xl shadow-slate-300/40 rounded-3xl z-50 hidden lg:flex flex-col items-center py-5 space-y-4">
         <nav class="flex flex-col items-center gap-2">
-            <a href="dashboard.html" title="Dashboard Utama" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+            <a href="dashboard.html" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">dashboard</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Dashboard</span>
             </a>
-            <a href="pemeriksaan.html" title="Ruang Periksa Pasien" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+            <a href="pemeriksaan.html" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">stethoscope</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Ruang Periksa</span>
             </a>
-            <a href="jadwal.html" title="Jadwal Shift Dokter" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+            <a href="jadwal.html" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">calendar_month</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Jadwal Shift</span>
             </a>
-            <a href="riwayat-pasien.html" title="Arsip Riwayat Pasien" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+            <a href="riwayat-pasien.html" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">folder_shared</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Riwayat Pasien</span>
             </a>
-            <a href="chat.html" title="Live Chat Konsultasi" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+            <a href="chat.html" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">forum</span>
                 <span id="doctor-chat-badge" class="hidden absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white text-[9px] font-black rounded-full items-center justify-center animate-pulse border border-white shadow-xs">0</span>
                 <span id="doctor-chat-tooltip" class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Live Chat</span>
             </a>
-            <a href="laporan-harian.html" title="Laporan Harian & Berkas" class="relative group p-2.5 rounded-2xl bg-brand-50 text-brand-600 font-bold transition-all shadow-2xs">
+            <a href="laporan-harian.html" class="relative group p-2.5 rounded-2xl bg-brand-50 text-brand-600 font-bold transition-all shadow-2xs">
                 <span class="material-symbols-outlined text-[22px]">assignment</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Laporan Harian</span>
             </a>
-            <button onclick="Absensi.openModal()" title="Presensi Dokter" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all cursor-pointer">
+            <button onclick="Absensi.openModal()" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all cursor-pointer">
                 <span class="material-symbols-outlined text-[22px]">fingerprint</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Presensi Dokter</span>
             </button>
@@ -147,11 +154,11 @@
         <div class="w-8 h-px bg-slate-200/70"></div>
 
         <div class="flex flex-col items-center gap-2">
-            <a href="profil.html" title="Profil Dokter" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+            <a href="profil.html" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">person</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Profil Saya</span>
             </a>
-            <button onclick="handleLogout()" title="Logout" class="relative group p-2.5 rounded-2xl text-rose-400 hover:text-rose-600 hover:bg-rose-50 transition-all">
+            <button onclick="handleLogout()" class="relative group p-2.5 rounded-2xl text-rose-400 hover:text-rose-600 hover:bg-rose-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">logout</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-rose-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Logout</span>
             </button>
@@ -211,7 +218,7 @@
         </header>
 
         <!-- MAIN WORKSPACE CONTAINER -->
-        <main class="p-6 max-w-6xl mx-auto w-full flex-1 flex flex-col justify-between overflow-hidden gap-4">
+        <main class="p-6 w-full flex-1 flex flex-col justify-between overflow-hidden gap-4">
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-1">
 
@@ -236,10 +243,9 @@
                             <div>
                                 <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px] tracking-wider">Shift Jaga *</label>
                                 <select id="laporan-shift" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800 font-semibold focus:outline-none focus:border-brand-500 focus:bg-white transition-all">
-                                    <option value="Shift Pagi (07:00 - 12:00)">Shift Pagi (07:00 - 12:00 WIB)</option>
-                                    <option value="Shift Siang (12:00 - 16:00)">Shift Siang (12:00 - 16:00 WIB)</option>
-                                    <option value="Shift Sore (16:00 - 19:00)">Shift Sore (16:00 - 19:00 WIB)</option>
-                                    <option value="Shift Malam (19:00 - 07:00)">Shift Malam (19:00 - 07:00 WIB)</option>
+                                    <option value="Shift Pagi (07:00 - 15:00 WIB)">Shift Pagi (07:00 - 15:00 WIB)</option>
+                                    <option value="Shift Sore (15:00 - 23:00 WIB)">Shift Sore (15:00 - 23:00 WIB)</option>
+                                    <option value="Shift Malam (23:00 - 07:00 WIB)">Shift Malam (23:00 - 07:00 WIB)</option>
                                 </select>
                             </div>
                         </div>
@@ -319,23 +325,6 @@
 
             </div>
         </main>
-
-        <!-- FOOTER -->
-        <footer class="mt-auto py-3 px-6 border-t border-slate-200/60 bg-white/60 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 shrink-0">
-            <div class="flex items-center gap-2">
-                <img src="../../assets/logo.png" alt="Sentra Farma" class="h-5 w-auto object-contain opacity-80" />
-                <span class="font-bold text-slate-700">© 2026 Sentra Farma Medika.</span>
-                <span class="hidden md:inline text-slate-400">Pusat Layanan Kesehatan Digital.</span>
-            </div>
-            <div class="flex items-center gap-4 text-[11px] font-semibold">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100/80 text-emerald-800 font-bold border border-emerald-200/60">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>System Active 24/7 v2.4</span>
-                </span>
-                <a href="#" class="hover:text-emerald-700 transition-colors">Bantuan & Support</a>
-                <a href="#" class="hover:text-emerald-700 transition-colors">Kebijakan Privasi</a>
-            </div>
-        </footer>
     </div>
 
     <!-- MODAL PREVIEW & CETAK LAPORAN PDF -->
@@ -386,8 +375,11 @@
 
             <div class="flex justify-end items-center gap-2 pt-2">
                 <button onclick="closeModalCetakLaporan()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-extrabold rounded-xl transition-colors">Tutup</button>
-                <button onclick="window.print()" class="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-extrabold rounded-xl transition-colors flex items-center gap-1 shadow-xs">
-                    <span class="material-symbols-outlined text-[16px]">print</span> Cetak Laporan / Download PDF
+                <button onclick="downloadLaporanCSV()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold rounded-xl transition-colors flex items-center gap-1 shadow-xs cursor-pointer">
+                    <span class="material-symbols-outlined text-[16px]">table_view</span> Download Excel
+                </button>
+                <button onclick="downloadLaporanPDF()" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-extrabold rounded-xl transition-colors flex items-center gap-1 shadow-xs cursor-pointer">
+                    <span class="material-symbols-outlined text-[16px]">picture_as_pdf</span> Download PDF
                 </button>
             </div>
         </div>
@@ -564,6 +556,58 @@
 
         function closeModalCetakLaporan() {
             document.getElementById('modal-cetak-laporan').classList.add('hidden');
+        }
+
+        function downloadLaporanPDF() {
+            const element = document.querySelector('#modal-cetak-laporan .bg-white');
+            if (typeof html2pdf !== 'undefined') {
+                const opt = {
+                    margin: 0.3,
+                    filename: `Laporan_Jaga_Dokter_${new Date().toISOString().slice(0,10)}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2 },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
+                html2pdf().set(opt).from(element).save();
+                Toast.success('Laporan Jaga Dokter berhasil di-download sebagai PDF!', 'Download PDF');
+            } else {
+                const docName = document.getElementById('print-doc-name').innerText;
+                const docDate = document.getElementById('print-doc-date').innerText;
+                const blob = new Blob([`LAPORAN JAGA DOKTER SENTRA FARMA\nDokter: ${docName}\nTanggal: ${docDate}`], { type: 'application/pdf' });
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = `Laporan_Jaga_Dokter_${new Date().toISOString().slice(0,10)}.pdf`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                Toast.success('Laporan PDF berhasil di-download!', 'Download PDF');
+            }
+        }
+
+        function downloadLaporanCSV() {
+            const docName = document.getElementById('print-doc-name').innerText;
+            const docDate = document.getElementById('print-doc-date').innerText;
+            const docTotal = document.getElementById('print-doc-total').innerText;
+            const docFile = document.getElementById('print-doc-file').innerText;
+            const docSummary = document.getElementById('print-doc-ringkasan').innerText;
+
+            const csvData = [
+                ["Parameter Laporan Dokter", "Detail Data"],
+                ["Dokter Praktik", docName],
+                ["Tanggal & Shift Jaga", docDate],
+                ["Total Pasien Terlayani", docTotal],
+                ["Lampiran Berkas Medis", docFile],
+                ["Ringkasan Kegiatan Medis", docSummary]
+            ].map(e => e.map(cell => `"${cell}"`).join(",")).join("\n");
+
+            const blob = new Blob(["\uFEFF" + csvData], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `Laporan_Jaga_Dokter_${new Date().toISOString().slice(0,10)}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            Toast.success('Laporan Jaga Dokter berhasil di-download sebagai Excel/CSV!', 'Download Excel');
         }
     </script>
 </body>

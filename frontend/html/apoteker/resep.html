@@ -13,6 +13,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -208,23 +209,6 @@
                     </table>
             </section>
         </main>
-
-        <!-- FOOTER -->
-        <footer class="mt-auto py-3 px-6 border-t border-slate-200/60 bg-white/60 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 shrink-0">
-            <div class="flex items-center gap-2">
-                <img src="../../assets/logo.png" alt="Sentra Farma" class="h-5 w-auto object-contain opacity-80" />
-                <span class="font-bold text-slate-700">© 2026 Sentra Farma Medika.</span>
-                <span class="hidden md:inline text-slate-400">Pusat Layanan Kesehatan Digital.</span>
-            </div>
-            <div class="flex items-center gap-4 text-[11px] font-semibold">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100/80 text-emerald-800 font-bold border border-emerald-200/60">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>System Active 24/7 v2.4</span>
-                </span>
-                <a href="#" class="hover:text-emerald-700 transition-colors">Bantuan & Support</a>
-                <a href="#" class="hover:text-emerald-700 transition-colors">Kebijakan Privasi</a>
-            </div>
-        </footer>
     </div>
 
     <!-- MODAL CETAK ETIKET OBAT DIGITAL -->
@@ -280,8 +264,8 @@
 
             <div class="flex justify-end gap-2">
                 <button onclick="closeModalEtiket()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs">Tutup</button>
-                <button onclick="window.print()" class="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white font-extrabold rounded-xl shadow-xs text-xs flex items-center gap-1">
-                    <span class="material-symbols-outlined text-[16px]">print</span> Cetak Etiket
+                <button onclick="downloadEtiketPDF()" class="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white font-extrabold rounded-xl shadow-xs text-xs flex items-center gap-1 cursor-pointer">
+                    <span class="material-symbols-outlined text-[16px]">picture_as_pdf</span> Download Etiket PDF
                 </button>
             </div>
         </div>
@@ -432,6 +416,31 @@
                 document.getElementById('racik-hasil-rekomendasi').innerText = `Ambil ${totalTablet} Tablet sediaan ${sediaan}mg dan gerus rata menjadi ${bungkus} puyer / kapsul (@ ${minta}mg).`;
             } else {
                 document.getElementById('racik-hasil-rekomendasi').innerText = 'Masukkan rincian dosis untuk menghitung tablet racikan.';
+            }
+        }
+
+        function downloadEtiketPDF() {
+            const element = document.querySelector('#modal-etiket-obat .bg-white');
+            const pasien = document.getElementById('etiket-pasien-nama').innerText;
+            if (typeof html2pdf !== 'undefined') {
+                const opt = {
+                    margin: 0.3,
+                    filename: `Etiket_Obat_${pasien.replace(/\s+/g, '_')}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2 },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
+                html2pdf().set(opt).from(element).save();
+                Toast.success(`Etiket obat ${pasien} berhasil di-download sebagai PDF!`, 'Download PDF');
+            } else {
+                const blob = new Blob([`ETIKET OBAT SENTRA FARMA\nPasien: ${pasien}`], { type: 'application/pdf' });
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = `Etiket_Obat_${pasien.replace(/\s+/g, '_')}.pdf`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                Toast.success('Etiket PDF berhasil di-download!', 'Download PDF');
             }
         }
     </script>

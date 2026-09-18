@@ -12,6 +12,8 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../css/custom-select.css" />
+    <script src="../../js/custom-select.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -19,8 +21,8 @@
                 extend: {
                     colors: {
                         brand: {
-                            50: '#F5F3FF', 100: '#EDE9FE', 200: '#DDD6FE', 300: '#C4B5FD', 400: '#A78BFA',
-                            500: '#8B5CF6', 600: '#7C3AED', 700: '#6D28D9', 800: '#5B21B6', 900: '#4C1D95'
+                            50: '#F0FDF4', 100: '#DCFCE7', 200: '#BBF7D0', 300: '#86EFAC', 400: '#4ADE80',
+                            500: '#10B981', 600: '#059669', 700: '#047857', 800: '#065F46', 900: '#064E3B', 950: '#022C22'
                         },
                         surface: '#F8FAFC'
                     },
@@ -39,7 +41,7 @@
         }
 
         html, body { height: 100vh; overflow: hidden !important; }
-        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 9999px; }
         ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
@@ -57,11 +59,11 @@
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-purple-50/60 via-indigo-50/40 to-slate-50 font-sans text-slate-800 flex h-screen antialiased selection:bg-brand-100 selection:text-brand-800 relative overflow-hidden">
+<body class="bg-gradient-to-br from-emerald-50/70 via-teal-50/40 to-slate-50 font-sans text-slate-800 flex h-screen antialiased selection:bg-brand-100 selection:text-brand-800 relative overflow-hidden">
 
     <!-- Ambient Glow Mesh Spheres -->
-    <div class="fixed -top-40 -left-40 w-[500px] h-[500px] bg-purple-300/25 rounded-full blur-[120px] pointer-events-none z-0"></div>
-    <div class="fixed top-1/3 -right-40 w-[450px] h-[450px] bg-indigo-200/25 rounded-full blur-[100px] pointer-events-none z-0"></div>
+    <div class="fixed -top-40 -left-40 w-[500px] h-[500px] bg-emerald-300/20 rounded-full blur-[120px] pointer-events-none z-0"></div>
+    <div class="fixed top-1/3 -right-40 w-[450px] h-[450px] bg-teal-200/20 rounded-full blur-[100px] pointer-events-none z-0"></div>
 
     <!-- LEFT SIDEBAR DOCK (DESKTOP) -->
     <aside class="left-dock fixed left-6 top-1/2 -translate-y-1/2 w-20 bg-white/95 backdrop-blur-2xl border border-slate-200/80 shadow-xl shadow-slate-300/40 rounded-3xl z-50 hidden lg:flex flex-col items-center py-5 space-y-4">
@@ -119,10 +121,10 @@
     </nav>
 
     <!-- MAIN CONTENT CONTAINER -->
-    <div class="main-portal-container flex-1 lg:ml-32 lg:mr-4 px-3 sm:px-6 flex flex-col min-h-screen lg:h-screen overflow-y-auto lg:overflow-hidden pb-20 lg:pb-0">
+    <div class="main-portal-container flex-1 lg:ml-32 lg:mr-6 px-3 sm:px-6 flex flex-col min-h-screen lg:h-screen overflow-y-auto lg:overflow-hidden pb-20 lg:pb-0">
 
         <!-- HEADER BAR -->
-        <header class="h-20 flex items-center justify-between px-6 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-purple-100/60 transition-all shrink-0">
+        <header class="h-20 flex items-center justify-between px-6 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100/60 transition-all shrink-0">
             <div class="flex items-center gap-3">
                 <a href="dashboard.html" class="flex items-center gap-2 group cursor-pointer shrink-0" title="Sentra Farma Front Desk">
                     <img src="../../assets/logo.png" alt="Sentra Farma" class="h-12 sm:h-14 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform" />
@@ -136,8 +138,8 @@
 
             <div class="flex items-center gap-2.5">
                 <button onclick="Absensi.openModal()" title="Presensi & Absensi Resepsionis"
-                    class="px-3 py-1 bg-brand-600 hover:bg-brand-700 text-white text-xs font-black rounded-full flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer">
-                    <span class="material-symbols-outlined text-[14px]">fingerprint</span>
+                    class="px-3.5 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-black rounded-full flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer">
+                    <span class="material-symbols-outlined text-[15px]">fingerprint</span>
                     <span>Presensi / Absen</span>
                 </button>
                 <a href="tiket-walkin.html" class="px-3.5 py-1.5 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs rounded-full flex items-center gap-1 shadow-2xs transition-all">
@@ -146,66 +148,118 @@
                 </a>
 
                 <div class="flex items-center gap-2 pl-2 border-l border-slate-200">
-                    <div id="user-avatar-initials" class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-700 to-indigo-500 text-white flex items-center justify-center font-extrabold text-xs shadow-md">R</div>
+                    <div id="user-avatar-initials" class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-700 to-emerald-500 text-white flex items-center justify-center font-extrabold text-xs shadow-md">R</div>
                     <span id="user-name-badge" class="text-xs font-extrabold text-slate-900 hidden sm:inline">Resepsionis</span>
                 </div>
             </div>
         </header>
 
         <!-- MAIN WORKSPACE CONTAINER -->
-        <main class="p-6 max-w-6xl mx-auto w-full flex-1 flex flex-col overflow-y-auto space-y-5 custom-scrollbar">
+        <main class="py-4 px-2 max-w-6xl mx-auto w-full flex-1 flex flex-col overflow-y-auto space-y-4 custom-scrollbar">
 
             <!-- HERO BANNER STATS -->
-            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-gradient-to-r from-purple-950 via-indigo-900 to-slate-900 p-6 rounded-3xl text-white shadow-xl relative overflow-hidden shrink-0">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-gradient-to-br from-brand-900 via-brand-800 to-emerald-900 p-5 rounded-3xl text-white shadow-xl relative overflow-hidden shrink-0 border border-emerald-700/40">
                 <div class="space-y-1 z-10">
-                    <div class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-white/10 backdrop-blur-md text-purple-300 text-[10px] font-bold">
-                        <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
+                    <div class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-white/10 backdrop-blur-md text-emerald-300 text-[10px] font-bold">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                         Meja Pendaftaran #1 • On Duty
                     </div>
-                    <h2 class="text-xl font-extrabold tracking-tight" id="hero-resepsionis-name">Meja Resepsionis Sentra Farma 🩺</h2>
-                    <p class="text-xs text-purple-100/80">Loket Pendaftaran Pasien, Check-In Kedatangan, & Pemanggilan Antrian Voice</p>
+                    <h2 class="text-lg sm:text-xl font-extrabold tracking-tight" id="hero-resepsionis-name">Meja Resepsionis Sentra Farma 🩺</h2>
+                    <p class="text-xs text-emerald-100/80">Loket Pendaftaran Pasien, Check-In Kedatangan, & Pemanggilan Antrian Voice</p>
                 </div>
 
-                <div class="flex items-center gap-3 z-10 text-xs">
-                    <div class="px-4 py-2 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 text-center">
+                <div class="flex items-center gap-3 z-10 text-xs w-full md:w-auto justify-between md:justify-end">
+                    <div class="px-4 py-2 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 text-center min-w-[80px]">
                         <span class="text-[10px] text-slate-300 block uppercase font-bold">Menunggu</span>
                         <span id="kpi-menunggu-count" class="text-lg font-black text-amber-300">0</span>
                     </div>
-                    <div class="px-4 py-2 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 text-center">
+                    <div class="px-4 py-2 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 text-center min-w-[80px]">
                         <span class="text-[10px] text-slate-300 block uppercase font-bold">Dipanggil</span>
-                        <span id="kpi-dipanggil-count" class="text-lg font-black text-purple-300">0</span>
+                        <span id="kpi-dipanggil-count" class="text-lg font-black text-emerald-300">0</span>
                     </div>
-                    <div class="px-4 py-2 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 text-center">
+                    <div class="px-4 py-2 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 text-center min-w-[80px]">
                         <span class="text-[10px] text-slate-300 block uppercase font-bold">Selesai</span>
                         <span id="kpi-selesai-count" class="text-lg font-black text-emerald-300">0</span>
                     </div>
                 </div>
             </div>
 
+            <!-- PUSAT KONTROL PANGGILAN ANTRIAN VOICE LOUDSPEAKER -->
+            <div class="bg-gradient-to-r from-emerald-950 via-brand-900 to-slate-900 rounded-3xl p-5 text-white shadow-lg space-y-4 border border-emerald-700/50">
+                <div class="flex items-center justify-between border-b border-white/10 pb-3 flex-wrap gap-2">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-bold border border-emerald-400/30 shrink-0">
+                            <span class="material-symbols-outlined text-[20px]">volume_up</span>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-extrabold text-white">Pusat Kontrol Panggilan Antrian (Voice Loudspeaker)</h3>
+                            <p class="text-[10px] text-emerald-200/80">Panggil antrian pasien secara realtime ke Monitor TV Publik & Portal Pasien</p>
+                        </div>
+                    </div>
+                    <span class="px-3 py-1 bg-emerald-500/20 text-emerald-300 font-extrabold text-[10px] rounded-full border border-emerald-400/30 flex items-center gap-1.5 shrink-0">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> LOUDSPEAKER READY
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 items-center">
+                    <!-- Current Calling Display Card -->
+                    <div class="p-3.5 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center shrink-0 border border-emerald-400/30">
+                            <span id="control-active-num" class="font-mono text-xl font-black text-emerald-300">---</span>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <span class="text-[9px] text-emerald-200 uppercase font-bold block">Sedang Dipanggil Sekarang:</span>
+                            <h4 id="control-active-name" class="text-xs font-black text-white truncate">Belum Ada Panggilan</h4>
+                            <span id="control-active-poli" class="text-[10px] text-slate-300 block font-medium truncate">Poliklinik Sentra Farma</span>
+                        </div>
+                    </div>
+
+                    <!-- Call Action Buttons -->
+                    <div class="lg:col-span-2 flex flex-wrap items-center gap-2 justify-start lg:justify-end text-xs">
+                        <button onclick="panggilAntrianBerikutnya()" class="flex-1 sm:flex-none px-4 py-3 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer">
+                            <span class="material-symbols-outlined text-[18px]">volume_up</span>
+                            <span>Panggil Antrian Selanjutnya</span>
+                        </button>
+                        <button onclick="panggilUlangAntrian()" class="px-3.5 py-3 bg-white/15 hover:bg-white/25 text-white font-extrabold rounded-2xl border border-white/20 transition-all flex items-center gap-1.5 cursor-pointer">
+                            <span class="material-symbols-outlined text-[16px]">replay</span>
+                            <span>Panggil Ulang</span>
+                        </button>
+                        <button onclick="selesaikanAntrianAktif()" class="px-3.5 py-3 bg-emerald-800/80 hover:bg-emerald-700 text-emerald-100 font-extrabold rounded-2xl border border-emerald-600/50 transition-all flex items-center gap-1.5 cursor-pointer">
+                            <span class="material-symbols-outlined text-[16px]">check_circle</span>
+                            <span>Selesai</span>
+                        </button>
+                        <button onclick="resetAntrianKeNol()" title="Reset semua antrian hari ini ke 0" class="px-3.5 py-3 bg-rose-500/80 hover:bg-rose-600 text-white font-extrabold rounded-2xl border border-rose-400/50 transition-all flex items-center gap-1.5 cursor-pointer">
+                            <span class="material-symbols-outlined text-[16px]">restart_alt</span>
+                            <span>Reset Ke 0</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <!-- QUICK SHORTCUTS -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-                <a href="tiket-walkin.html" class="p-4 bg-white hover:bg-brand-50/40 border border-slate-200/80 rounded-2xl shadow-2xs space-y-1 transition-all group">
-                    <div class="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
+                <a href="tiket-walkin.html" class="p-3.5 bg-white hover:bg-brand-50/40 border border-slate-200/80 rounded-2xl shadow-2xs space-y-1 transition-all group">
+                    <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
                         <span class="material-symbols-outlined text-[20px]">confirmation_number</span>
                     </div>
                     <h4 class="font-extrabold text-slate-900">Tiket Walk-in</h4>
                     <p class="text-[10px] text-slate-500">Terbitkan antrian pasien offline</p>
                 </a>
-                <a href="pendaftaran-pasien.html" class="p-4 bg-white hover:bg-brand-50/40 border border-slate-200/80 rounded-2xl shadow-2xs space-y-1 transition-all group">
-                    <div class="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
+                <a href="pendaftaran-pasien.html" class="p-3.5 bg-white hover:bg-brand-50/40 border border-slate-200/80 rounded-2xl shadow-2xs space-y-1 transition-all group">
+                    <div class="w-8 h-8 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
                         <span class="material-symbols-outlined text-[20px]">person_add</span>
                     </div>
                     <h4 class="font-extrabold text-slate-900">Registrasi Pasien</h4>
                     <p class="text-[10px] text-slate-500">Daftar akun pasien baru offline</p>
                 </a>
-                <a href="monitor-antrian.html" class="p-4 bg-white hover:bg-brand-50/40 border border-slate-200/80 rounded-2xl shadow-2xs space-y-1 transition-all group">
-                    <div class="w-8 h-8 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
+                <a href="monitor-antrian.html" class="p-3.5 bg-white hover:bg-brand-50/40 border border-slate-200/80 rounded-2xl shadow-2xs space-y-1 transition-all group">
+                    <div class="w-8 h-8 rounded-xl bg-brand-100 text-brand-700 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
                         <span class="material-symbols-outlined text-[20px]">desktop_windows</span>
                     </div>
                     <h4 class="font-extrabold text-slate-900">Monitor TV</h4>
                     <p class="text-[10px] text-slate-500">Display panggilan layar tunggu</p>
                 </a>
-                <button onclick="loadAntrianLive()" class="p-4 bg-white hover:bg-brand-50/40 border border-slate-200/80 rounded-2xl shadow-2xs space-y-1 transition-all group text-left">
+                <button onclick="loadAntrianLive()" class="p-3.5 bg-white hover:bg-brand-50/40 border border-slate-200/80 rounded-2xl shadow-2xs space-y-1 transition-all group text-left">
                     <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
                         <span class="material-symbols-outlined text-[20px]">refresh</span>
                     </div>
@@ -227,58 +281,45 @@
                         </div>
                     </div>
 
-                    <button onclick="loadAntrianLive()" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs rounded-xl flex items-center gap-1 transition-colors">
+                    <button onclick="loadAntrianLive()" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs rounded-xl flex items-center gap-1 transition-colors cursor-pointer">
                         <span class="material-symbols-outlined text-[15px]">refresh</span> Refresh
                     </button>
                 </div>
 
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-xs">
+                <div class="overflow-x-auto w-full">
+                    <table class="w-full text-left border-collapse text-xs min-w-[700px]">
                         <thead>
                             <tr class="border-b border-slate-200 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
-                                <th class="pb-2.5">Tiket</th>
-                                <th class="pb-2.5">Pasien</th>
-                                <th class="pb-2.5">Poli</th>
-                                <th class="pb-2.5">Dokter</th>
-                                <th class="pb-2.5">Tipe</th>
-                                <th class="pb-2.5">Status</th>
-                                <th class="pb-2.5 text-right">Aksi Panggilan Voice</th>
+                                <th class="pb-2.5 px-3">Tiket</th>
+                                <th class="pb-2.5 px-3">Pasien</th>
+                                <th class="pb-2.5 px-3">Poli</th>
+                                <th class="pb-2.5 px-3">Dokter</th>
+                                <th class="pb-2.5 px-3">Tipe</th>
+                                <th class="pb-2.5 px-3">Status</th>
+                                <th class="pb-2.5 px-3 text-right">Aksi Panggilan Voice</th>
                             </tr>
                         </thead>
                         <tbody id="antrian-live-tbody" class="divide-y divide-slate-100 text-slate-700">
                             <!-- Dynamic Content -->
                         </tbody>
                     </table>
+                </div>
             </section>
         </main>
-
-        <!-- FOOTER -->
-        <footer class="mt-auto py-3 px-6 border-t border-slate-200/60 bg-white/60 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 shrink-0">
-            <div class="flex items-center gap-2">
-                <img src="../../assets/logo.png" alt="Sentra Farma" class="h-5 w-auto object-contain opacity-80" />
-                <span class="font-bold text-slate-700">© 2026 Sentra Farma Medika.</span>
-                <span class="hidden md:inline text-slate-400">Pusat Layanan Kesehatan Digital.</span>
-            </div>
-            <div class="flex items-center gap-4 text-[11px] font-semibold">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100/80 text-emerald-800 font-bold border border-emerald-200/60">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>System Active 24/7 v2.4</span>
-                </span>
-                <a href="#" class="hover:text-emerald-700 transition-colors">Bantuan & Support</a>
-                <a href="#" class="hover:text-emerald-700 transition-colors">Kebijakan Privasi</a>
-            </div>
-        </footer>
     </div>
 
     <script src="../../js/api.js"></script>
     <script src="../../js/toast.js"></script>
     <script src="../../js/auth-guard.js"></script>
     <script src="../../js/absensi.js"></script>
+    <script src="../../js/queue-sync.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             initProfile();
             await loadAntrianLive();
-            setInterval(loadAntrianLive, 5000);
+            setInterval(loadAntrianLive, 3000);
+            window.addEventListener('storage', loadAntrianLive);
+            window.addEventListener('sf_queue_updated', loadAntrianLive);
         });
 
         function initProfile() {
@@ -291,13 +332,38 @@
             }
         }
 
+        let currentAntrianList = [];
+
         async function loadAntrianLive() {
             try {
-                const list = await API.get('/clinic/antrian/hari-ini');
+                let apiAntrians = [];
+                try {
+                    const list = await API.get('/clinic/antrian/hari-ini');
+                    if (Array.isArray(list)) apiAntrians = list;
+                } catch(e) {}
+
+                const localAntrians = QueueSync.getAllQueues();
+
+                const map = new Map();
+                [...apiAntrians, ...localAntrians].forEach(a => {
+                    if (a) {
+                        const key = a.nomorAntrian || a.id;
+                        if (!map.has(key)) {
+                            map.set(key, a);
+                        } else {
+                            if (a.status === 'DIPANGGIL' || a.status === 'DIPERIKSA') {
+                                map.set(key, a);
+                            }
+                        }
+                    }
+                });
+
+                let antrians = Array.from(map.values());
+                antrians = QueueSync.filterValidQueues(antrians);
+                currentAntrianList = antrians;
+
                 const tbody = document.getElementById('antrian-live-tbody');
                 tbody.innerHTML = '';
-
-                const antrians = Array.isArray(list) ? list : [];
                 
                 const mCount = antrians.filter(a => a.status === 'MENUNGGU').length;
                 const pCount = antrians.filter(a => a.status === 'DIPANGGIL' || a.status === 'DIPERIKSA').length;
@@ -307,54 +373,80 @@
                 document.getElementById('kpi-dipanggil-count').innerText = pCount;
                 document.getElementById('kpi-selesai-count').innerText = sCount;
 
+                const activeCalling = QueueSync.getActiveCalling() || antrians.find(a => a.status === 'DIPANGGIL') || null;
+
+                if (activeCalling) {
+                    document.getElementById('control-active-num').innerText = activeCalling.nomorAntrian || '---';
+                    document.getElementById('control-active-name').innerText = activeCalling.pasien?.namaLengkap || activeCalling.namaPasien || 'Pasien';
+                    document.getElementById('control-active-poli').innerText = `${activeCalling.poliklinik?.namaPoli || activeCalling.namaPoli || 'Poli Umum'} • ${activeCalling.dokter?.namaDokter || activeCalling.namaDokter || 'Dokter Jaga'}`;
+                } else {
+                    document.getElementById('control-active-num').innerText = '---';
+                    document.getElementById('control-active-name').innerText = 'Belum Ada Panggilan';
+                    document.getElementById('control-active-poli').innerText = 'Poliklinik Sentra Farma';
+                }
+
                 if (antrians.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-slate-400 italic">Belum ada antrian aktif hari ini.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-slate-400 italic font-medium">Belum ada antrian terdaftar hari ini. Klik 'Cetak Tiket Walk-In' untuk mendaftarkan pasien.</td></tr>`;
                     return;
                 }
 
-                antrians.forEach(a => {
-                    const tr = document.createElement('tr');
-                    tr.className = "hover:bg-slate-50 transition-colors";
-                    const pasienNama = a.pasien ? a.pasien.namaLengkap : 'Pasien Walk-in';
-                    const poliNama = a.poliklinik ? a.poliklinik.namaPoli : 'Poli Umum';
-                    const docNama = a.dokter ? a.dokter.namaDokter : 'Dokter Jaga';
-                    const isOnline = a.tipe === 'ONLINE';
-
-                    tr.innerHTML = `
-                        <td class="py-3 font-mono font-black text-brand-700">${a.nomorAntrian}</td>
-                        <td class="py-3 font-extrabold text-slate-900">${pasienNama}</td>
-                        <td class="py-3 font-semibold text-slate-700">${poliNama}</td>
-                        <td class="py-3 text-slate-500 font-medium">${docNama}</td>
-                        <td class="py-3"><span class="px-2 py-0.5 rounded text-[9px] font-black uppercase ${isOnline ? 'bg-sky-100 text-sky-800' : 'bg-purple-100 text-purple-800'}">${a.tipe || 'OFFLINE'}</span></td>
-                        <td class="py-3"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-black ${a.status === 'SELESAI' ? 'bg-emerald-100 text-emerald-800' : (a.status === 'DIPANGGIL' ? 'bg-purple-100 text-purple-800 animate-pulse' : 'bg-amber-100 text-amber-800')}">${a.status}</span></td>
-                        <td class="py-3 text-right flex items-center justify-end gap-1">
-                            <button onclick="panggilVoice('${a.id}', '${a.nomorAntrian}', '${poliNama}')" class="px-3 py-1 bg-brand-600 hover:bg-brand-700 text-white text-xs font-extrabold rounded-xl transition-all shadow-2xs flex items-center gap-1">
+                tbody.innerHTML = antrians.map(a => `
+                    <tr class="hover:bg-brand-50/30 transition-colors">
+                        <td class="py-3 px-3 font-mono font-black text-brand-700 text-sm">${a.nomorAntrian || '-'}</td>
+                        <td class="py-3 px-3 font-bold text-slate-900">${a.pasien?.namaLengkap || a.namaPasien || 'Pasien Walk-in'}</td>
+                        <td class="py-3 px-3 font-semibold text-slate-600">${a.poliklinik?.namaPoli || a.namaPoli || 'Poli Umum'}</td>
+                        <td class="py-3 px-3 text-slate-600 font-medium">${a.dokter?.namaDokter || a.namaDokter || 'Dokter Jaga'}</td>
+                        <td class="py-3 px-3">
+                            <span class="px-2 py-0.5 ${a.tipe === 'WALKIN' || a.tipe === 'OFFLINE' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'} rounded-full text-[10px] font-bold uppercase">${a.tipe || 'ONLINE'}</span>
+                        </td>
+                        <td class="py-3 px-3">
+                            <span class="px-2.5 py-0.5 ${a.status === 'MENUNGGU' ? 'bg-amber-100 text-amber-800' : a.status === 'DIPANGGIL' ? 'bg-emerald-100 text-emerald-800 animate-pulse' : 'bg-slate-100 text-slate-600'} rounded-full text-[10px] font-extrabold uppercase">${a.status}</span>
+                        </td>
+                        <td class="py-3 px-3 text-right">
+                            <button onclick="panggilSpesifik('${a.id}')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[11px] rounded-xl shadow-2xs transition-all flex items-center gap-1 ml-auto cursor-pointer">
                                 <span class="material-symbols-outlined text-[14px]">volume_up</span> Panggil Voice
                             </button>
                         </td>
-                    `;
-                    tbody.appendChild(tr);
-                });
+                    </tr>
+                `).join('');
             } catch(e) {
-                document.getElementById('antrian-live-tbody').innerHTML = `<tr><td colspan="7" class="py-6 text-center text-slate-400 italic">Belum ada antrian aktif.</td></tr>`;
+                console.error(e);
             }
         }
 
-        function panggilVoice(id, num, poli) {
-            API.patch(`/clinic/antrian/${id}/status?status=DIPANGGIL`, { status: 'DIPANGGIL' }).catch(()=>{});
-            
-            // Audio simulation feedback
-            const textToSpeak = `Nomor antrian ${num}, silakan menuju ${poli}.`;
-            if ('speechSynthesis' in window) {
-                const speech = new SpeechSynthesisUtterance(textToSpeak);
-                speech.lang = 'id-ID';
-                speech.rate = 0.9;
-                window.speechSynthesis.speak(speech);
+        function panggilAntrianBerikutnya() {
+            const result = QueueSync.callNext();
+            if (result) loadAntrianLive();
+        }
+
+        function panggilUlangAntrian() {
+            QueueSync.callRepeat();
+        }
+
+        function selesaikanAntrianAktif() {
+            const result = QueueSync.completeActive();
+            if (result) loadAntrianLive();
+        }
+
+        function resetAntrianKeNol() {
+            if (confirm('Apakah Anda yakin ingin mereset seluruh antrian hari ini ke 0?')) {
+                QueueSync.resetAllQueues();
+                loadAntrianLive();
             }
-            
-            Toast.info(`Memanggil Voice: "${textToSpeak}"`, 'Pengeras Suara Loudspeaker');
+        }
+
+        function panggilSpesifik(id) {
+            const foundItem = currentAntrianList.find(a => a.id == id || String(a.id) === String(id) || a.nomorAntrian === id);
+            QueueSync.callQueue(id, foundItem);
             loadAntrianLive();
+        }
+
+        function handleLogout() {
+            API.clearSession();
+            Toast.success('Logout berhasil.', 'Sampai Jumpa');
+            setTimeout(() => window.location.href = '/frontend/html/auth/login.html', 1000);
         }
     </script>
 </body>
+
 </html>

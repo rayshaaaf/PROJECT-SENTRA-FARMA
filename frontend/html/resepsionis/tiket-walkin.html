@@ -12,15 +12,18 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../css/custom-select.css" />
+    <script src="../../js/custom-select.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
                         brand: {
-                            50: '#F5F3FF', 100: '#EDE9FE', 200: '#DDD6FE', 300: '#C4B5FD', 400: '#A78BFA',
-                            500: '#8B5CF6', 600: '#7C3AED', 700: '#6D28D9', 800: '#5B21B6', 900: '#4C1D95'
+                            50: '#F0FDF4', 100: '#DCFCE7', 200: '#BBF7D0', 300: '#86EFAC', 400: '#4ADE80',
+                            500: '#10B981', 600: '#059669', 700: '#047857', 800: '#065F46', 900: '#064E3B', 950: '#022C22'
                         },
                         surface: '#F8FAFC'
                     },
@@ -63,11 +66,11 @@
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-purple-50/60 via-indigo-50/40 to-slate-50 font-sans text-slate-800 flex h-screen antialiased selection:bg-brand-100 selection:text-brand-800 relative overflow-hidden">
+<body class="bg-gradient-to-br from-emerald-50/70 via-teal-50/40 to-slate-50 font-sans text-slate-800 flex h-screen antialiased selection:bg-brand-100 selection:text-brand-800 relative overflow-hidden">
 
     <!-- Ambient Glow Mesh Spheres -->
-    <div class="fixed -top-40 -left-40 w-[500px] h-[500px] bg-purple-300/25 rounded-full blur-[120px] pointer-events-none z-0"></div>
-    <div class="fixed top-1/3 -right-40 w-[450px] h-[450px] bg-indigo-200/25 rounded-full blur-[100px] pointer-events-none z-0"></div>
+    <div class="fixed -top-40 -left-40 w-[500px] h-[500px] bg-emerald-300/20 rounded-full blur-[120px] pointer-events-none z-0"></div>
+    <div class="fixed top-1/3 -right-40 w-[450px] h-[450px] bg-teal-200/20 rounded-full blur-[100px] pointer-events-none z-0"></div>
 
     <!-- LEFT SIDEBAR DOCK (DESKTOP) -->
     <aside class="left-dock fixed left-6 top-1/2 -translate-y-1/2 w-20 bg-white/95 backdrop-blur-2xl border border-slate-200/80 shadow-xl shadow-slate-300/40 rounded-3xl z-50 hidden lg:flex flex-col items-center py-5 space-y-4">
@@ -128,7 +131,7 @@
     <div class="main-portal-container flex-1 lg:ml-32 lg:mr-4 px-3 sm:px-6 flex flex-col min-h-screen lg:h-screen overflow-y-auto lg:overflow-hidden pb-20 lg:pb-0">
 
         <!-- HEADER BAR -->
-        <header class="h-20 flex items-center justify-between px-6 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-purple-100/60 transition-all shrink-0">
+        <header class="h-20 flex items-center justify-between px-6 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100/60 transition-all shrink-0">
             <div class="flex items-center gap-3">
                 <a href="dashboard.html" class="flex items-center gap-2 group cursor-pointer shrink-0" title="Sentra Farma Front Desk">
                     <img src="../../assets/logo.png" alt="Sentra Farma" class="h-12 sm:h-14 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform" />
@@ -152,7 +155,7 @@
                 </a>
 
                 <div class="flex items-center gap-2 pl-2 border-l border-slate-200">
-                    <div id="user-avatar-initials" class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-700 to-indigo-500 text-white flex items-center justify-center font-extrabold text-xs shadow-md">R</div>
+                    <div id="user-avatar-initials" class="w-8 h-8 rounded-full bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center font-extrabold text-xs shadow-md">R</div>
                     <span id="user-name-badge" class="text-xs font-extrabold text-slate-900 hidden sm:inline">Resepsionis</span>
                 </div>
             </div>
@@ -209,23 +212,6 @@
                 </form>
             </section>
         </main>
-
-        <!-- FOOTER -->
-        <footer class="mt-auto py-3 px-6 border-t border-slate-200/60 bg-white/60 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 shrink-0">
-            <div class="flex items-center gap-2">
-                <img src="../../assets/logo.png" alt="Sentra Farma" class="h-5 w-auto object-contain opacity-80" />
-                <span class="font-bold text-slate-700">© 2026 Sentra Farma Medika.</span>
-                <span class="hidden md:inline text-slate-400">Pusat Layanan Kesehatan Digital.</span>
-            </div>
-            <div class="flex items-center gap-4 text-[11px] font-semibold">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100/80 text-emerald-800 font-bold border border-emerald-200/60">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>System Active 24/7 v2.4</span>
-                </span>
-                <a href="#" class="hover:text-emerald-700 transition-colors">Bantuan & Support</a>
-                <a href="#" class="hover:text-emerald-700 transition-colors">Kebijakan Privasi</a>
-            </div>
-        </footer>
     </div>
 
     <!-- MODAL CETAK TIKET FISIK STRUK -->
@@ -235,21 +221,21 @@
                 <span class="material-symbols-outlined text-[20px]">close</span>
             </button>
 
-            <div id="printable-tiket-content" class="p-4 bg-slate-50 border-2 border-dashed border-purple-300 rounded-2xl text-center space-y-3 font-sans">
+            <div id="printable-tiket-content" class="p-4 bg-slate-50 border-2 border-dashed border-emerald-300 rounded-2xl text-center space-y-3 font-sans">
                 <div class="border-b border-slate-200 pb-2 space-y-0.5">
                     <h4 class="font-extrabold text-sm text-slate-900 uppercase">SENTRA FARMA CLINIC</h4>
                     <p class="text-[9px] text-slate-500">Tiket Antrian Fisik Loket Pendaftaran</p>
                 </div>
 
                 <div class="py-2 space-y-1">
-                    <span id="tiket-poli-title" class="text-[10px] font-extrabold text-purple-800 uppercase tracking-wider block">POLI UMUM</span>
+                    <span id="tiket-poli-title" class="text-[10px] font-extrabold text-emerald-800 uppercase tracking-wider block">POLI UMUM</span>
                     <span id="tiket-nomor-code" class="text-4xl font-black text-slate-900 font-mono tracking-tight block">A-001</span>
                     <span id="tiket-doc-name" class="text-xs font-bold text-slate-700 block">dr. Arisandy Pratama, M.Ked</span>
                 </div>
 
                 <div class="p-2.5 bg-white rounded-xl border border-slate-200 text-[10px] space-y-1 font-semibold text-slate-700 text-left">
                     <div class="flex justify-between"><span>Pasien:</span> <strong id="tiket-pasien-nama">Ahmad Dahlan</strong></div>
-                    <div class="flex justify-between"><span>Tipe:</span> <span class="px-2 py-0.2 bg-purple-100 text-purple-800 rounded font-bold">WALK-IN OFFLINE</span></div>
+                    <div class="flex justify-between"><span>Tipe:</span> <span class="px-2 py-0.2 bg-emerald-100 text-emerald-800 rounded font-bold">WALK-IN OFFLINE</span></div>
                     <div class="flex justify-between"><span>Waktu:</span> <span id="tiket-waktu-print" class="text-slate-500">17 Sep 2026, 09:30 WIB</span></div>
                 </div>
 
@@ -258,8 +244,8 @@
 
             <div class="flex justify-end gap-2 pt-1">
                 <button onclick="closeModalTiketFisik()" class="px-4 py-2 bg-slate-100 text-slate-700 font-bold text-xs rounded-xl">Tutup</button>
-                <button onclick="window.print()" class="px-5 py-2 bg-brand-600 text-white font-extrabold text-xs rounded-xl shadow-xs flex items-center gap-1">
-                    <span class="material-symbols-outlined text-[16px]">print</span> Cetak Tiket Thermal
+                <button onclick="downloadTiketPDF()" class="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs rounded-xl shadow-xs flex items-center gap-1 cursor-pointer">
+                    <span class="material-symbols-outlined text-[16px]">picture_as_pdf</span> Download Tiket PDF
                 </button>
             </div>
         </div>
@@ -269,6 +255,7 @@
     <script src="../../js/toast.js"></script>
     <script src="../../js/auth-guard.js"></script>
     <script src="../../js/absensi.js"></script>
+    <script src="../../js/queue-sync.js"></script>
     <script>
         let allDokters = [];
 
@@ -288,14 +275,32 @@
 
         async function loadOptions() {
             try {
-                const pasiens = await API.get('/clinic/pasien');
+                let pasiens = [];
+                try {
+                    const apiP = await API.get('/clinic/pasien');
+                    if (Array.isArray(apiP)) pasiens = apiP;
+                } catch(e) {}
+
+                // Merge with offline patients saved in localStorage
+                try {
+                    const rawOff = localStorage.getItem('sf_offline_patients');
+                    if (rawOff) {
+                        const offList = JSON.parse(rawOff);
+                        if (Array.isArray(offList)) {
+                            offList.forEach(op => {
+                                if (!pasiens.some(p => (p.nik && op.nik && p.nik === op.nik) || (p.namaLengkap && p.namaLengkap.toLowerCase() === op.namaLengkap.toLowerCase()))) {
+                                    pasiens.push(op);
+                                }
+                            });
+                        }
+                    }
+                } catch(e) {}
+
                 const selPasien = document.getElementById('select-pasien-offline');
                 selPasien.innerHTML = '<option value="">-- Pilih Pasien --</option>';
-                if (Array.isArray(pasiens)) {
-                    pasiens.forEach(p => {
-                        selPasien.innerHTML += `<option value="${p.id}">${p.namaLengkap} (NIK: ${p.nik || '-'})</option>`;
-                    });
-                }
+                pasiens.forEach(p => {
+                    selPasien.innerHTML += `<option value="${p.id}">${p.namaLengkap} (NIK: ${p.nik || '-'})</option>`;
+                });
 
                 const polis = await API.get('/clinic/poliklinik');
                 const selPoli = document.getElementById('select-poli');
@@ -348,27 +353,46 @@
             }
 
             const payload = {
-                pasienId: parseInt(pasienId),
+                pasienId: isNaN(pasienId) ? pasienId : parseInt(pasienId),
                 dokterId: parseInt(dokterId),
                 poliklinikId: parseInt(poliId),
                 keluhanUtama,
                 tipe: 'OFFLINE'
             };
 
+            let antrianRes = null;
             try {
-                const res = await API.post('/clinic/antrian', payload);
-                showTiketModal(res);
-                Toast.success('Tiket antrian offline berhasil diterbitkan!', 'Cetak Tiket Sukses');
-            } catch(err) {
-                const dummyTiket = {
-                    nomorAntrian: 'A-0' + Math.floor(Math.random() * 90 + 10),
-                    pasien: { namaLengkap: 'Pasien Walk-In' },
-                    poliklinik: { namaPoli: 'Poliklinik Umum' },
-                    dokter: { namaDokter: 'dr. Arisandy Pratama, M.Ked' }
-                };
-                showTiketModal(dummyTiket);
-                Toast.success('Tiket antrian offline berhasil diterbitkan!', 'Cetak Tiket Sukses');
+                antrianRes = await API.post('/clinic/antrian', payload);
+            } catch(err) {}
+
+            const selPasien = document.getElementById('select-pasien-offline');
+            const pasienNama = selPasien.options[selPasien.selectedIndex]?.text.split('(')[0].trim() || 'Pasien Walk-in';
+            const selPoli = document.getElementById('select-poli');
+            const poliNama = selPoli.options[selPoli.selectedIndex]?.text || 'Poli Umum';
+            const selDoc = document.getElementById('select-dokter');
+            const docNama = selDoc.options[selDoc.selectedIndex]?.text.split('(')[0].trim() || 'Dokter Jaga';
+
+            if (!antrianRes || !antrianRes.nomorAntrian) {
+                antrianRes = QueueSync.addQueue({
+                    namaPasien: pasienNama,
+                    namaPoli: poliNama,
+                    namaDokter: docNama,
+                    tipe: 'OFFLINE'
+                });
+            } else {
+                QueueSync.addQueue({
+                    id: antrianRes.id,
+                    nomorAntrian: antrianRes.nomorAntrian,
+                    namaPasien: pasienNama,
+                    namaPoli: poliNama,
+                    namaDokter: docNama,
+                    tipe: 'OFFLINE',
+                    status: antrianRes.status || 'MENUNGGU'
+                });
             }
+
+            showTiketModal(antrianRes);
+            Toast.success(`Tiket antrian offline ${antrianRes.nomorAntrian} berhasil diterbitkan!`, 'Cetak Tiket Sukses');
         }
 
         function showTiketModal(t) {
@@ -388,6 +412,31 @@
 
         function closeModalTiketFisik() {
             document.getElementById('modal-tiket-fisik').classList.add('hidden');
+        }
+
+        function downloadTiketPDF() {
+            const element = document.querySelector('#modal-tiket-fisik .bg-white');
+            const noAntrian = document.getElementById('tiket-nomor-code').innerText;
+            if (typeof html2pdf !== 'undefined') {
+                const opt = {
+                    margin: 0.3,
+                    filename: `Tiket_Antrian_${noAntrian}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2 },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
+                html2pdf().set(opt).from(element).save();
+                Toast.success(`Tiket Antrian ${noAntrian} berhasil di-download sebagai PDF!`, 'Download PDF');
+            } else {
+                const blob = new Blob([`TIKET ANTRIAN SENTRA FARMA\nNomor: ${noAntrian}`], { type: 'application/pdf' });
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = `Tiket_Antrian_${noAntrian}.pdf`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                Toast.success('Tiket PDF berhasil di-download!', 'Download PDF');
+            }
         }
     </script>
 </body>

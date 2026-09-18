@@ -13,6 +13,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -57,7 +58,7 @@
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-emerald-50/70 via-teal-50/40 to-slate-50 font-sans text-slate-800 flex h-screen antialiased selection:bg-brand-100 selection:text-brand-800 relative overflow-hidden">
+<body class="bg-gradient-to-br from-emerald-50/70 via-teal-50/40 to-slate-50 font-sans text-slate-800 flex h-screen overflow-hidden antialiased selection:bg-brand-100 selection:text-brand-800 relative">
 
     <!-- Ambient Glow Mesh Spheres -->
     <div class="fixed -top-40 -left-40 w-[500px] h-[500px] bg-emerald-300/20 rounded-full blur-[120px] pointer-events-none z-0"></div>
@@ -131,10 +132,10 @@
     </nav>
 
     <!-- MAIN CONTENT CONTAINER -->
-    <div class="main-portal-container flex-1 lg:ml-32 lg:mr-4 px-3 sm:px-6 flex flex-col min-h-screen lg:h-screen overflow-y-auto lg:overflow-hidden pb-20 lg:pb-0">
+    <div class="main-portal-container flex-1 lg:ml-24 lg:mr-4 px-2 sm:px-4 flex flex-col lg:h-screen lg:overflow-hidden pb-20 lg:pb-0 transition-all">
 
         <!-- HEADER BAR -->
-        <header class="h-20 flex items-center justify-between px-6 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100/60 transition-all shrink-0">
+        <header class="h-20 flex items-center justify-between px-4 sm:px-6 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100/60 transition-all shrink-0">
             <div class="flex items-center gap-3">
                 <a href="dashboard.html" class="flex items-center gap-2 group cursor-pointer shrink-0" title="Sentra Farma Master Control">
                     <img src="../../assets/logo.png" alt="Sentra Farma" class="h-12 sm:h-14 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform" />
@@ -164,10 +165,10 @@
         </header>
 
         <!-- MAIN WORKSPACE CONTAINER -->
-        <main class="p-6 max-w-6xl mx-auto w-full flex-1 flex flex-col overflow-y-auto space-y-5 custom-scrollbar">
+        <main class="p-4 sm:p-6 max-w-full w-full flex-1 flex flex-col overflow-hidden gap-4">
 
             <!-- KPI EXECUTIVE SUMMARY CARDS -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs shrink-0">
                 <div class="p-5 bg-white rounded-3xl border border-slate-200/80 shadow-xs space-y-1">
                     <div class="flex items-center justify-between">
                         <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Revenue Gabungan</span>
@@ -202,8 +203,8 @@
                 </div>
             </div>
 
-            <!-- ANALYTICS BREAKDOWN -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <!-- ANALYTICS BREAKDOWN (KOTAK KEDUA SCROLLABLE) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-1">
                 <section class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-3">
                     <div class="flex items-center gap-2 border-b border-slate-100 pb-2">
                         <span class="material-symbols-outlined text-brand-600 text-[20px]">pie_chart</span>
@@ -246,29 +247,12 @@
                         </div>
                         <div class="flex justify-between items-center p-2.5 bg-slate-50 rounded-xl">
                             <span class="font-bold text-slate-700">Poli Anak (Pediatri)</span>
-                            <span class="px-2.5 py-0.5 bg-purple-100 text-purple-800 font-black rounded-full text-[10px]">Aktif</span>
+                            <span class="px-2.5 py-0.5 bg-emerald-100 text-emerald-800 font-black rounded-full text-[10px]">Aktif</span>
                         </div>
                     </div>
                 </section>
             </div>
         </main>
-
-        <!-- FOOTER -->
-        <footer class="mt-auto py-3 px-6 border-t border-slate-200/60 bg-white/60 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 shrink-0">
-            <div class="flex items-center gap-2">
-                <img src="../../assets/logo.png" alt="Sentra Farma" class="h-5 w-auto object-contain opacity-80" />
-                <span class="font-bold text-slate-700">© 2026 Sentra Farma Medika.</span>
-                <span class="hidden md:inline text-slate-400">Sistem Informasi Manajemen Klinik & Farmasi 24 Jam.</span>
-            </div>
-            <div class="flex items-center gap-4 text-[11px] font-semibold">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100/80 text-emerald-800 font-bold border border-emerald-200/60">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>System Active 24/7 v2.4</span>
-                </span>
-                <a href="#" class="hover:text-emerald-700 transition-colors">Bantuan & Support</a>
-                <a href="#" class="hover:text-emerald-700 transition-colors">Kebijakan Privasi</a>
-            </div>
-        </footer>
     </div>
 
     <script src="../../js/api.js"></script>
@@ -332,8 +316,54 @@
         }
 
         function exportExecutiveReport(type) {
-            Toast.success(`Laporan Eksekutif Finansial berhasil di-export ke format ${type}!`, `Export ${type}`);
-            setTimeout(() => { window.print(); }, 1000);
+            const rev = document.getElementById('exec-total-revenue').innerText;
+            const kunj = document.getElementById('exec-total-kunjungan').innerText;
+            const resep = document.getElementById('exec-total-resep').innerText;
+            const farm = document.getElementById('revenue-farmasi').innerText;
+            const klin = document.getElementById('revenue-klinik').innerText;
+
+            if (type === 'Excel') {
+                const csvData = [
+                    ["Kategori Laporan Eksekutif", "Nilai / Total"],
+                    ["Total Revenue Gabungan", rev],
+                    ["Total Kunjungan Pasien", kunj],
+                    ["Resep Farmasi Ditebus", resep],
+                    ["Pendapatan Farmasi & POS Kasir", farm],
+                    ["Pendapatan Poli Klinik & Dokter", klin],
+                    ["Tanggal Export", new Date().toLocaleString('id-ID')]
+                ].map(e => e.map(cell => `"${cell}"`).join(",")).join("\n");
+
+                const blob = new Blob(["\uFEFF" + csvData], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = `Laporan_Eksekutif_Finansial_SentraFarma_${new Date().toISOString().slice(0,10)}.csv`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                Toast.success('Laporan Eksekutif Finansial berhasil di-download sebagai Excel (.csv)!', 'Download Excel');
+            } else {
+                const element = document.querySelector('main');
+                if (typeof html2pdf !== 'undefined') {
+                    const opt = {
+                        margin:       0.3,
+                        filename:     `Laporan_Eksekutif_Finansial_SentraFarma_${new Date().toISOString().slice(0,10)}.pdf`,
+                        image:        { type: 'jpeg', quality: 0.98 },
+                        html2canvas:  { scale: 2 },
+                        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+                    };
+                    html2pdf().set(opt).from(element).save();
+                    Toast.success('Laporan Eksekutif Finansial berhasil di-download sebagai PDF!', 'Download PDF');
+                } else {
+                    const blob = new Blob([`LAPORAN EKSEKUTIF FINANSIAL SENTRA FARMA\nRevenue: ${rev}\nKunjungan: ${kunj}\nResep: ${resep}`], { type: 'application/pdf' });
+                    const link = document.createElement("a");
+                    link.href = URL.createObjectURL(blob);
+                    link.download = `Laporan_Eksekutif_Finansial_SentraFarma_${new Date().toISOString().slice(0,10)}.pdf`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    Toast.success('Laporan PDF berhasil di-download!', 'Download PDF');
+                }
+            }
         }
     </script>
 </body>

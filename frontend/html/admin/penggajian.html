@@ -12,7 +12,10 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../css/custom-select.css" />
+    <script src="../../js/custom-select.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -44,6 +47,45 @@
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 9999px; }
         ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
 
+        /* CUSTOM DROPDOWN SELECT STYLING */
+        select, .custom-select {
+            appearance: none !important;
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2.5' stroke='%23059669'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' /%3E%3C/svg%3E") !important;
+            background-repeat: no-repeat !important;
+            background-position: right 0.85rem center !important;
+            background-size: 1rem 1rem !important;
+            padding-right: 2.5rem !important;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        select:hover, .custom-select:hover {
+            border-color: #059669 !important;
+            background-color: #F0FDF4 !important;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.1);
+        }
+
+        select:focus, .custom-select:focus {
+            outline: none !important;
+            border-color: #047857 !important;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2) !important;
+        }
+
+        select option {
+            background-color: #FFFFFF !important;
+            color: #0F172A !important;
+            font-weight: 700 !important;
+            padding: 10px 14px !important;
+        }
+
+        select option:checked {
+            background-color: #ECFDF5 !important;
+            color: #047857 !important;
+            font-weight: 800 !important;
+        }
+
         @media (max-width: 1024px) {
             html, body { height: auto; overflow-y: auto !important; }
             body { flex-direction: column !important; padding: 0.75rem !important; }
@@ -64,7 +106,7 @@
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-emerald-50/70 via-teal-50/40 to-slate-50 font-sans text-slate-800 flex h-screen antialiased selection:bg-brand-100 selection:text-brand-800 relative overflow-hidden">
+<body class="bg-gradient-to-br from-emerald-50/70 via-teal-50/40 to-slate-50 font-sans text-slate-800 flex h-screen overflow-hidden antialiased selection:bg-brand-100 selection:text-brand-800 relative">
 
     <!-- Ambient Glow Mesh Spheres -->
     <div class="fixed -top-40 -left-40 w-[500px] h-[500px] bg-emerald-300/20 rounded-full blur-[120px] pointer-events-none z-0"></div>
@@ -73,31 +115,31 @@
     <!-- LEFT SIDEBAR DOCK (DESKTOP) -->
     <aside class="left-dock fixed left-6 top-1/2 -translate-y-1/2 w-20 bg-white/95 backdrop-blur-2xl border border-slate-200/80 shadow-xl shadow-slate-300/40 rounded-3xl z-50 hidden lg:flex flex-col items-center py-5 space-y-4">
         <nav class="flex flex-col items-center gap-2">
-            <a href="dashboard.html" title="Dashboard Utama" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+            <a href="dashboard.html" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">admin_panel_settings</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Dashboard Admin</span>
             </a>
-            <a href="users.html" title="Manajemen Users & Role" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+            <a href="users.html" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">manage_accounts</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">User & Access RBAC</span>
             </a>
-            <a href="master-data.html" title="Master Data Klinik & Poli" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+            <a href="master-data.html" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">domain_add</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Master Data Klinik</span>
             </a>
-            <a href="penggajian.html" title="Penggajian Staff & Slip Gaji" class="relative group p-2.5 rounded-2xl bg-brand-50 text-brand-600 font-bold transition-all shadow-2xs">
+            <a href="penggajian.html" class="relative group p-2.5 rounded-2xl bg-brand-50 text-brand-600 font-bold transition-all shadow-2xs">
                 <span class="material-symbols-outlined text-[22px]">payments</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Penggajian Staff</span>
             </a>
-            <a href="audit-log.html" title="Audit Trail Security Log" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+            <a href="audit-log.html" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">shield_person</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Audit Log System</span>
             </a>
-            <a href="laporan-eksekutif.html" title="Laporan Eksekutif Financial" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+            <a href="laporan-eksekutif.html" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">insights</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Laporan Eksekutif</span>
             </a>
-            <button onclick="Absensi.openModal()" title="Presensi & Absensi Staff" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all cursor-pointer">
+            <button onclick="Absensi.openModal()" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all cursor-pointer">
                 <span class="material-symbols-outlined text-[22px]">fingerprint</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Presensi & Absen</span>
             </button>
@@ -106,7 +148,7 @@
         <div class="w-8 h-px bg-slate-200/70"></div>
 
         <div class="flex flex-col items-center gap-2">
-            <button onclick="handleLogout()" title="Logout" class="relative group p-2.5 rounded-2xl text-rose-400 hover:text-rose-600 hover:bg-rose-50 transition-all">
+            <button onclick="handleLogout()" class="relative group p-2.5 rounded-2xl text-rose-400 hover:text-rose-600 hover:bg-rose-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">logout</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-rose-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Logout</span>
             </button>
@@ -134,10 +176,10 @@
     </nav>
 
     <!-- MAIN CONTENT CONTAINER -->
-    <div class="main-portal-container flex-1 lg:ml-32 lg:mr-4 px-3 sm:px-6 flex flex-col min-h-screen lg:h-screen overflow-y-auto lg:overflow-hidden pb-20 lg:pb-0">
+    <div class="main-portal-container flex-1 lg:ml-24 lg:mr-4 px-2 sm:px-4 flex flex-col lg:h-screen lg:overflow-hidden pb-20 lg:pb-0 transition-all">
 
         <!-- HEADER BAR -->
-        <header class="h-20 flex items-center justify-between px-6 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100/60 transition-all shrink-0">
+        <header class="h-20 flex items-center justify-between px-4 sm:px-6 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100/60 transition-all shrink-0">
             <div class="flex items-center gap-3">
                 <a href="dashboard.html" class="flex items-center gap-2 group cursor-pointer shrink-0" title="Sentra Farma Master Control">
                     <img src="../../assets/logo.png" alt="Sentra Farma" class="h-12 sm:h-14 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform" />
@@ -163,10 +205,12 @@
         </header>
 
         <!-- MAIN WORKSPACE CONTAINER -->
-        <main class="p-6 max-w-6xl mx-auto w-full flex-1 flex flex-col overflow-y-auto space-y-5 custom-scrollbar">
+        <main class="p-4 sm:p-6 max-w-full w-full flex-1 flex flex-col overflow-hidden gap-4">
+
+
 
             <!-- KPI PAYROLL SUMMARY CARDS -->
-            <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs shrink-0">
                 <div class="p-4 bg-white rounded-3xl border border-slate-200/80 shadow-xs space-y-1">
                     <div class="flex items-center justify-between">
                         <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Payroll Bulan Ini</span>
@@ -213,31 +257,49 @@
             </div>
 
             <!-- FILTER & SEARCH BAR -->
-            <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+            <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3 text-xs shrink-0">
                 <div class="relative w-full sm:w-80">
                     <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">search</span>
                     <input type="text" id="search-payroll" oninput="renderPayrollTable()" placeholder="Cari nama staff / NIK..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl pl-9 pr-4 py-2 font-bold text-slate-800 focus:border-brand-500" />
                 </div>
 
-                <div class="flex items-center gap-2.5 w-full sm:w-auto">
-                    <select id="filter-role-payroll" onchange="renderPayrollTable()" class="bg-slate-50 border border-slate-200 rounded-2xl px-3 py-2 font-bold text-slate-800 focus:border-brand-500 text-xs">
-                        <option value="ALL">Semua Jabatan / Role</option>
-                        <option value="DOKTER">Dokter Spesialis & Jaga</option>
-                        <option value="APOTEKER">Apoteker & Farmasi</option>
-                        <option value="RESEPSIONIS">Resepsionis & Loket</option>
-                        <option value="ADMIN">System Administrator</option>
-                    </select>
+                <div class="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+                    <!-- FILTER JABATAN / ROLE -->
+                    <div class="relative w-full sm:w-auto">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-emerald-700 text-[18px] pointer-events-none">badge</span>
+                        <select id="filter-role-payroll" onchange="renderPayrollTable()" class="custom-select w-full bg-slate-50 border border-slate-200/90 rounded-2xl pl-9 pr-9 py-2.5 font-bold text-slate-800 text-xs shadow-2xs hover:border-emerald-500 focus:outline-none focus:border-emerald-600 focus:bg-emerald-50/40 transition-all">
+                            <option value="ALL">Semua Jabatan / Role</option>
+                            <option value="DOKTER">Dokter Spesialis & Jaga</option>
+                            <option value="APOTEKER">Apoteker & Farmasi</option>
+                            <option value="RESEPSIONIS">Resepsionis & Loket</option>
+                            <option value="ADMIN">System Administrator</option>
+                        </select>
+                    </div>
 
-                    <select id="filter-bulan-payroll" onchange="renderPayrollTable()" class="bg-slate-50 border border-slate-200 rounded-2xl px-3 py-2 font-bold text-slate-800 focus:border-brand-500 text-xs">
-                        <option value="September 2026">September 2026</option>
-                        <option value="Agustus 2026">Agustus 2026</option>
-                    </select>
+                    <!-- FILTER PERIODE BULAN -->
+                    <div class="relative w-full sm:w-auto">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-emerald-700 text-[18px] pointer-events-none">calendar_month</span>
+                        <select id="filter-bulan-payroll" onchange="renderPayrollTable()" class="custom-select w-full bg-slate-50 border border-slate-200/90 rounded-2xl pl-9 pr-9 py-2.5 font-bold text-slate-800 text-xs shadow-2xs hover:border-emerald-500 focus:outline-none focus:border-emerald-600 focus:bg-emerald-50/40 transition-all">
+                            <option value="Januari 2026">Januari 2026</option>
+                            <option value="Februari 2026">Februari 2026</option>
+                            <option value="Maret 2026">Maret 2026</option>
+                            <option value="April 2026">April 2026</option>
+                            <option value="Mei 2026">Mei 2026</option>
+                            <option value="Juni 2026">Juni 2026</option>
+                            <option value="Juli 2026">Juli 2026</option>
+                            <option value="Agustus 2026">Agustus 2026</option>
+                            <option value="September 2026" selected>September 2026</option>
+                            <option value="Oktober 2026">Oktober 2026</option>
+                            <option value="November 2026">November 2026</option>
+                            <option value="Desember 2026">Desember 2026</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
-            <!-- PAYROLL TABLE -->
-            <section class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-4">
-                <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+            <!-- PAYROLL TABLE (KOTAK KEDUA SCROLLABLE) -->
+            <section class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs flex-1 min-h-0 flex flex-col overflow-hidden space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-3 shrink-0">
                     <div class="flex items-center gap-2.5">
                         <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
                             <span class="material-symbols-outlined text-[20px]">receipt_long</span>
@@ -250,18 +312,19 @@
                     <span id="payroll-badge-count" class="text-xs font-black text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">0 Staff</span>
                 </div>
 
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto flex-1 overflow-y-auto custom-scrollbar">
                     <table class="w-full text-left border-collapse text-xs">
-                        <thead>
+                        <thead class="sticky top-0 bg-white z-10 shadow-2xs">
                             <tr class="border-b border-slate-200 text-slate-400 font-semibold uppercase text-[10px]">
-                                <th class="pb-3">Karyawan / NIK</th>
-                                <th class="pb-3">Jabatan</th>
-                                <th class="pb-3">Data Kehadiran</th>
-                                <th class="pb-3 text-right">Gaji Pokok</th>
-                                <th class="pb-3 text-right">Tunjangan Hadir</th>
-                                <th class="pb-3 text-right">Take Home Pay</th>
-                                <th class="pb-3 text-center">Status</th>
-                                <th class="pb-3 text-right">Opsi</th>
+                                <th class="pb-3 pt-2 px-2 bg-white whitespace-nowrap">Karyawan / NIK</th>
+                                <th class="pb-3 pt-2 px-2 bg-white whitespace-nowrap">Jabatan</th>
+                                <th class="pb-3 pt-2 px-2 bg-white whitespace-nowrap">Data Kehadiran</th>
+                                <th class="pb-3 pt-2 px-2 bg-white text-right whitespace-nowrap">Gaji Pokok</th>
+                                <th class="pb-3 pt-2 px-2 bg-white text-right whitespace-nowrap">Tunjangan & Bonus</th>
+                                <th class="pb-3 pt-2 px-2 bg-white text-right whitespace-nowrap">Potongan (Denda/BPJS)</th>
+                                <th class="pb-3 pt-2 px-2 bg-white text-right whitespace-nowrap">Total Gaji Bersih</th>
+                                <th class="pb-3 pt-2 px-2 bg-white text-center whitespace-nowrap">Status</th>
+                                <th class="pb-3 pt-2 px-2 bg-white text-right whitespace-nowrap">Opsi</th>
                             </tr>
                         </thead>
                         <tbody id="payroll-tbody" class="divide-y divide-slate-100 text-slate-700">
@@ -272,23 +335,6 @@
             </section>
 
         </main>
-
-        <!-- FOOTER -->
-        <footer class="mt-auto py-3 px-6 border-t border-slate-200/60 bg-white/60 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 shrink-0">
-            <div class="flex items-center gap-2">
-                <img src="../../assets/logo.png" alt="Sentra Farma" class="h-5 w-auto object-contain opacity-80" />
-                <span class="font-bold text-slate-700">© 2026 Sentra Farma Medika.</span>
-                <span class="hidden md:inline text-slate-400">Sistem Informasi Manajemen Klinik & Farmasi 24 Jam.</span>
-            </div>
-            <div class="flex items-center gap-4 text-[11px] font-semibold">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100/80 text-emerald-800 font-bold border border-emerald-200/60">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>System Active 24/7 v2.4</span>
-                </span>
-                <a href="#" class="hover:text-emerald-700 transition-colors">Bantuan & Support</a>
-                <a href="#" class="hover:text-emerald-700 transition-colors">Kebijakan Privasi</a>
-            </div>
-        </footer>
     </div>
 
     <!-- MODAL SLIP GAJI RESMI -->
@@ -391,9 +437,166 @@
             <!-- ACTION BUTTONS -->
             <div class="no-print pt-2 flex justify-end gap-2">
                 <button onclick="closeModalSlip()" class="px-4 py-2 bg-slate-100 text-slate-700 font-bold text-xs rounded-xl">Tutup</button>
-                <button onclick="window.print()" class="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs rounded-xl shadow-xs flex items-center gap-1.5 cursor-pointer">
-                    <span class="material-symbols-outlined text-[16px]">print</span>
-                    <span>Cetak Slip Gaji</span>
+                <button onclick="downloadSlipCSV()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-xs flex items-center gap-1.5 cursor-pointer">
+                    <span class="material-symbols-outlined text-[16px]">table_view</span>
+                    <span>Download Excel</span>
+                </button>
+                <button onclick="downloadSlipPDF()" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs rounded-xl shadow-xs flex items-center gap-1.5 cursor-pointer">
+                    <span class="material-symbols-outlined text-[16px]">picture_as_pdf</span>
+                    <span>Download PDF</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL EDIT ABSENSI & GAJI STAF -->
+    <div id="modal-edit-payroll" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4 border border-slate-200 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-xl bg-brand-100 text-brand-700 flex items-center justify-center font-bold">
+                        <span class="material-symbols-outlined text-[18px]">edit_calendar</span>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-extrabold text-slate-900">Input / Edit Rincian Gaji & Presensi Staf</h3>
+                        <p id="edit-staff-subtitle" class="text-[10px] text-slate-500 font-medium">Input Gaji Pokok, Tunjangan, Insentif, & Potongan Staf</p>
+                    </div>
+                </div>
+                <button onclick="closeModalEditPayroll()" class="w-7 h-7 rounded-full bg-slate-100 text-slate-400 hover:text-slate-600 flex items-center justify-center font-bold">&times;</button>
+            </div>
+
+            <form id="form-edit-payroll" onsubmit="saveEditPayroll(event)" class="space-y-3 text-xs">
+                <input type="hidden" id="edit-staff-id" />
+
+                <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200/80 flex items-center justify-between">
+                    <div>
+                        <span id="edit-staff-name" class="font-extrabold text-slate-900 text-xs block">dr. Arisandy Pratama</span>
+                        <span id="edit-staff-nik" class="text-[10px] text-slate-400 font-mono">SF-DOC-001</span>
+                    </div>
+                    <span id="edit-staff-role" class="px-2.5 py-1 rounded-full text-[9px] font-black uppercase bg-blue-100 text-blue-800 border border-blue-200">DOKTER</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[10px] font-extrabold text-slate-700 uppercase tracking-wider mb-1">Gaji Pokok (Rp)</label>
+                        <input type="number" id="edit-gaji-pokok" min="0" required oninput="previewSalaryCalc()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900 focus:outline-none focus:border-brand-500" />
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-extrabold text-slate-700 uppercase tracking-wider mb-1">Hari Hadir (Bulan Ini)</label>
+                        <div class="relative">
+                            <input type="number" id="edit-hari-hadir" min="0" max="31" required oninput="previewSalaryCalc()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900 focus:outline-none focus:border-brand-500" />
+                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] font-bold">Hari</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[10px] font-extrabold text-emerald-800 uppercase tracking-wider mb-1">+ Bonus Insentif (Rp)</label>
+                        <input type="number" id="edit-insentif" min="0" required oninput="previewSalaryCalc()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-bold text-emerald-700 focus:outline-none focus:border-brand-500" />
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-extrabold text-rose-800 uppercase tracking-wider mb-1">- Denda Keterlambatan (Rp)</label>
+                        <input type="number" id="edit-potongan-telat" min="0" required oninput="previewSalaryCalc()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-bold text-rose-700 focus:outline-none focus:border-brand-500" />
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[10px] font-extrabold text-rose-800 uppercase tracking-wider mb-1">- Potongan Lain (BPJS/Kasbon)</label>
+                        <input type="number" id="edit-potongan-lain" min="0" required oninput="previewSalaryCalc()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-bold text-rose-700 focus:outline-none focus:border-brand-500" />
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-extrabold text-slate-700 uppercase tracking-wider mb-1">Catatan Potongan Lain</label>
+                        <input type="text" id="edit-catatan-potongan" placeholder="Misal: BPJS & Kasbon" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-medium text-slate-800 focus:outline-none focus:border-brand-500" />
+                    </div>
+                </div>
+
+                <!-- PREVIEW ESTIMASI THP -->
+                <div class="p-3.5 bg-brand-50/80 rounded-2xl border border-brand-200 space-y-1.5">
+                    <div class="flex justify-between text-[11px]">
+                        <span class="text-slate-600 font-semibold">Gaji Pokok:</span>
+                        <span id="preview-gaji-pokok" class="font-bold text-slate-900">Rp 0</span>
+                    </div>
+                    <div class="flex justify-between text-[11px]">
+                        <span class="text-slate-600 font-semibold">+ Total Tunjangan & Bonus:</span>
+                        <span id="preview-tunjangan" class="font-bold text-emerald-700">Rp 0</span>
+                    </div>
+                    <div class="flex justify-between text-[11px]">
+                        <span class="text-slate-600 font-semibold">- Total Potongan (Denda + BPJS/Kasbon):</span>
+                        <span id="preview-potongan" class="font-bold text-rose-600">Rp 0</span>
+                    </div>
+                    <div class="flex justify-between text-xs pt-1.5 border-t border-brand-200/80">
+                        <span class="font-black text-brand-950 uppercase">TOTAL GAJI BERSIH (TAKE HOME PAY):</span>
+                        <span id="preview-thp" class="font-black text-brand-700 font-mono text-sm">Rp 0</span>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModalEditPayroll()" class="px-4 py-2 bg-slate-100 text-slate-700 font-bold rounded-xl hover:bg-slate-200 transition-colors">Batal</button>
+                    <button type="submit" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white font-extrabold rounded-xl shadow-xs transition-all flex items-center gap-1.5 cursor-pointer">
+                        <span class="material-symbols-outlined text-[16px]">save</span>
+                        <span>Simpan Perubahan Gaji</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL KONFIRMASI PROSES GAJI BULAN INI -->
+    <div id="modal-confirm-pay" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4 relative">
+            <button onclick="closeModalConfirmPay()" class="absolute right-5 top-5 text-slate-400 hover:text-slate-600 p-1.5 rounded-full hover:bg-slate-100 transition-all cursor-pointer">
+                <span class="material-symbols-outlined text-[20px]">close</span>
+            </button>
+
+            <div class="flex items-center gap-3 border-b border-slate-100 pb-3">
+                <div class="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold shadow-2xs">
+                    <span class="material-symbols-outlined text-[22px]">account_balance_wallet</span>
+                </div>
+                <div>
+                    <h3 class="text-sm font-extrabold text-slate-900">Konfirmasi Proses & Resmikan Gaji</h3>
+                    <p class="text-[10px] text-slate-500 font-medium">Verifikasi data presensi & pengeluaran penggajian</p>
+                </div>
+            </div>
+
+            <div class="p-3.5 bg-amber-50/80 border border-amber-200/80 rounded-2xl text-amber-900 text-xs space-y-2">
+                <div class="font-bold flex items-center gap-1.5 text-amber-950">
+                    <span class="material-symbols-outlined text-[18px]">warning</span>
+                    <span>Apakah Anda yakin ingin meresmikan penggajian ini?</span>
+                </div>
+                <p class="text-[11px] text-amber-800 leading-relaxed">
+                    Tindakan ini akan memproses pembayaran gaji seluruh karyawan untuk periode <strong id="confirm-month-name">September 2026</strong>. Status akan diubah menjadi <strong class="text-emerald-700">TERBAYARKAN (LUNAS)</strong> dan slip gaji resmi dapat dicetak.
+                </p>
+            </div>
+
+            <div class="bg-slate-50 rounded-2xl p-3 border border-slate-200/80 text-xs space-y-2">
+                <div class="flex justify-between items-center text-slate-600">
+                    <span>Periode Penggajian:</span>
+                    <strong id="confirm-month-val" class="text-slate-900 font-extrabold">September 2026</strong>
+                </div>
+                <div class="flex justify-between items-center text-slate-600">
+                    <span>Staff Ter-input Presensi:</span>
+                    <strong id="confirm-staff-count" class="text-slate-900 font-extrabold">0 Staff</strong>
+                </div>
+                <div class="flex justify-between items-center text-slate-600">
+                    <span>Total Presensi Kehadiran:</span>
+                    <strong id="confirm-total-hadir" class="text-slate-900 font-extrabold">0 Hari</strong>
+                </div>
+                <div class="border-t border-slate-200 pt-2 flex justify-between items-center">
+                    <span class="font-extrabold text-slate-800">TOTAL PAYROLL BERSIH:</span>
+                    <strong id="confirm-total-thp" class="text-emerald-700 text-sm font-black">Rp 0</strong>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-2">
+                <button type="button" onclick="closeModalConfirmPay()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-all cursor-pointer">Batal</button>
+                <button type="button" onclick="confirmProcessPayroll()" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-md transition-all cursor-pointer flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-[16px]">check_circle</span>
+                    <span>Ya, Proses & Resmikan Gaji</span>
                 </button>
             </div>
         </div>
@@ -404,13 +607,31 @@
     <script src="../../js/auth-guard.js"></script>
     <script src="../../js/absensi.js"></script>
     <script>
-        // Data Dasar Penggajian Staff Berdasarkan Role
         const SALARY_CONFIG = {
             DOKTER: { gajiPokok: 12000000, tunjanganPerHari: 150000, insentifStandard: 1500000 },
             APOTEKER: { gajiPokok: 7500000, tunjanganPerHari: 75000, insentifStandard: 800000 },
             RESEPSIONIS: { gajiPokok: 5000000, tunjanganPerHari: 50000, insentifStandard: 500000 },
             ADMIN: { gajiPokok: 6500000, tunjanganPerHari: 60000, insentifStandard: 600000 }
         };
+
+        const ALL_MONTHS = [
+            'Januari 2026', 'Februari 2026', 'Maret 2026', 'April 2026',
+            'Mei 2026', 'Juni 2026', 'Juli 2026', 'Agustus 2026',
+            'September 2026', 'Oktober 2026', 'November 2026', 'Desember 2026'
+        ];
+        const CURRENT_MONTH = 'September 2026';
+
+        const PAST_MONTHS = [
+            'Januari 2026', 'Februari 2026', 'Maret 2026', 'April 2026',
+            'Mei 2026', 'Juni 2026', 'Juli 2026', 'Agustus 2026'
+        ];
+
+        function isFutureMonth(monthStr) {
+            const m = monthStr || getSelectedMonth();
+            const currIdx = ALL_MONTHS.indexOf(CURRENT_MONTH);
+            const targetIdx = ALL_MONTHS.indexOf(m);
+            return targetIdx > currIdx;
+        }
 
         let staffPayrollList = [];
 
@@ -428,70 +649,164 @@
             }
         }
 
+        function getSelectedMonth() {
+            const el = document.getElementById('filter-bulan-payroll');
+            return el ? el.value : 'September 2026';
+        }
+
+        function getMonthKey(monthStr) {
+            return (monthStr || getSelectedMonth()).replace(/\s+/g, '_');
+        }
+
+        function getCustomOverrides(monthStr) {
+            try {
+                return JSON.parse(localStorage.getItem('sentra_payroll_overrides_' + getMonthKey(monthStr))) || {};
+            } catch(e) {
+                return {};
+            }
+        }
+
+        function isMonthPaid(monthStr) {
+            const m = monthStr || getSelectedMonth();
+            if (isFutureMonth(m)) return false;
+            if (PAST_MONTHS.includes(m)) return true;
+            return localStorage.getItem('sentra_payroll_processed_' + getMonthKey(m)) === 'true';
+        }
+
         async function loadPayrollData() {
-            const absensiLog = (typeof Absensi !== 'undefined' && Absensi.getLogs) ? Absensi.getLogs() : [];
+            const defaultStaff = [
+                // 12 DOKTER KLINIK (Sesuai DB Seeder Auth & Clinic Service)
+                { id: 1, nik: 'SF-DOC-001', nama: 'dr. Arisandy Pratama, M.Ked', role: 'DOKTER', baseHadir: 22 },
+                { id: 2, nik: 'SF-DOC-002', nama: 'dr. Sabrina Prameshwari', role: 'DOKTER', baseHadir: 19 },
+                { id: 3, nik: 'SF-DOC-003', nama: 'dr. Ghazi Al-Fatih', role: 'DOKTER', baseHadir: 24 },
+                { id: 4, nik: 'SF-DOC-004', nama: 'drg. Mahendra Varian, Sp.KG', role: 'DOKTER', baseHadir: 20 },
+                { id: 5, nik: 'SF-DOC-005', nama: 'drg. Zhafira Amalia', role: 'DOKTER', baseHadir: 23 },
+                { id: 6, nik: 'SF-DOC-006', nama: 'dr. Kalila Kirana, Dip.Derm', role: 'DOKTER', baseHadir: 18 },
+                { id: 7, nik: 'SF-DOC-007', nama: 'dr. Naura Danendra', role: 'DOKTER', baseHadir: 25 },
+                { id: 8, nik: 'SF-DOC-008', nama: 'dr. Aurelia Savitri, Sp.A', role: 'DOKTER', baseHadir: 21 },
+                { id: 9, nik: 'SF-DOC-009', nama: 'dr. Tristan Alamsyah, Sp.A', role: 'DOKTER', baseHadir: 22 },
+                { id: 10, nik: 'SF-DOC-010', nama: 'dr. Raditya Mahesa', role: 'DOKTER', baseHadir: 20 },
+                { id: 11, nik: 'SF-DOC-011', nama: 'dr. Darren Valerius', role: 'DOKTER', baseHadir: 23 },
+                { id: 12, nik: 'SF-DOC-012', nama: 'dr. Clarissa Elvina', role: 'DOKTER', baseHadir: 21 },
+
+                // 2 APOTEKER (Sesuai DB Seeder)
+                { id: 13, nik: 'SF-APT-001', nama: 'apt. Bambang Sugianto, S.Farm', role: 'APOTEKER', baseHadir: 24 },
+                { id: 14, nik: 'SF-APT-002', nama: 'apt. Siti Nurhaliza, S.Farm', role: 'APOTEKER', baseHadir: 21 },
+
+                // 2 RESEPSIONIS (Sesuai DB Seeder)
+                { id: 15, nik: 'SF-REC-001', nama: 'Rina Anggraini', role: 'RESEPSIONIS', baseHadir: 23 },
+                { id: 16, nik: 'SF-REC-002', nama: 'Dewi Lestari', role: 'RESEPSIONIS', baseHadir: 18 },
+
+                // 3 ADMIN SYSTEM & OPERASIONAL (Sesuai DB Seeder)
+                { id: 17, nik: 'SF-ADM-001', nama: 'Administrator System', role: 'ADMIN', baseHadir: 24 },
+                { id: 18, nik: 'SF-ADM-002', nama: 'Admin Operasional Klinik', role: 'ADMIN', baseHadir: 20 },
+                { id: 19, nik: 'SF-ADM-003', nama: 'Admin Logistik Farmasi', role: 'ADMIN', baseHadir: 22 }
+            ];
 
             try {
-                const res = await API.get('/auth/users?page=1&limit=100');
-                const users = Array.isArray(res) ? res : (res.content || []);
-                const staffUsers = users.filter(u => u.role !== 'PASIEN');
+                if (typeof API !== 'undefined' && API.get) {
+                    const res = await API.get('/auth/users?page=1&limit=100');
+                    const users = Array.isArray(res) ? res : (res.content || []);
+                    const staffUsers = users.filter(u => u.role !== 'PASIEN');
 
-                if (staffUsers.length > 0) {
-                    staffPayrollList = staffUsers.map((u, idx) => {
-                        const nikPrefix = u.role.slice(0, 3);
-                        const userLogs = absensiLog.filter(l => l.user === u.namaLengkap || l.userId === u.id);
-                        const attendanceDays = 20 + Math.min(userLogs.length, 5);
-                        return {
-                            id: u.id || (idx + 1),
-                            nik: `SF-${nikPrefix}-${String(u.id || idx + 1).padStart(3, '0')}`,
-                            nama: u.namaLengkap,
-                            role: u.role,
-                            hariHadir: attendanceDays,
-                            jamTelatCount: userLogs.filter(l => l.isLate).length,
-                            status: 'DIBAYARKAN'
-                        };
-                    });
-                    renderPayrollTable();
-                    return;
+                    if (staffUsers.length > 0) {
+                        const apiStaff = staffUsers.map((u, idx) => {
+                            const nikPrefix = u.role.slice(0, 3);
+                            const sId = u.id || (100 + idx);
+                            return {
+                                id: sId,
+                                nik: `SF-${nikPrefix}-${String(sId).padStart(3, '0')}`,
+                                nama: u.namaLengkap,
+                                role: u.role,
+                                baseHadir: 20 + (sId % 5)
+                            };
+                        });
+                        
+                        // Merge API staff with defaults avoiding duplicate IDs
+                        const existingIds = new Set(apiStaff.map(s => s.id));
+                        const uniqueDefaults = defaultStaff.filter(s => !existingIds.has(s.id));
+                        staffPayrollList = [...apiStaff, ...uniqueDefaults];
+                        renderPayrollTable();
+                        return;
+                    }
                 }
             } catch(e) { }
 
-            // Fallback list when backend is offline
-            staffPayrollList = [
-                { id: 1, nik: 'SF-DOC-001', nama: 'dr. Arisandy Pratama, M.Ked', role: 'DOKTER', hariHadir: 22, jamTelatCount: 0, status: 'DIBAYARKAN' },
-                { id: 2, nik: 'SF-DOC-002', nama: 'dr. Sabrina Prameshwari', role: 'DOKTER', hariHadir: 20, jamTelatCount: 1, status: 'DIBAYARKAN' },
-                { id: 3, nik: 'SF-APT-001', nama: 'apt. Bambang Sugianto, S.Farm', role: 'APOTEKER', hariHadir: 24, jamTelatCount: 0, status: 'DIBAYARKAN' },
-                { id: 4, nik: 'SF-APT-002', nama: 'apt. Siti Nurhaliza, S.Farm', role: 'APOTEKER', hariHadir: 21, jamTelatCount: 2, status: 'DIBAYARKAN' },
-                { id: 5, nik: 'SF-REC-001', nama: 'Rina Anggraini', role: 'RESEPSIONIS', hariHadir: 23, jamTelatCount: 0, status: 'DIBAYARKAN' },
-                { id: 6, nik: 'SF-REC-002', nama: 'Dewi Lestari', role: 'RESEPSIONIS', hariHadir: 22, jamTelatCount: 1, status: 'DIBAYARKAN' },
-                { id: 7, nik: 'SF-ADM-001', nama: 'Administrator System', role: 'ADMIN', hariHadir: 24, jamTelatCount: 0, status: 'DIBAYARKAN' },
-                { id: 8, nik: 'SF-ADM-002', nama: 'Admin Operasional Klinik', role: 'ADMIN', hariHadir: 22, jamTelatCount: 0, status: 'DIBAYARKAN' }
-            ];
-
+            staffPayrollList = defaultStaff;
             renderPayrollTable();
         }
 
-        function calculateStaffSalary(staff) {
+        function calculateStaffSalaryForMonth(staff, selectedMonth) {
             const cfg = SALARY_CONFIG[staff.role] || SALARY_CONFIG.ADMIN;
-            const tunjanganTotal = staff.hariHadir * cfg.tunjanganPerHari;
-            const potonganTotal = staff.jamTelatCount * 50000;
-            const insentifTotal = cfg.insentifStandard;
-            const thp = cfg.gajiPokok + tunjanganTotal + insentifTotal - potonganTotal;
+            const isPast = PAST_MONTHS.includes(selectedMonth);
+            const isPaid = isMonthPaid(selectedMonth);
+            const overrides = getCustomOverrides(selectedMonth);
+            const override = overrides[staff.id];
+
+            const gajiPokok = override?.gajiPokok ?? cfg.gajiPokok;
+
+            let hariHadir = 0;
+            let insentifBonus = 0;
+            let dendaTelat = 0;
+            let potonganLain = 0;
+            let catatanPotongan = override?.catatanPotongan || '';
+
+            if (override) {
+                hariHadir = override.hariHadir ?? 0;
+                insentifBonus = override.insentifTotal ?? 0;
+                dendaTelat = override.potonganTelat ?? 0;
+                potonganLain = override.potonganLain ?? 0;
+            } else if (isPast) {
+                hariHadir = staff.baseHadir || 20;
+                insentifBonus = cfg.insentifStandard;
+                dendaTelat = (staff.id % 4 === 0) ? 50000 : 0;
+                potonganLain = 0;
+            } else {
+                // Current / future months start empty except Gaji Pokok
+                hariHadir = 0;
+                insentifBonus = 0;
+                dendaTelat = 0;
+                potonganLain = 0;
+            }
+
+            const tunjanganHarian = cfg.tunjanganPerHari;
+            const tunjanganHadirTotal = hariHadir * tunjanganHarian;
+            const tunjanganTotal = tunjanganHadirTotal + insentifBonus;
+            const potonganTotal = dendaTelat + potonganLain;
+
+            let thp = 0;
+            if (isPast || isPaid || override) {
+                thp = gajiPokok + tunjanganTotal - potonganTotal;
+            } else {
+                // If not input by admin yet in draft month
+                thp = 0;
+            }
 
             return {
-                gajiPokok: cfg.gajiPokok,
+                gajiPokok,
+                hariHadir,
+                tunjanganHarian,
+                tunjanganHadirTotal,
+                insentifBonus,
                 tunjanganTotal,
-                insentifTotal,
+                dendaTelat,
+                potonganLain,
                 potonganTotal,
-                thp
+                thp,
+                catatanPotongan,
+                isInputted: !!(override || isPast || isPaid)
             };
         }
 
         function formatRupiah(val) {
-            return 'Rp ' + Math.round(val).toLocaleString('id-ID');
+            return 'Rp ' + Math.round(val || 0).toLocaleString('id-ID');
         }
 
         function renderPayrollTable() {
+            const selectedMonth = getSelectedMonth();
+            const isPast = PAST_MONTHS.includes(selectedMonth);
+            const isPaid = isMonthPaid(selectedMonth);
+
             const query = (document.getElementById('search-payroll').value || '').toLowerCase();
             const roleFilter = document.getElementById('filter-role-payroll').value;
 
@@ -505,79 +820,239 @@
 
             let grandTotalPayroll = 0;
             let grandTotalHadir = 0;
+            let countInputted = 0;
 
             const tbody = document.getElementById('payroll-tbody');
             tbody.innerHTML = '';
 
             if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" class="py-6 text-center text-slate-400 italic">Data penggajian staff tidak ditemukan.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="9" class="py-6 text-center text-slate-400 italic">Data penggajian staff tidak ditemukan.</td></tr>`;
                 return;
             }
 
+            // Update banner status
+            const bannerBadge = document.getElementById('banner-status-badge');
+            const bannerContainer = document.getElementById('payroll-status-banner');
+            const bannerTitle = bannerContainer ? bannerContainer.querySelector('h4') : null;
+            const bannerDesc = bannerContainer ? bannerContainer.querySelector('p') : null;
+
+            if (isPast || isPaid) {
+                if (bannerBadge) {
+                    bannerBadge.innerText = 'TERBAYARKAN (LUNAS)';
+                    bannerBadge.className = 'px-2.5 py-0.5 bg-emerald-200/80 text-emerald-900 font-extrabold text-[9.5px] rounded-full uppercase border border-emerald-300 shrink-0';
+                }
+                if (bannerContainer) {
+                    bannerContainer.className = 'p-4 rounded-3xl bg-emerald-50 border border-emerald-200/80 text-emerald-900 flex items-start gap-3 shadow-xs';
+                }
+                if (bannerTitle) {
+                    bannerTitle.innerText = `Periode Penggajian (${selectedMonth}) — Terbayarkan & Lunas`;
+                }
+                if (bannerDesc) {
+                    bannerDesc.innerHTML = `Seluruh gaji karyawan untuk periode <strong>${selectedMonth}</strong> telah ditransfer dan terbayarkan secara resmi. Anda dapat mencetak atau mengunduh slip gaji masing-masing karyawan.`;
+                }
+            } else {
+                if (bannerBadge) {
+                    bannerBadge.innerText = 'DRAFT (BELUM DIPROSES)';
+                    bannerBadge.className = 'px-2.5 py-0.5 bg-amber-200/80 text-amber-900 font-extrabold text-[9.5px] rounded-full uppercase border border-amber-300 shrink-0';
+                }
+                if (bannerContainer) {
+                    bannerContainer.className = 'p-4 rounded-3xl bg-amber-50 border border-amber-200/80 text-amber-900 flex items-start gap-3 shadow-xs';
+                }
+                if (bannerTitle) {
+                    bannerTitle.innerText = `Periode Penggajian (${selectedMonth}) — Status Draft / Pendataan Admin`;
+                }
+                if (bannerDesc) {
+                    bannerDesc.innerHTML = `Data awal memuat <strong>Nama, Jabatan, dan Gaji Pokok</strong>. Silakan klik <strong>"Input Gaji"</strong> untuk mengisi hari hadir, insentif, dan potongan tiap karyawan, lalu klik <strong>"Proses Gaji Bulan Ini"</strong> setelah selesai.`;
+                }
+            }
+
             filtered.forEach(s => {
-                const calc = calculateStaffSalary(s);
-                grandTotalPayroll += calc.thp;
-                grandTotalHadir += s.hariHadir;
+                const calc = calculateStaffSalaryForMonth(s, selectedMonth);
+
+                if (calc.isInputted || isPaid) {
+                    grandTotalPayroll += calc.thp;
+                    grandTotalHadir += calc.hariHadir;
+                    countInputted++;
+                }
 
                 const roleBadge = {
                     DOKTER: 'bg-blue-100 text-blue-800 border-blue-200',
                     APOTEKER: 'bg-teal-100 text-teal-800 border-teal-200',
-                    RESEPSIONIS: 'bg-purple-100 text-purple-800 border-purple-200',
+                    RESEPSIONIS: 'bg-teal-100 text-teal-800 border-teal-200',
                     ADMIN: 'bg-emerald-100 text-emerald-800 border-emerald-200'
                 }[s.role] || 'bg-slate-100 text-slate-700';
+
+                let statusBadge = '';
+                if (isFutureMonth(selectedMonth)) {
+                    statusBadge = `<span class="px-2.5 py-0.5 bg-slate-100 text-slate-500 font-bold text-[9px] rounded-full uppercase border border-slate-200">BELUM BERJALAN</span>`;
+                } else if (isPast || isPaid) {
+                    statusBadge = `<span class="px-2.5 py-0.5 bg-emerald-100 text-emerald-800 font-extrabold text-[9px] rounded-full uppercase border border-emerald-200">TERBAYARKAN</span>`;
+                } else if (calc.isInputted) {
+                    statusBadge = `<span class="px-2.5 py-0.5 bg-blue-100 text-blue-800 font-extrabold text-[9px] rounded-full uppercase border border-blue-200">SIAP DIPROSES</span>`;
+                } else {
+                    statusBadge = `<span class="px-2.5 py-0.5 bg-amber-100 text-amber-800 font-extrabold text-[9px] rounded-full uppercase border border-amber-200">DRAFT</span>`;
+                }
 
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition-colors text-xs";
                 tr.innerHTML = `
-                    <td class="py-3 font-extrabold text-slate-900">
+                    <td class="py-3 px-2 font-extrabold text-slate-900 whitespace-nowrap">
                         <div>${s.nama}</div>
                         <div class="text-[10px] font-mono text-slate-400 font-normal">${s.nik}</div>
                     </td>
-                    <td class="py-3"><span class="px-2 py-0.5 rounded text-[9px] font-black uppercase border ${roleBadge}">${s.role}</span></td>
-                    <td class="py-3">
-                        <div class="font-bold text-slate-800">${s.hariHadir} Hari Hadir</div>
-                        <div class="text-[10px] text-slate-400">${s.jamTelatCount > 0 ? `${s.jamTelatCount}x Terlambat` : 'Disiplin 100%'}</div>
+                    <td class="py-3 px-2 whitespace-nowrap"><span class="px-2 py-0.5 rounded text-[9px] font-black uppercase border ${roleBadge}">${s.role}</span></td>
+                    <td class="py-3 px-2 whitespace-nowrap">
+                        <div class="font-bold text-slate-800">${calc.hariHadir > 0 ? `${calc.hariHadir} Hari Hadir` : '<span class="text-slate-400 font-normal italic">0 Hari (Kosong)</span>'}</div>
+                        <div class="text-[10px] text-slate-400">${calc.dendaTelat > 0 ? `Denda Telat ${formatRupiah(calc.dendaTelat)}` : (calc.hariHadir > 0 ? 'Disiplin 100%' : 'Belum di-input')}</div>
                     </td>
-                    <td class="py-3 text-right font-mono font-bold text-slate-700">${formatRupiah(calc.gajiPokok)}</td>
-                    <td class="py-3 text-right font-mono font-bold text-emerald-700">+${formatRupiah(calc.tunjanganTotal)}</td>
-                    <td class="py-3 text-right font-mono font-black text-slate-900">${formatRupiah(calc.thp)}</td>
-                    <td class="py-3 text-center">
-                        <span class="px-2.5 py-0.5 bg-emerald-100 text-emerald-800 font-extrabold text-[9px] rounded-full uppercase border border-emerald-200">DIBAYARKAN</span>
-                    </td>
-                    <td class="py-3 text-right">
-                        <button onclick="openModalSlip(${s.id})" class="px-3 py-1 bg-brand-50 hover:bg-brand-100 text-brand-700 font-bold rounded-xl border border-brand-200 transition-all cursor-pointer">
-                            Slip Gaji
-                        </button>
+                    <td class="py-3 px-2 text-right font-mono font-bold text-slate-700 whitespace-nowrap">${formatRupiah(calc.gajiPokok)}</td>
+                    <td class="py-3 px-2 text-right font-mono font-bold text-emerald-700 whitespace-nowrap">${calc.tunjanganTotal > 0 ? `+${formatRupiah(calc.tunjanganTotal)}` : '<span class="text-slate-400 font-normal">Rp 0</span>'}</td>
+                    <td class="py-3 px-2 text-right font-mono font-bold text-rose-600 whitespace-nowrap">${calc.potonganTotal > 0 ? `-${formatRupiah(calc.potonganTotal)}` : '<span class="text-slate-400 font-normal">Rp 0</span>'}</td>
+                    <td class="py-3 px-2 text-right font-mono font-black whitespace-nowrap ${calc.thp > 0 ? 'text-slate-900 text-sm' : 'text-slate-400 text-xs italic'}">${calc.thp > 0 ? formatRupiah(calc.thp) : 'Rp 0 (Belum Input)'}</td>
+                    <td class="py-3 px-2 text-center whitespace-nowrap">${statusBadge}</td>
+                    <td class="py-3 px-2 text-right whitespace-nowrap">
+                        <div class="flex items-center justify-end gap-1.5">
+                            <button onclick="openModalEditPayroll(${s.id})" title="Input / Edit Presensi & Rincian Gaji" class="px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 font-bold rounded-xl border border-amber-200/80 transition-all cursor-pointer flex items-center gap-1 text-[11px]">
+                                <span class="material-symbols-outlined text-[14px]">edit_calendar</span>
+                                <span>Input Gaji</span>
+                            </button>
+                            <button onclick="openModalSlip(${s.id})" title="Cetak Slip Gaji" class="px-2.5 py-1 bg-brand-50 hover:bg-brand-100 text-brand-700 font-bold rounded-xl border border-brand-200 transition-all cursor-pointer text-[11px]">
+                                Slip Gaji
+                            </button>
+                        </div>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
 
             // Update KPI Cards
-            document.getElementById('kpi-total-payroll').innerText = formatRupiah(grandTotalPayroll);
-            document.getElementById('kpi-staff-count').innerText = `${filtered.length} Staff`;
-            document.getElementById('kpi-total-kehadiran').innerText = `${grandTotalHadir} Hari`;
-            document.getElementById('kpi-avg-salary').innerText = formatRupiah(filtered.length ? grandTotalPayroll / filtered.length : 0);
+            if (isFutureMonth(selectedMonth)) {
+                document.getElementById('kpi-total-payroll').innerText = "Rp 0 (Belum Berjalan)";
+                document.getElementById('kpi-staff-count').innerText = `0 dari ${filtered.length} Staff`;
+                document.getElementById('kpi-total-kehadiran').innerText = "0 Hari";
+                document.getElementById('kpi-avg-salary').innerText = "Rp 0";
+            } else if (isPast || isPaid) {
+                document.getElementById('kpi-total-payroll').innerText = formatRupiah(grandTotalPayroll);
+                document.getElementById('kpi-staff-count').innerText = `${filtered.length} Staff (Lunas)`;
+                document.getElementById('kpi-total-kehadiran').innerText = `${grandTotalHadir} Hari`;
+                document.getElementById('kpi-avg-salary').innerText = formatRupiah(filtered.length ? Math.round(grandTotalPayroll / filtered.length) : 0);
+            } else {
+                document.getElementById('kpi-total-payroll').innerText = grandTotalPayroll > 0 ? formatRupiah(grandTotalPayroll) : "Rp 0 (Draft)";
+                document.getElementById('kpi-staff-count').innerText = `${countInputted} dari ${filtered.length} Staff`;
+                document.getElementById('kpi-total-kehadiran').innerText = `${grandTotalHadir} Hari`;
+                document.getElementById('kpi-avg-salary').innerText = countInputted > 0 ? formatRupiah(Math.round(grandTotalPayroll / countInputted)) : "Rp 0";
+            }
         }
 
-        function openModalSlip(staffId) {
+        function openModalEditPayroll(staffId) {
+            const selectedMonth = getSelectedMonth();
+            if (isFutureMonth(selectedMonth)) {
+                Toast.warning(
+                    `Periode ${selectedMonth} belum berjalan (bulan mendatang). Input presensi & gaji hanya dapat dilakukan pada bulan berjalan (${CURRENT_MONTH}) atau bulan lalu.`,
+                    'Akses Dibatasi'
+                );
+                return;
+            }
             const staff = staffPayrollList.find(s => s.id === staffId);
             if (!staff) return;
 
-            const calc = calculateStaffSalary(staff);
+            const calc = calculateStaffSalaryForMonth(staff, selectedMonth);
+
+            document.getElementById('edit-staff-id').value = staff.id;
+            document.getElementById('edit-staff-name').innerText = staff.nama;
+            document.getElementById('edit-staff-role').innerText = staff.role;
+            document.getElementById('edit-staff-nik').innerText = staff.nik;
+            document.getElementById('edit-staff-subtitle').innerText = `Input Gaji & Presensi Periode ${selectedMonth}`;
+
+            document.getElementById('edit-gaji-pokok').value = calc.gajiPokok;
+            document.getElementById('edit-hari-hadir').value = calc.hariHadir;
+            document.getElementById('edit-insentif').value = calc.insentifBonus;
+            document.getElementById('edit-potongan-telat').value = calc.dendaTelat;
+            document.getElementById('edit-potongan-lain').value = calc.potonganLain;
+            document.getElementById('edit-catatan-potongan').value = calc.catatanPotongan || '';
+
+            previewSalaryCalc();
+            document.getElementById('modal-edit-payroll').classList.remove('hidden');
+        }
+
+        function closeModalEditPayroll() {
+            document.getElementById('modal-edit-payroll').classList.add('hidden');
+        }
+
+        function previewSalaryCalc() {
+            const staffId = parseInt(document.getElementById('edit-staff-id').value);
+            const staff = staffPayrollList.find(s => s.id === staffId);
+            if (!staff) return;
+
+            const gajiPokok = parseFloat(document.getElementById('edit-gaji-pokok').value) || 0;
+            const hariHadir = parseInt(document.getElementById('edit-hari-hadir').value) || 0;
+            const insentifTotal = parseFloat(document.getElementById('edit-insentif').value) || 0;
+            const dendaTelat = parseFloat(document.getElementById('edit-potongan-telat').value) || 0;
+            const potonganLain = parseFloat(document.getElementById('edit-potongan-lain').value) || 0;
+
+            const cfg = SALARY_CONFIG[staff.role] || SALARY_CONFIG.ADMIN;
+            const tunjanganHadir = hariHadir * cfg.tunjanganPerHari;
+            const totalTunjangan = tunjanganHadir + insentifTotal;
+            const totalPotongan = dendaTelat + potonganLain;
+            const thp = gajiPokok + totalTunjangan - totalPotongan;
+
+            document.getElementById('preview-gaji-pokok').innerText = formatRupiah(gajiPokok);
+            document.getElementById('preview-tunjangan').innerText = `+ ${formatRupiah(totalTunjangan)}`;
+            document.getElementById('preview-potongan').innerText = `- ${formatRupiah(totalPotongan)}`;
+            document.getElementById('preview-thp').innerText = formatRupiah(thp);
+        }
+
+        function saveEditPayroll(e) {
+            e.preventDefault();
+            const selectedMonth = getSelectedMonth();
+            const staffId = parseInt(document.getElementById('edit-staff-id').value);
+            const gajiPokok = parseFloat(document.getElementById('edit-gaji-pokok').value) || 0;
+            const hariHadir = parseInt(document.getElementById('edit-hari-hadir').value) || 0;
+            const insentifTotal = parseFloat(document.getElementById('edit-insentif').value) || 0;
+            const dendaTelat = parseFloat(document.getElementById('edit-potongan-telat').value) || 0;
+            const potonganLain = parseFloat(document.getElementById('edit-potongan-lain').value) || 0;
+            const catatanPotongan = document.getElementById('edit-catatan-potongan').value || '';
+
+            const staff = staffPayrollList.find(s => s.id === staffId);
+            if (staff) {
+                const overrides = getCustomOverrides(selectedMonth);
+                overrides[staffId] = {
+                    gajiPokok,
+                    hariHadir,
+                    insentifTotal,
+                    potonganTelat: dendaTelat,
+                    potonganLain,
+                    catatanPotongan
+                };
+                localStorage.setItem('sentra_payroll_overrides_' + getMonthKey(selectedMonth), JSON.stringify(overrides));
+
+                renderPayrollTable();
+                closeModalEditPayroll();
+                Toast.success(`Rincian gaji ${staff.nama} periode ${selectedMonth} berhasil disimpan!`, 'Simpan Berhasil');
+            }
+        }
+
+        function openModalSlip(staffId) {
+            const selectedMonth = getSelectedMonth();
+            const staff = staffPayrollList.find(s => s.id === staffId);
+            if (!staff) return;
+
+            const calc = calculateStaffSalaryForMonth(staff, selectedMonth);
 
             document.getElementById('slip-nama').innerText = staff.nama;
             document.getElementById('slip-role').innerText = staff.role;
             document.getElementById('slip-nik').innerText = staff.nik;
-            document.getElementById('slip-absensi').innerText = `${staff.hariHadir} Hari Hadir • Presensi Terverifikasi`;
+            document.getElementById('slip-periode').innerText = `Periode: ${selectedMonth}`;
+            document.getElementById('slip-absensi').innerText = `${calc.hariHadir} Hari Hadir • Presensi Terverifikasi`;
 
             document.getElementById('slip-gaji-pokok').innerText = formatRupiah(calc.gajiPokok);
-            document.getElementById('slip-total-hari-label').innerText = staff.hariHadir;
-            document.getElementById('slip-tunjangan').innerText = formatRupiah(calc.tunjanganTotal);
-            document.getElementById('slip-insentif').innerText = formatRupiah(calc.insentifTotal);
+            document.getElementById('slip-total-hari-label').innerText = calc.hariHadir;
+            document.getElementById('slip-tunjangan').innerText = formatRupiah(calc.tunjanganHadirTotal);
+            document.getElementById('slip-insentif').innerText = formatRupiah(calc.insentifBonus);
             
-            document.getElementById('slip-telat-label').innerText = staff.jamTelatCount;
-            document.getElementById('slip-potongan').innerText = `- ${formatRupiah(calc.potonganTotal)}`;
+            document.getElementById('slip-telat-label').innerText = calc.dendaTelat > 0 ? 1 : 0;
+            const catPotStr = calc.catatanPotongan ? ` (${calc.catatanPotongan})` : '';
+            document.getElementById('slip-potongan').innerText = `- ${formatRupiah(calc.potonganTotal)}${catPotStr}`;
 
             document.getElementById('slip-thp').innerText = formatRupiah(calc.thp);
 
@@ -588,8 +1063,124 @@
             document.getElementById('modal-slip-gaji').classList.add('hidden');
         }
 
+        function downloadSlipPDF() {
+            const element = document.getElementById('modal-slip-content');
+            const name = document.getElementById('slip-nama').innerText;
+            const selectedMonth = getSelectedMonth();
+            if (typeof html2pdf !== 'undefined') {
+                const opt = {
+                    margin: 0.3,
+                    filename: `Slip_Gaji_${name.replace(/\s+/g, '_')}_${selectedMonth.replace(/\s+/g, '_')}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2 },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
+                html2pdf().set(opt).from(element).save();
+                Toast.success(`Slip gaji ${name} (${selectedMonth}) berhasil di-download sebagai PDF!`, 'Download PDF');
+            } else {
+                const blob = new Blob([`SLIP GAJI RESMI SENTRA FARMA\nNama: ${name}\nPeriode: ${selectedMonth}`], { type: 'application/pdf' });
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = `Slip_Gaji_${name.replace(/\s+/g, '_')}_${selectedMonth.replace(/\s+/g, '_')}.pdf`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                Toast.success('Slip Gaji PDF berhasil di-download!', 'Download PDF');
+            }
+        }
+
+        function downloadSlipCSV() {
+            const name = document.getElementById('slip-nama').innerText;
+            const role = document.getElementById('slip-role').innerText;
+            const gajipok = document.getElementById('slip-gaji-pokok').innerText;
+            const tunj = document.getElementById('slip-tunjangan').innerText;
+            const pot = document.getElementById('slip-potongan').innerText;
+            const thp = document.getElementById('slip-thp').innerText;
+            const selectedMonth = getSelectedMonth();
+
+            const csvData = [
+                ["Rincian Slip Gaji Resmi", "Detail Nominal"],
+                ["Nama Pegawai", name],
+                ["Jabatan / Role", role],
+                ["Periode Gaji", selectedMonth],
+                ["Gaji Pokok", gajipok],
+                ["Tunjangan & Bonus", tunj],
+                ["Potongan Absen / BPJS", pot],
+                ["TOTAL TAKE HOME PAY (THP)", thp],
+                ["Status Pembayaran", isMonthPaid(selectedMonth) ? "LUNAS / REK BNI SENTRA FARMA" : "DRAFT / BELUM DIPROSES"],
+                ["Tanggal Penerbitan", new Date().toLocaleString('id-ID')]
+            ].map(e => e.map(cell => `"${cell}"`).join(",")).join("\n");
+
+            const blob = new Blob(["\uFEFF" + csvData], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `Slip_Gaji_${name.replace(/\s+/g, '_')}_${selectedMonth.replace(/\s+/g, '_')}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            Toast.success(`Slip gaji ${name} (${selectedMonth}) berhasil di-download sebagai Excel (.csv)!`, 'Download Excel');
+        }
+
         function prosesSemuaGaji() {
-            Toast.success('Seluruh penggajian bulan ini berhasil diproses & ditransfer ke rekening staff!', 'Payroll Berhasil');
+            const selectedMonth = getSelectedMonth();
+
+            if (isFutureMonth(selectedMonth)) {
+                Toast.warning(
+                    `Periode ${selectedMonth} belum berjalan (bulan mendatang). Penggajian periode mendatang belum dapat diproses!`,
+                    'Periode Belum Berjalan'
+                );
+                return;
+            }
+
+            const isPaid = isMonthPaid(selectedMonth);
+
+            if (isPaid) {
+                Toast.info(`Periode ${selectedMonth} sudah berstatus TERBAYARKAN (LUNAS).`, 'Informasi');
+                return;
+            }
+
+            // Validation: Check if attendance data has been inputted for staff
+            let staffWithAttendance = 0;
+            let totalCalculatedPayroll = 0;
+            let totalCalculatedHadir = 0;
+
+            staffPayrollList.forEach(s => {
+                const calc = calculateStaffSalaryForMonth(s, selectedMonth);
+                if (calc.hariHadir > 0 || calc.isInputted) {
+                    staffWithAttendance++;
+                    totalCalculatedPayroll += (calc.gajiPokok + calc.tunjanganTotal - calc.potonganTotal);
+                    totalCalculatedHadir += calc.hariHadir;
+                }
+            });
+
+            if (staffWithAttendance === 0) {
+                Toast.warning(
+                    'Belum ada data presensi/kehadiran staff yang di-input! Harap isi data kehadiran staff terlebih dahulu melalui tombol "Input Gaji".',
+                    'Proses Gaji Ditolak'
+                );
+                return;
+            }
+
+            // Populate confirmation modal
+            document.getElementById('confirm-month-name').innerText = selectedMonth;
+            document.getElementById('confirm-month-val').innerText = selectedMonth;
+            document.getElementById('confirm-staff-count').innerText = `${staffWithAttendance} dari ${staffPayrollList.length} Staff`;
+            document.getElementById('confirm-total-hadir').innerText = `${totalCalculatedHadir} Hari`;
+            document.getElementById('confirm-total-thp').innerText = formatRupiah(totalCalculatedPayroll);
+
+            document.getElementById('modal-confirm-pay').classList.remove('hidden');
+        }
+
+        function closeModalConfirmPay() {
+            document.getElementById('modal-confirm-pay').classList.add('hidden');
+        }
+
+        function confirmProcessPayroll() {
+            const selectedMonth = getSelectedMonth();
+            localStorage.setItem('sentra_payroll_processed_' + getMonthKey(selectedMonth), 'true');
+            closeModalConfirmPay();
+            renderPayrollTable();
+            Toast.success(`Seluruh penggajian periode ${selectedMonth} berhasil diproses & diresmikan!`, 'Gaji Terbayarkan (Lunas)');
         }
 
         function handleLogout() {

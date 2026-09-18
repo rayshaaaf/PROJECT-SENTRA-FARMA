@@ -84,4 +84,15 @@
         localStorage.removeItem('user_data');
         window.location.replace('/frontend/html/auth/login.html');
     };
+
+    window.handleLogout = function () {
+        if (typeof Toast !== 'undefined' && Toast.success) {
+            Toast.success('Anda telah berhasil logout.', 'Sampai Jumpa');
+            setTimeout(() => {
+                window.logout();
+            }, 600);
+        } else {
+            window.logout();
+        }
+    };
 })();

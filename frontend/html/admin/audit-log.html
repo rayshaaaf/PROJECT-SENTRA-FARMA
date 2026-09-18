@@ -12,6 +12,8 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../css/custom-select.css" />
+    <script src="../../js/custom-select.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -57,7 +59,7 @@
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-emerald-50/70 via-teal-50/40 to-slate-50 font-sans text-slate-800 flex h-screen antialiased selection:bg-brand-100 selection:text-brand-800 relative overflow-hidden">
+<body class="bg-gradient-to-br from-emerald-50/70 via-teal-50/40 to-slate-50 font-sans text-slate-800 flex h-screen overflow-hidden antialiased selection:bg-brand-100 selection:text-brand-800 relative">
 
     <!-- Ambient Glow Mesh Spheres -->
     <div class="fixed -top-40 -left-40 w-[500px] h-[500px] bg-emerald-300/20 rounded-full blur-[120px] pointer-events-none z-0"></div>
@@ -131,10 +133,10 @@
     </nav>
 
     <!-- MAIN CONTENT CONTAINER -->
-    <div class="main-portal-container flex-1 lg:ml-32 lg:mr-4 px-3 sm:px-6 flex flex-col min-h-screen lg:h-screen overflow-y-auto lg:overflow-hidden pb-20 lg:pb-0">
+    <div class="main-portal-container flex-1 lg:ml-24 lg:mr-4 px-2 sm:px-4 flex flex-col lg:h-screen lg:overflow-hidden pb-20 lg:pb-0 transition-all">
 
         <!-- HEADER BAR -->
-        <header class="h-20 flex items-center justify-between px-6 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100/60 transition-all shrink-0">
+        <header class="h-20 flex items-center justify-between px-4 sm:px-6 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100/60 transition-all shrink-0">
             <div class="flex items-center gap-3">
                 <a href="dashboard.html" class="flex items-center gap-2 group cursor-pointer shrink-0" title="Sentra Farma Master Control">
                     <img src="../../assets/logo.png" alt="Sentra Farma" class="h-12 sm:h-14 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform" />
@@ -160,10 +162,10 @@
         </header>
 
         <!-- MAIN WORKSPACE CONTAINER -->
-        <main class="p-6 max-w-6xl mx-auto w-full flex-1 flex flex-col overflow-y-auto space-y-5 custom-scrollbar">
+        <main class="p-4 sm:p-6 max-w-full w-full flex-1 flex flex-col overflow-hidden gap-4">
 
             <!-- FILTER BAR -->
-            <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+            <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3 text-xs shrink-0">
                 <div class="relative w-full sm:w-80">
                     <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">search</span>
                     <input type="text" id="search-audit" oninput="renderAuditLogs()" placeholder="Cari aktivitas / user ID..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl pl-9 pr-4 py-2 font-bold text-slate-800 focus:border-brand-500" />
@@ -179,9 +181,9 @@
                 </div>
             </div>
 
-            <!-- TABLE AUDIT TRAIL LOG -->
-            <section class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-4">
-                <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+            <!-- TABLE AUDIT TRAIL LOG (KOTAK KEDUA SCROLLABLE) -->
+            <section class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs flex-1 min-h-0 flex flex-col overflow-hidden space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-3 shrink-0">
                     <div class="flex items-center gap-2.5">
                         <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
                             <span class="material-symbols-outlined text-[20px]">shield_person</span>
@@ -194,16 +196,16 @@
                     <span id="audit-count-badge" class="text-xs font-black text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">0 Log Event</span>
                 </div>
 
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto flex-1 overflow-y-auto custom-scrollbar">
                     <table class="w-full text-left border-collapse text-xs">
-                        <thead>
+                        <thead class="sticky top-0 bg-white z-10 shadow-2xs">
                             <tr class="border-b border-slate-200 text-slate-400 font-semibold uppercase text-[10px]">
-                                <th class="pb-3">Timestamp (WIB)</th>
-                                <th class="pb-3">Pelaku / User</th>
-                                <th class="pb-3">Role RBAC</th>
-                                <th class="pb-3">Event Action</th>
-                                <th class="pb-3">IP / Geofence</th>
-                                <th class="pb-3 text-right">Status</th>
+                                <th class="pb-3 pt-2 bg-white">Timestamp (WIB)</th>
+                                <th class="pb-3 pt-2 bg-white">Pelaku / User</th>
+                                <th class="pb-3 pt-2 bg-white">Role RBAC</th>
+                                <th class="pb-3 pt-2 bg-white">Event Action</th>
+                                <th class="pb-3 pt-2 bg-white">IP / Geofence</th>
+                                <th class="pb-3 pt-2 text-right bg-white">Status</th>
                             </tr>
                         </thead>
                         <tbody id="audit-table-tbody" class="divide-y divide-slate-100 text-slate-700">
@@ -213,23 +215,6 @@
                 </div>
             </section>
         </main>
-
-        <!-- FOOTER -->
-        <footer class="mt-auto py-3 px-6 border-t border-slate-200/60 bg-white/60 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 shrink-0">
-            <div class="flex items-center gap-2">
-                <img src="../../assets/logo.png" alt="Sentra Farma" class="h-5 w-auto object-contain opacity-80" />
-                <span class="font-bold text-slate-700">© 2026 Sentra Farma Medika.</span>
-                <span class="hidden md:inline text-slate-400">Sistem Informasi Manajemen Klinik & Farmasi 24 Jam.</span>
-            </div>
-            <div class="flex items-center gap-4 text-[11px] font-semibold">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100/80 text-emerald-800 font-bold border border-emerald-200/60">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>System Active 24/7 v2.4</span>
-                </span>
-                <a href="#" class="hover:text-emerald-700 transition-colors">Bantuan & Support</a>
-                <a href="#" class="hover:text-emerald-700 transition-colors">Kebijakan Privasi</a>
-            </div>
-        </footer>
     </div>
 
     <script src="../../js/api.js"></script>
@@ -303,7 +288,19 @@
         }
 
         function exportAuditLog() {
-            Toast.success('Seluruh catatan Audit Trail Security Log berhasil di-export!', 'Export Log');
+            const csvRows = [["Timestamp", "Pelaku / User", "Role", "Event Action", "IP / Geofence", "Status"]];
+            logsData.forEach(l => {
+                csvRows.push([l.timestamp, l.user, l.role, l.action, l.ip, l.status]);
+            });
+            const csvContent = csvRows.map(row => row.map(cell => `"${cell}"`).join(",")).join("\n");
+            const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `Audit_Trail_Security_Log_${new Date().toISOString().slice(0,10)}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            Toast.success('Seluruh catatan Audit Trail Security Log berhasil di-download sebagai Excel/CSV!', 'Download Log');
         }
     </script>
 </body>

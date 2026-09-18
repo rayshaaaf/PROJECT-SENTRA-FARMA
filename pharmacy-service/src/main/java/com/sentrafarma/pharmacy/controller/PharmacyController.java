@@ -125,4 +125,11 @@ public class PharmacyController {
     public ResponseEntity<Transaksi> getTransaksiByInvoice(@PathVariable String invoice) {
         return ResponseEntity.ok(pharmacyService.getTransaksiByInvoice(invoice));
     }
+
+    @DeleteMapping("/reset-history")
+    @Operation(summary = "Hapus Semua Riwayat Resep & Transaksi POS Kasir")
+    public ResponseEntity<Void> resetHistory() {
+        pharmacyService.resetHistory();
+        return ResponseEntity.noContent().build();
+    }
 }

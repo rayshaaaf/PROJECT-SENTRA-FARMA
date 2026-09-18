@@ -57,7 +57,7 @@
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-emerald-50/70 via-teal-50/40 to-slate-50 font-sans text-slate-800 flex h-screen antialiased selection:bg-brand-100 selection:text-brand-800 relative overflow-hidden">
+<body class="bg-gradient-to-br from-emerald-50/70 via-teal-50/40 to-slate-50 font-sans text-slate-800 flex h-screen overflow-hidden antialiased selection:bg-brand-100 selection:text-brand-800 relative">
 
     <!-- Ambient Glow Mesh Spheres -->
     <div class="fixed -top-40 -left-40 w-[500px] h-[500px] bg-emerald-300/20 rounded-full blur-[120px] pointer-events-none z-0"></div>
@@ -131,10 +131,10 @@
     </nav>
 
     <!-- MAIN CONTENT CONTAINER -->
-    <div class="main-portal-container flex-1 lg:ml-32 lg:mr-4 px-3 sm:px-6 flex flex-col min-h-screen lg:h-screen overflow-y-auto lg:overflow-hidden pb-20 lg:pb-0">
+    <div class="main-portal-container flex-1 lg:ml-24 lg:mr-4 px-2 sm:px-4 flex flex-col lg:h-screen lg:overflow-hidden pb-20 lg:pb-0 transition-all">
 
         <!-- HEADER BAR -->
-        <header class="h-20 flex items-center justify-between px-6 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100/60 transition-all shrink-0">
+        <header class="h-20 flex items-center justify-between px-4 sm:px-6 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100/60 transition-all shrink-0">
             <div class="flex items-center gap-3">
                 <a href="dashboard.html" class="flex items-center gap-2 group cursor-pointer shrink-0" title="Sentra Farma Master Control">
                     <img src="../../assets/logo.png" alt="Sentra Farma" class="h-12 sm:h-14 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform" />
@@ -160,10 +160,10 @@
         </header>
 
         <!-- MAIN WORKSPACE CONTAINER -->
-        <main class="p-6 max-w-6xl mx-auto w-full flex-1 flex flex-col overflow-y-auto space-y-5 custom-scrollbar">
+        <main class="p-4 sm:p-6 max-w-full w-full flex-1 flex flex-col overflow-hidden gap-4">
 
             <!-- MASTER POLIKLINIK GRID -->
-            <section class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-4">
+            <section class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-4 shrink-0">
                 <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                     <div class="flex items-center gap-2.5">
                         <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
@@ -177,14 +177,14 @@
                     <span id="poli-count-badge" class="text-xs font-black text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">0 Poli</span>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs" id="poli-cards-grid">
-                    <div class="p-4 bg-slate-50 border border-slate-200/80 rounded-2xl text-center py-6 text-slate-400 italic col-span-3">Memuat data poliklinik...</div>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-2.5 text-xs" id="poli-cards-grid">
+                    <div class="p-3 bg-slate-50 border border-slate-200/80 rounded-2xl text-center py-4 text-slate-400 italic col-span-5">Memuat data poliklinik...</div>
                 </div>
             </section>
 
-            <!-- KATALOG DIAGNOSIS ICD-10 MEDICAL CODES -->
-            <section class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-4">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-100 pb-3">
+            <!-- KATALOG DIAGNOSIS ICD-10 MEDICAL CODES (KOTAK KEDUA SCROLLABLE) -->
+            <section class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs flex-1 min-h-0 flex flex-col overflow-hidden space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-100 pb-3 shrink-0">
                     <div class="flex items-center gap-2.5">
                         <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
                             <span class="material-symbols-outlined text-[20px]">menu_book</span>
@@ -201,14 +201,14 @@
                     </div>
                 </div>
 
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto flex-1 overflow-y-auto custom-scrollbar">
                     <table class="w-full text-left border-collapse text-xs">
-                        <thead>
+                        <thead class="sticky top-0 bg-white z-10 shadow-2xs">
                             <tr class="border-b border-slate-200 text-slate-400 font-semibold uppercase text-[10px]">
-                                <th class="pb-3">Kode ICD-10</th>
-                                <th class="pb-3">Nama Diagnosis Medis</th>
-                                <th class="pb-3">Kategori Medis</th>
-                                <th class="pb-3">Status Otorisasi</th>
+                                <th class="pb-3 pt-2 bg-white">Kode ICD-10</th>
+                                <th class="pb-3 pt-2 bg-white">Nama Diagnosis Medis</th>
+                                <th class="pb-3 pt-2 bg-white">Kategori Medis</th>
+                                <th class="pb-3 pt-2 bg-white">Status Otorisasi</th>
                             </tr>
                         </thead>
                         <tbody id="icd-table-tbody" class="divide-y divide-slate-100 text-slate-700">
@@ -218,23 +218,6 @@
                 </div>
             </section>
         </main>
-
-        <!-- FOOTER -->
-        <footer class="mt-auto py-3 px-6 border-t border-slate-200/60 bg-white/60 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 shrink-0">
-            <div class="flex items-center gap-2">
-                <img src="../../assets/logo.png" alt="Sentra Farma" class="h-5 w-auto object-contain opacity-80" />
-                <span class="font-bold text-slate-700">© 2026 Sentra Farma Medika.</span>
-                <span class="hidden md:inline text-slate-400">Sistem Informasi Manajemen Klinik & Farmasi 24 Jam.</span>
-            </div>
-            <div class="flex items-center gap-4 text-[11px] font-semibold">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100/80 text-emerald-800 font-bold border border-emerald-200/60">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>System Active 24/7 v2.4</span>
-                </span>
-                <a href="#" class="hover:text-emerald-700 transition-colors">Bantuan & Support</a>
-                <a href="#" class="hover:text-emerald-700 transition-colors">Kebijakan Privasi</a>
-            </div>
-        </footer>
     </div>
 
     <!-- MODAL TAMBAH POLIKLINIK -->
@@ -278,14 +261,41 @@
     <script src="../../js/absensi.js"></script>
     <script>
         let icdData = [
-            { code: 'J00', name: 'Acute nasopharyngitis (common cold)', category: 'Respiratori' },
-            { code: 'I10', name: 'Essential (primary) hypertension', category: 'Kardiovaskular' },
-            { code: 'E11', name: 'Type 2 diabetes mellitus', category: 'Endokrin' },
-            { code: 'K29.7', name: 'Gastritis, unspecified', category: 'Pencernaan' },
-            { code: 'A09', name: 'Infectious gastroenteritis and colitis', category: 'Infeksi' },
-            { code: 'J18.9', name: 'Pneumonia, unspecified organism', category: 'Respiratori' },
-            { code: 'M54.5', name: 'Low back pain', category: 'Muskuloskeletal' },
-            { code: 'H10.9', name: 'Unspecified conjunctivitis', category: 'Mata' }
+            { code: 'A09', name: 'Infectious gastroenteritis and colitis (Diare & Muntaber)', category: 'Infeksi / Pencernaan' },
+            { code: 'A75.9', name: 'Typhoid fever, unspecified (Demam Tipes)', category: 'Infeksi Bakteri' },
+            { code: 'A91', name: 'Dengue hemorrhagic fever (Demam Berdarah / DHF)', category: 'Infeksi Virus' },
+            { code: 'B05.9', name: 'Measles without complication (Campak)', category: 'Infeksi Virus' },
+            { code: 'B01.9', name: 'Varicella without complication (Cacar Air)', category: 'Infeksi Virus' },
+            { code: 'E11.9', name: 'Type 2 diabetes mellitus without complications (Kencing Manis)', category: 'Endokrin & Metabolik' },
+            { code: 'E05.9', name: 'Thyrotoxicosis, unspecified (Hipertiroid)', category: 'Endokrin & Metabolik' },
+            { code: 'E78.5', name: 'Hyperlipidemia, unspecified (Kolesterol Tinggi)', category: 'Endokrin & Metabolik' },
+            { code: 'H10.9', name: 'Unspecified conjunctivitis (Iritasi / Radang Mata)', category: 'Mata' },
+            { code: 'H66.9', name: 'Otitis media, unspecified (Infeksi Telinga Tengah)', category: 'THT & Pendengaran' },
+            { code: 'I10', name: 'Essential (primary) hypertension (Darah Tinggi)', category: 'Kardiovaskular' },
+            { code: 'I20.9', name: 'Angina pectoris, unspecified (Nyeri Dada Iskemik)', category: 'Kardiovaskular' },
+            { code: 'I64', name: 'Stroke, not specified as haemorrhage or infarction', category: 'Neurologi / Saraf' },
+            { code: 'J00', name: 'Acute nasopharyngitis [common cold] (Flu & Batuk Pilek)', category: 'Respiratori' },
+            { code: 'J02.9', name: 'Acute pharyngitis, unspecified (Radang Tenggorokan)', category: 'Respiratori' },
+            { code: 'J03.9', name: 'Acute tonsillitis, unspecified (Aandel / Tonsilitis)', category: 'Respiratori' },
+            { code: 'J45.9', name: 'Asthma, unspecified (Sesak Napas / Asma)', category: 'Respiratori' },
+            { code: 'J18.9', name: 'Pneumonia, unspecified organism (Infeksi Paru)', category: 'Respiratori' },
+            { code: 'K29.7', name: 'Gastritis, unspecified (Sakit Maag / Gastritis)', category: 'Pencernaan' },
+            { code: 'K30', name: 'Dyspepsia (Gangguan Pencernaan / Asam Lambung)', category: 'Pencernaan' },
+            { code: 'K02.9', name: 'Dental caries, unspecified (Gigi Berlubang)', category: 'Gigi & Mulut' },
+            { code: 'K05.1', name: 'Chronic gingivitis (Gusi Berdarah / Radang Gusi)', category: 'Gigi & Mulut' },
+            { code: 'K12.1', name: 'Other forms of stomatitis (Sariawan)', category: 'Gigi & Mulut' },
+            { code: 'L03.9', name: 'Cellulitis, unspecified (Infeksi Kulit & Jaringan)', category: 'Dermatologi / Kulit' },
+            { code: 'L20.9', name: 'Atopic dermatitis, unspecified (Gatal Eksim / Alergi)', category: 'Dermatologi / Kulit' },
+            { code: 'L70.0', name: 'Acne vulgaris (Jerawat Severa / Komedo)', category: 'Dermatologi / Kulit' },
+            { code: 'M54.5', name: 'Low back pain (Nyeri Punggung Bawah)', category: 'Muskuloskeletal' },
+            { code: 'M13.9', name: 'Arthritis, unspecified (Nyeri Sendi / Asam Urat)', category: 'Muskuloskeletal' },
+            { code: 'N39.0', name: 'Urinary tract infection, site not specified (ISK)', category: 'Urologi' },
+            { code: 'O80.0', name: 'Spontaneous vertex delivery (Persalinan Normal)', category: 'Kebidanan & KIA' },
+            { code: 'P59.9', name: 'Neonatal jaundice, unspecified (Bayi Kuning)', category: 'Pediatri / Anak' },
+            { code: 'R50.9', name: 'Fever, unspecified (Demam Tinggi Tanpa Sebab)', category: 'Gejala Umum' },
+            { code: 'R51', name: 'Headache (Sakit Kepala / Migrain)', category: 'Gejala Umum' },
+            { code: 'Z00.0', name: 'General medical examination (Check-Up Kesehatan)', category: 'Pemeriksaan Rutin' },
+            { code: 'Z23.8', name: 'Need for immunization against other single diseases (Imunisasi Anak)', category: 'Preventif & KB' }
         ];
 
         let poliList = [];
@@ -312,9 +322,11 @@
                 renderPoliGrid();
             } catch(e) {
                 poliList = [
-                    { id: 1, namaPoli: 'Poli Umum', deskripsi: 'Pelayanan kesehatan umum & pemeriksaan dasar' },
-                    { id: 2, namaPoli: 'Poli Gigi & Mulut', deskripsi: 'Pemeriksaan & perawatan kesehatan gigi' },
-                    { id: 3, namaPoli: 'Poli Anak (Pediatri)', deskripsi: 'Konsultasi & imunisasi tumbuh kembang anak' }
+                    { id: 1, namaPoli: 'Poli Umum', deskripsi: 'Pelayanan kesehatan umum & berobat jalan' },
+                    { id: 2, namaPoli: 'Poli Gigi & Mulut', deskripsi: 'Pemeriksaan & perawatan karang gigi' },
+                    { id: 3, namaPoli: 'Poli KIA & KB', deskripsi: 'Pemeriksaan kehamilan ANC & KB' },
+                    { id: 4, namaPoli: 'Poli Anak', deskripsi: 'Konsultasi & imunisasi tumbuh kembang' },
+                    { id: 5, namaPoli: 'Unit Emergency', deskripsi: 'Pertolongan gawat darurat 24 jam' }
                 ];
                 renderPoliGrid();
             }
@@ -325,17 +337,19 @@
             const container = document.getElementById('poli-cards-grid');
             container.innerHTML = '';
 
-            poliList.forEach(p => {
+            poliList.forEach((p, idx) => {
+                const poliNum = idx + 1;
+                const cleanName = (p.namaPoli || '').replace(/^Poli\s*\d*\s*\(?/i, '').replace(/\)$/, '').trim();
                 const card = document.createElement('div');
-                card.className = "p-4 bg-slate-50 border border-slate-200/80 rounded-2xl space-y-2 hover:bg-white transition-all shadow-2xs";
+                card.className = "p-3 bg-slate-50 border border-slate-200/80 rounded-2xl space-y-1.5 hover:bg-white transition-all shadow-2xs";
                 card.innerHTML = `
-                    <div class="flex justify-between items-start">
-                        <span class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 font-extrabold flex items-center justify-center text-xs">#POL-${p.id}</span>
-                        <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-bold text-[9px] rounded-full uppercase">OPERASIONAL</span>
+                    <div class="flex justify-between items-center">
+                        <span class="px-2 py-0.5 rounded-lg bg-emerald-100 text-emerald-800 font-mono font-black text-[10px]">#POL-${poliNum}</span>
+                        <span class="px-1.5 py-0.2 bg-emerald-100 text-emerald-800 font-extrabold text-[8px] rounded uppercase">OPERASIONAL</span>
                     </div>
                     <div>
-                        <h4 class="font-extrabold text-slate-900 text-xs">${p.namaPoli}</h4>
-                        <p class="text-[10px] text-slate-500">${p.deskripsi || 'Layanan Poliklinik Sentra Farma'}</p>
+                        <h4 class="font-black text-slate-900 text-xs truncate">Poli ${poliNum} — ${cleanName}</h4>
+                        <p class="text-[9.5px] text-slate-500 font-medium truncate">${p.deskripsi || 'Layanan Klinik Sentra Farma'}</p>
                     </div>
                 `;
                 container.appendChild(card);

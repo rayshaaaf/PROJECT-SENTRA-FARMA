@@ -31,6 +31,10 @@
         }
     </script>
     <style>
+        * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
         .material-symbols-outlined, .material-icons, .material-icons-outlined {
             font-family: 'Material Symbols Outlined', 'Material Icons Outlined', 'Material Icons' !important;
             font-weight: normal;
@@ -199,29 +203,37 @@
     </aside>
 
     <!-- MAIN CONTENT CONTAINER -->
-    <div class="main-portal-container flex-1 ml-32 mr-8 transition-all flex flex-col min-h-screen overflow-y-auto">
+    <div class="main-portal-container flex-1 ml-32 mr-8 transition-all">
 
-        <!-- TRANSPARENT HEADER BAR (MATCHES PAGE BACKGROUND & COMPACT LOGO) -->
+        <!-- TRANSPARENT HEADER BAR (MATCHES PAGE BACKGROUND & MODERATELY ENLARGED LOGO) -->
         <header
-            class="h-18 flex items-center justify-between px-6 sm:px-10 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100/60 transition-all shrink-0 py-3">
+            class="h-24 flex items-center justify-between px-6 sm:px-10 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100/60 transition-all">
             <div class="flex items-center gap-4">
-                <!-- Brand Logo Link -->
-                <a href="dashboard.html" class="flex items-center gap-3 group cursor-pointer shrink-0" title="Sentra Farma">
-                    <img src="../../assets/logo.png" alt="Sentra Farma" class="h-12 sm:h-14 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform" />
+                <!-- Brand Logo Link (Moderately Enlarged) -->
+                <a href="dashboard.html" class="flex items-center gap-3 group cursor-pointer shrink-0"
+                    title="Sentra Farma">
+                    <img src="../../assets/logo.png" alt="Sentra Farma"
+                        class="h-16 sm:h-20 md:h-22 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform" />
                 </a>
-                <div class="h-8 w-px bg-slate-200/80 hidden sm:block"></div>
+                <div class="h-10 w-px bg-slate-200/80 hidden sm:block"></div>
                 <div>
-                    <h1 class="text-base font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+                    <h1
+                        class="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight flex items-center gap-2.5">
                         <span>Profil Pasien Digital</span>
+                        <span
+                            class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-extrabold rounded-full border border-emerald-200/80 flex items-center gap-1.5 shadow-2xs">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> ONLINE
+                        </span>
                     </h1>
                     <p class="text-xs text-slate-500 font-medium">Kelola Informasi Akun & Data Pasien Terdaftar</p>
                 </div>
             </div>
 
             <div class="flex items-center gap-4">
+                <!-- User Profile Avatar & Badge -->
                 <a href="profil.html" title="Buka Profil Saya"
                     class="flex items-center gap-3 pl-4 border-l border-slate-200 group cursor-pointer hover:opacity-90 transition-all">
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-brand-700 to-emerald-500 text-white flex items-center justify-center font-extrabold text-xs shadow-md group-hover:scale-105 transition-transform"
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-brand-700 to-emerald-500 text-white flex items-center justify-center font-extrabold text-sm shadow-md group-hover:scale-105 transition-transform"
                         id="user-avatar-initials">P</div>
                     <div class="hidden sm:flex flex-col">
                         <span id="user-name-badge"
@@ -233,7 +245,7 @@
         </header>
 
         <!-- MAIN WORKSPACE (FILLS VERTICAL SPACE RICHLY) -->
-        <main class="p-6 sm:p-8 max-w-6xl mx-auto w-full flex-1 flex flex-col justify-center my-auto">
+        <main class="p-6 sm:p-8 w-full flex-1 flex flex-col justify-center my-auto">
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch h-full">
 
@@ -371,23 +383,6 @@
             </div>
 
         </main>
-
-        <!-- FOOTER -->
-        <footer class="mt-auto py-3 px-6 border-t border-slate-200/60 bg-white/60 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 shrink-0 rounded-2xl mb-4 mx-6">
-            <div class="flex items-center gap-2">
-                <img src="../../assets/logo.png" alt="Sentra Farma" class="h-5 w-auto object-contain opacity-80" />
-                <span class="font-bold text-slate-700">© 2026 Sentra Farma Medika.</span>
-                <span class="hidden md:inline text-slate-400">Pusat Layanan Kesehatan Digital.</span>
-            </div>
-            <div class="flex items-center gap-4 text-[11px] font-semibold">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100/80 text-emerald-800 font-bold border border-emerald-200/60">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>System Active 24/7 v2.4</span>
-                </span>
-                <a href="#" class="hover:text-emerald-700 transition-colors">Bantuan & Support</a>
-                <a href="#" class="hover:text-emerald-700 transition-colors">Kebijakan Privasi</a>
-            </div>
-        </footer>
     </div>
 
     <!-- DELETE ACCOUNT CONFIRMATION MODAL -->

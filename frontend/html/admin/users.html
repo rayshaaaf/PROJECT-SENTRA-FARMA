@@ -12,6 +12,8 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../css/custom-select.css" />
+    <script src="../../js/custom-select.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -57,7 +59,7 @@
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-emerald-50/70 via-teal-50/40 to-slate-50 font-sans text-slate-800 flex h-screen antialiased selection:bg-brand-100 selection:text-brand-800 relative overflow-hidden">
+<body class="bg-gradient-to-br from-emerald-50/70 via-teal-50/40 to-slate-50 font-sans text-slate-800 flex h-screen overflow-hidden antialiased selection:bg-brand-100 selection:text-brand-800 relative">
 
     <!-- Ambient Glow Mesh Spheres -->
     <div class="fixed -top-40 -left-40 w-[500px] h-[500px] bg-emerald-300/20 rounded-full blur-[120px] pointer-events-none z-0"></div>
@@ -131,10 +133,10 @@
     </nav>
 
     <!-- MAIN CONTENT CONTAINER -->
-    <div class="main-portal-container flex-1 lg:ml-32 lg:mr-4 px-3 sm:px-6 flex flex-col min-h-screen lg:h-screen overflow-y-auto lg:overflow-hidden pb-20 lg:pb-0">
+    <div class="main-portal-container flex-1 lg:ml-24 lg:mr-4 px-2 sm:px-4 flex flex-col lg:h-screen lg:overflow-hidden pb-20 lg:pb-0 transition-all">
 
         <!-- HEADER BAR -->
-        <header class="h-20 flex items-center justify-between px-6 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100/60 transition-all shrink-0">
+        <header class="h-20 flex items-center justify-between px-4 sm:px-6 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100/60 transition-all shrink-0">
             <div class="flex items-center gap-3">
                 <a href="dashboard.html" class="flex items-center gap-2 group cursor-pointer shrink-0" title="Sentra Farma Master Control">
                     <img src="../../assets/logo.png" alt="Sentra Farma" class="h-12 sm:h-14 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform" />
@@ -160,10 +162,10 @@
         </header>
 
         <!-- MAIN WORKSPACE CONTAINER -->
-        <main class="p-6 max-w-6xl mx-auto w-full flex-1 flex flex-col overflow-y-auto space-y-5 custom-scrollbar">
+        <main class="p-4 sm:p-6 max-w-full w-full flex-1 flex flex-col overflow-hidden gap-4">
 
             <!-- FILTER & SEARCH CONTROL BAR -->
-            <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+            <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3 text-xs shrink-0">
                 <div class="relative w-full sm:w-80">
                     <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">search</span>
                     <input type="text" id="search-user" oninput="filterUserTable()" placeholder="Cari nama lengkap / email user..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl pl-9 pr-4 py-2 font-bold text-slate-800 focus:border-brand-500" />
@@ -185,9 +187,9 @@
                 </div>
             </div>
 
-            <!-- TABLE MANAJEMEN USERS -->
-            <section class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-4">
-                <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+            <!-- TABLE MANAJEMEN USERS (KOTAK KEDUA SCROLLABLE) -->
+            <section class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs flex-1 min-h-0 flex flex-col overflow-hidden space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-3 shrink-0">
                     <div class="flex items-center gap-2.5">
                         <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
                             <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
@@ -200,16 +202,16 @@
                     <span id="user-count-badge" class="text-xs font-black text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">0 Users</span>
                 </div>
 
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto flex-1 overflow-y-auto custom-scrollbar">
                     <table class="w-full text-left border-collapse text-xs">
-                        <thead>
+                        <thead class="sticky top-0 bg-white z-10 shadow-2xs">
                             <tr class="border-b border-slate-200 text-slate-400 font-semibold uppercase text-[10px]">
-                                <th class="pb-3">ID User</th>
-                                <th class="pb-3">Nama Lengkap</th>
-                                <th class="pb-3">Email Akun</th>
-                                <th class="pb-3">Role Otorisasi</th>
-                                <th class="pb-3">No. HP / Telepon</th>
-                                <th class="pb-3 text-right">Aksi Kelola</th>
+                                <th class="pb-3 pt-2 bg-white">ID User</th>
+                                <th class="pb-3 pt-2 bg-white">Nama Lengkap</th>
+                                <th class="pb-3 pt-2 bg-white">Email Akun</th>
+                                <th class="pb-3 pt-2 bg-white">Role Otorisasi</th>
+                                <th class="pb-3 pt-2 bg-white">No. HP / Telepon</th>
+                                <th class="pb-3 pt-2 text-right bg-white">Aksi Kelola</th>
                             </tr>
                         </thead>
                         <tbody id="user-page-tbody" class="divide-y divide-slate-100 text-slate-700">
@@ -221,23 +223,6 @@
                 </div>
             </section>
         </main>
-
-        <!-- FOOTER -->
-        <footer class="mt-auto py-3 px-6 border-t border-slate-200/60 bg-white/60 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 shrink-0">
-            <div class="flex items-center gap-2">
-                <img src="../../assets/logo.png" alt="Sentra Farma" class="h-5 w-auto object-contain opacity-80" />
-                <span class="font-bold text-slate-700">© 2026 Sentra Farma Medika.</span>
-                <span class="hidden md:inline text-slate-400">Sistem Informasi Manajemen Klinik & Farmasi 24 Jam.</span>
-            </div>
-            <div class="flex items-center gap-4 text-[11px] font-semibold">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100/80 text-emerald-800 font-bold border border-emerald-200/60">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>System Active 24/7 v2.4</span>
-                </span>
-                <a href="#" class="hover:text-emerald-700 transition-colors">Bantuan & Support</a>
-                <a href="#" class="hover:text-emerald-700 transition-colors">Kebijakan Privasi</a>
-            </div>
-        </footer>
     </div>
 
     <!-- MODAL TAMBAH USER BARU -->
@@ -260,7 +245,8 @@
             <form onsubmit="handleCreateUser(event)" class="space-y-3 text-xs">
                 <div>
                     <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px]">Nama Lengkap *</label>
-                    <input type="text" id="new-nama" required placeholder="Contoh: dr. Andi Wijaya, Sp.PD" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold text-slate-800 focus:border-brand-500" />
+                    <input type="text" id="new-nama" required minlength="2" maxlength="50" placeholder="Contoh: dr. Andi Wijaya, Sp.PD" oninput="validateNamaInline('new-nama', 'new-nama-error')" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold text-slate-800 focus:border-brand-500" />
+                    <p id="new-nama-error" class="text-[10px] font-bold text-rose-500 mt-0.5 hidden"></p>
                 </div>
                 <div>
                     <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px]">Email Akun *</label>
@@ -363,7 +349,7 @@
                     ADMIN: 'bg-emerald-100 text-emerald-800 border-emerald-200',
                     DOKTER: 'bg-blue-100 text-blue-800 border-blue-200',
                     APOTEKER: 'bg-teal-100 text-teal-800 border-teal-200',
-                    RESEPSIONIS: 'bg-purple-100 text-purple-800 border-purple-200',
+                    RESEPSIONIS: 'bg-teal-100 text-teal-800 border-teal-200',
                     PASIEN: 'bg-sky-100 text-sky-800 border-sky-200'
                 }[u.role] || 'bg-slate-100 text-slate-700';
 
@@ -391,6 +377,53 @@
             document.getElementById('modal-create-user').classList.add('hidden');
         }
 
+        function validateNamaInline(inputId = 'new-nama', errorId = 'new-nama-error') {
+            const el = document.getElementById(inputId);
+            const errEl = document.getElementById(errorId);
+            if (!el) return true;
+            
+            const val = el.value.trim();
+            if (!val) {
+                if (errEl) errEl.classList.add('hidden');
+                return true;
+            }
+
+            if (val.length < 2) {
+                if (errEl) {
+                    errEl.innerText = "⚠️ Nama lengkap minimal 2 karakter.";
+                    errEl.classList.remove('hidden');
+                }
+                return false;
+            }
+
+            if (val.length > 50) {
+                if (errEl) {
+                    errEl.innerText = `⚠️ Nama lengkap maksimal 50 karakter (saat ini ${val.length} karakter).`;
+                    errEl.classList.remove('hidden');
+                }
+                return false;
+            }
+
+            if (!/^[a-zA-Z\s\.\'\,\-]+$/.test(val)) {
+                if (errEl) {
+                    errEl.innerText = "❌ Nama hanya boleh berisi huruf, spasi, titik, petik, atau strip (tanpa angka/simbol).";
+                    errEl.classList.remove('hidden');
+                }
+                return false;
+            }
+
+            if (/(.)\1{3,}/i.test(val)) {
+                if (errEl) {
+                    errEl.innerText = "❌ Nama tidak boleh berupa karakter berulang sembarangan (contoh: hhhhhh).";
+                    errEl.classList.remove('hidden');
+                }
+                return false;
+            }
+
+            if (errEl) errEl.classList.add('hidden');
+            return true;
+        }
+
         async function handleCreateUser(e) {
             e.preventDefault();
             const namaLengkap = document.getElementById('new-nama').value.trim();
@@ -399,8 +432,8 @@
             const role = document.getElementById('new-role').value;
             const noTelepon = document.getElementById('new-phone').value.trim();
 
-            if (!namaLengkap || namaLengkap.length < 3) {
-                Toast.error('Nama lengkap wajib diisi minimal 3 karakter.', 'Validasi Gagal');
+            if (!validateNamaInline('new-nama', 'new-nama-error')) {
+                Toast.error('Nama Lengkap tidak valid! Harus berupa huruf dan bukan karakter berulang.', 'Validasi Gagal');
                 return;
             }
 

@@ -12,7 +12,10 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../css/custom-select.css" />
+    <script src="../../js/custom-select.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -30,6 +33,10 @@
         }
     </script>
     <style>
+        * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
         .material-symbols-outlined, .material-icons, .material-icons-outlined {
             font-family: 'Material Symbols Outlined', 'Material Icons Outlined', 'Material Icons' !important;
             font-weight: normal;
@@ -113,32 +120,32 @@
     <!-- LEFT SIDEBAR DOCK (DESKTOP) -->
     <aside class="left-dock fixed left-6 top-1/2 -translate-y-1/2 w-20 bg-white/95 backdrop-blur-2xl border border-slate-200/80 shadow-xl shadow-slate-300/40 rounded-3xl z-50 hidden lg:flex flex-col items-center py-5 space-y-4">
         <nav class="flex flex-col items-center gap-2">
-            <a href="dashboard.html" title="Dashboard Utama" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+            <a href="dashboard.html" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">dashboard</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Dashboard</span>
             </a>
-            <a href="pemeriksaan.html" title="Ruang Periksa Pasien" class="relative group p-2.5 rounded-2xl bg-brand-50 text-brand-600 font-bold transition-all shadow-2xs">
+            <a href="pemeriksaan.html" class="relative group p-2.5 rounded-2xl bg-brand-50 text-brand-600 font-bold transition-all shadow-2xs">
                 <span class="material-symbols-outlined text-[22px]">stethoscope</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Ruang Periksa</span>
             </a>
-            <a href="jadwal.html" title="Jadwal Shift Dokter" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+            <a href="jadwal.html" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">calendar_month</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Jadwal Shift</span>
             </a>
-            <a href="riwayat-pasien.html" title="Arsip Riwayat Pasien" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+            <a href="riwayat-pasien.html" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">folder_shared</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Riwayat Pasien</span>
             </a>
-            <a href="chat.html" title="Live Chat Konsultasi" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+            <a href="chat.html" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">forum</span>
                 <span id="doctor-chat-badge" class="hidden absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white text-[9px] font-black rounded-full items-center justify-center animate-pulse border border-white shadow-xs">0</span>
                 <span id="doctor-chat-tooltip" class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Live Chat</span>
             </a>
-            <a href="laporan-harian.html" title="Laporan Harian Dokter" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+            <a href="laporan-harian.html" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">assignment</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Laporan Harian</span>
             </a>
-            <button onclick="Absensi.openModal()" title="Presensi Dokter" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all cursor-pointer">
+            <button onclick="Absensi.openModal()" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all cursor-pointer">
                 <span class="material-symbols-outlined text-[22px]">fingerprint</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Presensi Dokter</span>
             </button>
@@ -147,11 +154,11 @@
         <div class="w-8 h-px bg-slate-200/70"></div>
 
         <div class="flex flex-col items-center gap-2">
-            <a href="profil.html" title="Profil Dokter" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
+            <a href="profil.html" class="relative group p-2.5 rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">person</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Profil Saya</span>
             </a>
-            <button onclick="handleLogout()" title="Logout" class="relative group p-2.5 rounded-2xl text-rose-400 hover:text-rose-600 hover:bg-rose-50 transition-all">
+            <button onclick="handleLogout()" class="relative group p-2.5 rounded-2xl text-rose-400 hover:text-rose-600 hover:bg-rose-50 transition-all">
                 <span class="material-symbols-outlined text-[22px]">logout</span>
                 <span class="absolute left-full ml-4 px-3 py-1.5 bg-rose-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg z-50">Logout</span>
             </button>
@@ -217,7 +224,7 @@
         </header>
 
         <!-- MAIN WORKSPACE CONTAINER (FIT SCREEN WITH INNER FORM BOX SCROLLING) -->
-        <main class="p-6 max-w-6xl mx-auto w-full flex-1 flex flex-col justify-between overflow-hidden gap-4">
+        <main class="p-6 w-full flex-1 flex flex-col justify-between overflow-hidden gap-4">
 
             <section class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-sm flex-1 flex flex-col min-h-0 overflow-hidden space-y-4">
                 <div class="flex items-center justify-between border-b border-slate-100 pb-3 shrink-0">
@@ -243,17 +250,70 @@
                                 </select>
                             </div>
                             <div>
-                                <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px] tracking-wider">Diagnosa ICD-10 *</label>
+                                <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px] tracking-wider">Diagnosa ICD-10 (Katalog Medis WHO) *</label>
                                 <div class="space-y-1.5">
-                                    <input type="text" id="diagnosaIcd10" required placeholder="Contoh: I10 - Primary Hypertension"
-                                        class="w-full bg-slate-50/80 border border-slate-200 rounded-xl p-2.5 text-slate-800 font-semibold focus:outline-none focus:border-brand-500 focus:bg-white transition-all" />
+                                    <select id="diagnosaIcd10" required
+                                        class="w-full bg-slate-50/80 border border-slate-200 rounded-xl p-2.5 text-slate-800 font-semibold focus:outline-none focus:border-brand-500 focus:bg-white transition-all">
+                                        <option value="" disabled selected>-- Pilih Kode & Diagnosa ICD-10 Medis WHO --</option>
+                                        <optgroup label="🫁 Respiratori & Pernapasan">
+                                            <option value="J00 - Acute nasopharyngitis (common cold)">J00 - Acute nasopharyngitis (Flu & Batuk)</option>
+                                            <option value="J02.9 - Acute pharyngitis, unspecified">J02.9 - Acute pharyngitis (Faringitis Akut)</option>
+                                            <option value="J06.9 - Acute upper respiratory infection">J06.9 - Acute upper respiratory infection (ISPA)</option>
+                                            <option value="J18.9 - Pneumonia, unspecified">J18.9 - Pneumonia, unspecified (Infeksi Paru-paru)</option>
+                                            <option value="J45.909 - Unspecified asthma, uncomplicated">J45.909 - Unspecified asthma (Asma Bronkial)</option>
+                                        </optgroup>
+                                        <optgroup label="🫀 Kardiovaskular & Jantung">
+                                            <option value="I10 - Essential (primary) hypertension">I10 - Essential (primary) hypertension (Hipertensi / Darah Tinggi)</option>
+                                            <option value="I25.10 - Atherosclerotic heart disease">I25.10 - Atherosclerotic heart disease (Penyakit Jantung Koroner)</option>
+                                            <option value="I50.9 - Heart failure, unspecified">I50.9 - Heart failure, unspecified (Gagal Jantung)</option>
+                                            <option value="I64 - Stroke, not specified">I64 - Stroke, not specified (Stroke)</option>
+                                        </optgroup>
+                                        <optgroup label="🩸 Endokrin & Metabolik">
+                                            <option value="E11.9 - Type 2 diabetes mellitus">E11.9 - Type 2 diabetes mellitus (Diabetes / Kencing Manis)</option>
+                                            <option value="E78.5 - Hyperlipidemia, unspecified">E78.5 - Hyperlipidemia (Kolesterol Tinggi)</option>
+                                            <option value="E03.9 - Hypothyroidism, unspecified">E03.9 - Hypothyroidism (Hipotiroidisme)</option>
+                                            <option value="E73.9 - Lactose intolerance">E73.9 - Lactose intolerance (Intoleransi Laktosa)</option>
+                                        </optgroup>
+                                        <optgroup label="🥗 Pencernaan & Saluran Cerna">
+                                            <option value="K29.7 - Gastritis, unspecified">K29.7 - Gastritis, unspecified (Maag / Gastritis)</option>
+                                            <option value="K21.9 - Gastro-esophageal reflux disease">K21.9 - GERD (Asam Lambung / Refluks)</option>
+                                            <option value="A09 - Infectious gastroenteritis and colitis">A09 - Infectious gastroenteritis (Diare Akut)</option>
+                                            <option value="K35.80 - Unspecified acute appendicitis">K35.80 - Acute appendicitis (Usus Buntu Akut)</option>
+                                            <option value="K58.9 - Irritable bowel syndrome">K58.9 - Irritable bowel syndrome (IBS)</option>
+                                        </optgroup>
+                                        <optgroup label="🦠 Infeksi & Tropis">
+                                            <option value="A75.9 - Typhus fever, unspecified">A75.9 - Typhus fever (Demam Tifoid / Tipes)</option>
+                                            <option value="A91 - Dengue hemorrhagic fever">A91 - Dengue hemorrhagic fever (Demam Berdarah / DHF)</option>
+                                            <option value="B01.9 - Varicella without complication">B01.9 - Varicella (Cacar Air)</option>
+                                            <option value="B35.9 - Dermatophytosis, unspecified">B35.9 - Dermatophytosis (Infeksi Jamur Kulit)</option>
+                                        </optgroup>
+                                        <optgroup label="🦴 Muskuloskeletal & Saraf">
+                                            <option value="M54.5 - Low back pain">M54.5 - Low back pain (Nyeri Punggung Bawah)</option>
+                                            <option value="G44.2 - Tension-type headache">G44.2 - Tension-type headache (Sakit Kepala Tegang)</option>
+                                            <option value="G43.9 - Migraine, unspecified">G43.9 - Migraine (Migrain)</option>
+                                            <option value="M17.9 - Osteoarthritis of knee">M17.9 - Osteoarthritis (Radang Sendi Lutut)</option>
+                                        </optgroup>
+                                        <optgroup label="👁️ Mata, THT & Gigi">
+                                            <option value="H10.9 - Unspecified conjunctivitis">H10.9 - Unspecified conjunctivitis (Mata Merah / Konjungtivitis)</option>
+                                            <option value="H66.9 - Otitis media, unspecified">H66.9 - Otitis media (Infeksi Telinga Tengah)</option>
+                                            <option value="K02.9 - Dental caries, unspecified">K02.9 - Dental caries (Gigi Berlubang)</option>
+                                            <option value="J01.90 - Acute sinusitis, unspecified">J01.90 - Acute sinusitis (Sinusitis Akut)</option>
+                                        </optgroup>
+                                        <optgroup label="🏥 Obgyn, Pediatri & Umum">
+                                            <option value="O80.0 - Single spontaneous delivery">O80.0 - Single spontaneous delivery (Persalinan Normal)</option>
+                                            <option value="Z23.8 - Encounter for immunization">Z23.8 - Encounter for immunization (Imunisasi Rutin)</option>
+                                            <option value="L23.9 - Allergic contact dermatitis">L23.9 - Allergic contact dermatitis (Alergi Kulit)</option>
+                                            <option value="N39.0 - Urinary tract infection">N39.0 - Urinary tract infection (Infeksi Saluran Kemih)</option>
+                                        </optgroup>
+                                    </select>
                                     
                                     <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5 custom-scrollbar">
                                         <span class="text-[9px] text-slate-400 font-bold uppercase shrink-0">Preset Cepat:</span>
-                                        <button type="button" onclick="setPresetDiagnosa('I10 - Primary Hypertension')" class="px-2 py-0.5 bg-slate-100 hover:bg-brand-50 hover:text-brand-700 rounded-md text-[10px] font-semibold text-slate-700 shrink-0">I10 (Hipertensi)</button>
-                                        <button type="button" onclick="setPresetDiagnosa('J00 - Acute Nasopharyngitis')" class="px-2 py-0.5 bg-slate-100 hover:bg-brand-50 hover:text-brand-700 rounded-md text-[10px] font-semibold text-slate-700 shrink-0">J00 (Flu/Batuk)</button>
-                                        <button type="button" onclick="setPresetDiagnosa('K29.7 - Gastritis Unspecified')" class="px-2 py-0.5 bg-slate-100 hover:bg-brand-50 hover:text-brand-700 rounded-md text-[10px] font-semibold text-slate-700 shrink-0">K29.7 (Gastritis)</button>
-                                        <button type="button" onclick="setPresetDiagnosa('E11 - Type 2 Diabetes Mellitus')" class="px-2 py-0.5 bg-slate-100 hover:bg-brand-50 hover:text-brand-700 rounded-md text-[10px] font-semibold text-slate-700 shrink-0">E11 (Diabetes)</button>
+                                        <button type="button" onclick="setPresetDiagnosa('I10 - Essential (primary) hypertension')" class="px-2 py-0.5 bg-slate-100 hover:bg-brand-50 hover:text-brand-700 rounded-md text-[10px] font-semibold text-slate-700 shrink-0">I10 (Hipertensi)</button>
+                                        <button type="button" onclick="setPresetDiagnosa('J00 - Acute nasopharyngitis (common cold)')" class="px-2 py-0.5 bg-slate-100 hover:bg-brand-50 hover:text-brand-700 rounded-md text-[10px] font-semibold text-slate-700 shrink-0">J00 (Flu/Batuk)</button>
+                                        <button type="button" onclick="setPresetDiagnosa('K29.7 - Gastritis, unspecified')" class="px-2 py-0.5 bg-slate-100 hover:bg-brand-50 hover:text-brand-700 rounded-md text-[10px] font-semibold text-slate-700 shrink-0">K29.7 (Gastritis)</button>
+                                        <button type="button" onclick="setPresetDiagnosa('E11.9 - Type 2 diabetes mellitus')" class="px-2 py-0.5 bg-slate-100 hover:bg-brand-50 hover:text-brand-700 rounded-md text-[10px] font-semibold text-slate-700 shrink-0">E11 (Diabetes)</button>
+                                        <button type="button" onclick="setPresetDiagnosa('A75.9 - Typhus fever, unspecified')" class="px-2 py-0.5 bg-slate-100 hover:bg-brand-50 hover:text-brand-700 rounded-md text-[10px] font-semibold text-slate-700 shrink-0">A75.9 (Tipes)</button>
                                     </div>
                                 </div>
                             </div>
@@ -349,23 +409,6 @@
                 </div>
             </section>
         </main>
-
-        <!-- FOOTER -->
-        <footer class="mt-auto py-3 px-6 border-t border-slate-200/60 bg-white/60 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 shrink-0">
-            <div class="flex items-center gap-2">
-                <img src="../../assets/logo.png" alt="Sentra Farma" class="h-5 w-auto object-contain opacity-80" />
-                <span class="font-bold text-slate-700">© 2026 Sentra Farma Medika.</span>
-                <span class="hidden md:inline text-slate-400">Pusat Layanan Kesehatan Digital.</span>
-            </div>
-            <div class="flex items-center gap-4 text-[11px] font-semibold">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100/80 text-emerald-800 font-bold border border-emerald-200/60">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>System Active 24/7 v2.4</span>
-                </span>
-                <a href="#" class="hover:text-emerald-700 transition-colors">Bantuan & Support</a>
-                <a href="#" class="hover:text-emerald-700 transition-colors">Kebijakan Privasi</a>
-            </div>
-        </footer>
     </div>
 
     <!-- MODAL CETAK SURAT MEDIS DIGITAL -->
@@ -432,8 +475,8 @@
 
             <div class="flex justify-end gap-2 pt-1">
                 <button onclick="closeModalSuratMedis()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-colors">Tutup</button>
-                <button onclick="window.print()" class="px-5 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-extrabold rounded-xl transition-colors flex items-center gap-1 shadow-xs">
-                    <span class="material-symbols-outlined text-[16px]">print</span> Cetak Surat PDF
+                <button onclick="downloadSuratMedisPDF()" class="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-extrabold rounded-xl transition-colors flex items-center gap-1 shadow-xs cursor-pointer">
+                    <span class="material-symbols-outlined text-[16px]">picture_as_pdf</span> Download Surat PDF
                 </button>
             </div>
         </div>
@@ -746,6 +789,31 @@
                 bSehat.className = 'p-2.5 bg-emerald-50 text-emerald-800 border border-emerald-300 rounded-xl font-bold text-center cursor-pointer';
                 document.getElementById('surat-judul-preview').innerText = 'SURAT KETERANGAN SEHAT MEDIS';
                 document.getElementById('surat-pasien-ket').innerText = 'Berdasarkan hasil pemeriksaan fisik & vital, pasien dinyatakan SEHAT secara medis.';
+            }
+        }
+
+        function downloadSuratMedisPDF() {
+            const element = document.querySelector('#modal-surat-medis .bg-white');
+            const pasienName = document.getElementById('surat-pasien-nama').innerText;
+            if (typeof html2pdf !== 'undefined') {
+                const opt = {
+                    margin: 0.3,
+                    filename: `Surat_Medis_${pasienName.replace(/\s+/g, '_')}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2 },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
+                html2pdf().set(opt).from(element).save();
+                Toast.success(`Surat medis ${pasienName} berhasil di-download sebagai PDF!`, 'Download PDF');
+            } else {
+                const blob = new Blob([`SURAT KETERANGAN MEDIS SENTRA FARMA\nPasien: ${pasienName}`], { type: 'application/pdf' });
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = `Surat_Medis_${pasienName.replace(/\s+/g, '_')}.pdf`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                Toast.success('Surat Medis PDF berhasil di-download!', 'Download PDF');
             }
         }
     </script>

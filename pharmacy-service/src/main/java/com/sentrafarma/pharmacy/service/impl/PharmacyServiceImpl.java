@@ -220,4 +220,11 @@ public class PharmacyServiceImpl implements PharmacyService {
         return transaksiRepository.findByNomorInvoice(invoice)
                 .orElseThrow(() -> new IllegalArgumentException("Transaksi tidak ditemukan dengan invoice: " + invoice));
     }
+
+    @Override
+    @Transactional
+    public void resetHistory() {
+        transaksiRepository.deleteAll();
+        resepRepository.deleteAll();
+    }
 }

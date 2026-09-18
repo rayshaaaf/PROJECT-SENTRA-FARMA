@@ -30,4 +30,7 @@ public interface PharmacyService {
     // Transaksi Kasir POS
     Transaksi checkoutTransaksi(TransaksiCreateRequest req);
     Transaksi getTransaksiByInvoice(String invoice);
+
+    // Reset History & Transactions
+    void resetHistory();
 }

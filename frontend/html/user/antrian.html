@@ -13,6 +13,8 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet" />
+    <link rel="stylesheet" href="../../css/custom-select.css" />
+    <script src="../../js/custom-select.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -31,6 +33,10 @@
         }
     </script>
     <style>
+        * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
         .material-symbols-outlined, .material-icons, .material-icons-outlined {
             font-family: 'Material Symbols Outlined', 'Material Icons Outlined', 'Material Icons' !important;
             font-weight: normal;
@@ -49,9 +55,8 @@
         }
         html,
         body {
-            height: 100vh;
-            max-height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
+            overflow-y: auto !important;
         }
 
         @media (max-width: 1024px) {
@@ -183,41 +188,49 @@
     </aside>
 
     <!-- MAIN CONTENT CONTAINER -->
-    <div class="main-portal-container flex-1 ml-28 mr-6 flex flex-col h-screen overflow-hidden transition-all">
+    <div class="main-portal-container flex-1 ml-32 mr-8 transition-all">
 
-        <!-- TRANSPARENT HEADER BAR -->
+        <!-- TRANSPARENT HEADER BAR (MATCHES PAGE BACKGROUND & MODERATELY ENLARGED LOGO) -->
         <header
-            class="h-16 shrink-0 flex items-center justify-between px-6 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100/60 transition-all">
-            <div class="flex items-center gap-3">
-                <!-- Brand Logo Link -->
-                <a href="dashboard.html" class="flex items-center gap-2 group cursor-pointer shrink-0" title="Sentra Farma">
-                    <img src="../../assets/logo.png" alt="Sentra Farma" class="h-12 sm:h-14 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform" />
+            class="h-24 flex items-center justify-between px-6 sm:px-10 bg-transparent backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100/60 transition-all">
+            <div class="flex items-center gap-4">
+                <!-- Brand Logo Link (Moderately Enlarged) -->
+                <a href="dashboard.html" class="flex items-center gap-3 group cursor-pointer shrink-0"
+                    title="Sentra Farma">
+                    <img src="../../assets/logo.png" alt="Sentra Farma"
+                        class="h-16 sm:h-20 md:h-22 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform" />
                 </a>
-                <div class="h-8 w-px bg-slate-200/80 hidden sm:block"></div>
+                <div class="h-10 w-px bg-slate-200/80 hidden sm:block"></div>
                 <div>
-                    <h1 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+                    <h1
+                        class="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight flex items-center gap-2.5">
                         <span>Pendaftaran & Status Antrian Online</span>
+                        <span
+                            class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-extrabold rounded-full border border-emerald-200/80 flex items-center gap-1.5 shadow-2xs">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> ONLINE
+                        </span>
                     </h1>
-                    <p class="text-[10px] text-slate-500 font-medium">Ambil Tiket Pendaftaran Berobat Kapan Saja & Di Mana Saja</p>
+                    <p class="text-xs text-slate-500 font-medium">Ambil Tiket Pendaftaran Berobat Kapan Saja & Di Mana Saja</p>
                 </div>
             </div>
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-4">
+                <!-- User Profile Avatar & Badge -->
                 <a href="profil.html" title="Buka Profil Saya"
-                    class="flex items-center gap-2.5 pl-3 border-l border-slate-200 group cursor-pointer hover:opacity-90 transition-all">
-                    <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-700 to-emerald-500 text-white flex items-center justify-center font-extrabold text-xs shadow-md group-hover:scale-105 transition-transform"
+                    class="flex items-center gap-3 pl-4 border-l border-slate-200 group cursor-pointer hover:opacity-90 transition-all">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-brand-700 to-emerald-500 text-white flex items-center justify-center font-extrabold text-sm shadow-md group-hover:scale-105 transition-transform"
                         id="user-avatar-initials">P</div>
                     <div class="hidden sm:flex flex-col">
                         <span id="user-name-badge"
                             class="text-xs font-extrabold text-slate-900 group-hover:text-emerald-700 transition-colors">Pasien</span>
-                        <span class="text-[9px] text-slate-500 font-medium">Pasien Terdaftar</span>
+                        <span class="text-[10px] text-slate-500 font-medium">Pasien Terdaftar</span>
                     </div>
                 </a>
             </div>
         </header>
 
-        <!-- MAIN WORKSPACE (FIT SCREEN HEIGHT, ZERO SCROLL) -->
-        <main class="flex-1 p-4 space-y-3 w-full overflow-hidden flex flex-col justify-between">
+        <!-- MAIN WORKSPACE -->
+        <main class="p-6 sm:p-8 space-y-6 w-full flex flex-col justify-between flex-1">
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 h-full items-start">
 
@@ -364,23 +377,6 @@
 
             </div>
 
-            <!-- FOOTER -->
-            <footer class="mt-auto py-3 px-6 border-t border-slate-200/60 bg-white/60 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 shrink-0 rounded-2xl">
-                <div class="flex items-center gap-2">
-                    <img src="../../assets/logo.png" alt="Sentra Farma" class="h-5 w-auto object-contain opacity-80" />
-                    <span class="font-bold text-slate-700">© 2026 Sentra Farma Medika.</span>
-                    <span class="hidden md:inline text-slate-400">Pusat Layanan Kesehatan Digital.</span>
-                </div>
-                <div class="flex items-center gap-4 text-[11px] font-semibold">
-                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100/80 text-emerald-800 font-bold border border-emerald-200/60">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <span>System Active 24/7 v2.4</span>
-                    </span>
-                    <a href="#" class="hover:text-emerald-700 transition-colors">Bantuan & Support</a>
-                    <a href="#" class="hover:text-emerald-700 transition-colors">Kebijakan Privasi</a>
-                </div>
-            </footer>
-
         </main>
     </div>
 
@@ -388,6 +384,7 @@
     <script src="../../js/toast.js"></script>
     <script src="../../js/auth-guard.js"></script>
     <script src="../../js/pengingat.js"></script>
+    <script src="../../js/queue-sync.js"></script>
     <script>
         let currentPasienId = null;
         let activeTabMode = 'today'; // 'today' | 'booking'
@@ -397,7 +394,9 @@
             initUserData();
             loadPoliList();
             loadMyQueueHistory();
-            setInterval(loadMyQueueHistory, 3000);
+            setInterval(loadMyQueueHistory, 2000);
+            window.addEventListener('storage', loadMyQueueHistory);
+            window.addEventListener('sf_queue_updated', loadMyQueueHistory);
 
             const todayStr = new Date().toISOString().split('T')[0];
             document.getElementById('booking-tanggal-input').setAttribute('min', todayStr);
@@ -545,7 +544,10 @@
         }
 
         function getLocalTickets() {
-            try { return JSON.parse(localStorage.getItem('sf_patient_tickets') || '[]'); }
+            try { 
+                const raw = JSON.parse(localStorage.getItem('sf_patient_tickets') || '[]'); 
+                return typeof QueueSync !== 'undefined' ? QueueSync.filterValidQueues(raw) : raw;
+            }
             catch(e) { return []; }
         }
 
@@ -565,11 +567,24 @@
                 if (Array.isArray(res)) qList = res;
             } catch (e) { }
 
+            const user = typeof API !== 'undefined' ? API.getUser() : null;
+            const uName = user && user.namaLengkap ? user.namaLengkap.toLowerCase().trim() : '';
+            const uEmail = user && user.email ? user.email.toLowerCase().trim() : '';
+
             const localList = getLocalTickets();
-            const allList = [...qList, ...localList];
+            const queueSyncList = typeof QueueSync !== 'undefined' ? QueueSync.getAllQueues() : [];
+
+            const userSyncList = user ? queueSyncList.filter(a => {
+                const pName = (a.pasien?.namaLengkap || a.namaPasien || '').toLowerCase().trim();
+                const pEmail = (a.pasien?.email || '').toLowerCase().trim();
+                return (uEmail && pEmail && pEmail === uEmail) ||
+                       (uName && pName && (uName === pName || uName.includes(pName) || pName.includes(uName)));
+            }) : [];
+
+            const allList = [...qList, ...localList, ...userSyncList];
             
             // Remove duplicates by id or nomorAntrian
-            const uniqueList = [];
+            let uniqueList = [];
             const seen = new Set();
             allList.forEach(item => {
                 const key = item.id || item.nomorAntrian;
@@ -578,6 +593,8 @@
                     uniqueList.push(item);
                 }
             });
+
+            uniqueList = QueueSync.filterValidQueues(uniqueList);
 
             if (uniqueList.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="4" class="py-4 text-center text-slate-400 italic">Belum ada riwayat pendaftaran antrian.</td></tr>';
@@ -693,25 +710,25 @@
                 };
 
                 let numAntrian = '';
+                const user = API.getUser();
+                const userName = user ? (user.namaLengkap || 'Pasien') : 'Pasien';
+
                 try {
                     const res = await API.post('/clinic/antrian', body);
-                    numAntrian = res.nomorAntrian;
-                } catch(e) {
-                    // Fallback local queue ticket generation if server API is offline
-                    const prefix = poliText.toLowerCase().includes('gigi') ? 'B' : (poliText.toLowerCase().includes('anak') ? 'C' : 'A');
-                    const seq = Math.floor(Math.random() * 80) + 1;
-                    numAntrian = `${prefix}-${String(seq).padStart(3, '0')}`;
-                    saveLocalTicket({
-                        id: Date.now(),
-                        nomorAntrian: numAntrian,
-                        poliklinik: { namaPoli: poliText },
+                    if (res && res.nomorAntrian) {
+                        numAntrian = res.nomorAntrian;
+                    }
+                } catch(e) {}
+
+                if (!numAntrian) {
+                    const created = QueueSync.addQueue({
+                        namaPasien: userName,
                         namaPoli: poliText,
-                        dokter: { namaDokter: docName },
                         namaDokter: docName,
-                        tanggalBerobat: targetDateStr,
-                        tanggalAntrian: targetDateStr,
-                        status: 'MENUNGGU'
+                        tanggal: targetDateStr,
+                        tipe: activeTabMode === 'booking' ? 'BOOKING' : 'ONLINE'
                     });
+                    numAntrian = created.nomorAntrian;
                 }
 
                 if (activeTabMode === 'booking') {
