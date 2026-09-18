@@ -45,11 +45,21 @@ public class DataSeeder implements CommandLineRunner {
             log.info("Clinic Service: Database sudah terisi. Memeriksa data Dokter...");
             List<Dokter> doctors = dokterRepository.findAll();
             for (Dokter d : doctors) {
-                if (d.getNamaDokter() != null && d.getNamaDokter().contains("Dian Sastro") && d.getPoliklinik() != null && d.getPoliklinik().getId() == 1L) {
-                    d.setNamaDokter("dr. Arisandy Pratama, M.Ked");
-                    d.setSpesialisasi("Dokter Umum");
+                if (d.getNamaDokter() != null) {
+                    String n = d.getNamaDokter().toLowerCase();
+                    if (n.contains("arisandy")) d.setUserId(8L);
+                    else if (n.contains("sabrina")) d.setUserId(9L);
+                    else if (n.contains("ghazi")) d.setUserId(10L);
+                    else if (n.contains("mahendra")) d.setUserId(11L);
+                    else if (n.contains("zhafira")) d.setUserId(12L);
+                    else if (n.contains("kalila")) d.setUserId(13L);
+                    else if (n.contains("naura")) d.setUserId(14L);
+                    else if (n.contains("aurelia")) d.setUserId(15L);
+                    else if (n.contains("tristan")) d.setUserId(16L);
+                    else if (n.contains("raditya")) d.setUserId(17L);
+                    else if (n.contains("darren")) d.setUserId(18L);
+                    else if (n.contains("clarissa")) d.setUserId(19L);
                     dokterRepository.save(d);
-                    log.info("Berhasil menyelaraskan data Dokter Poli Umum: dr. Arisandy Pratama, M.Ked (Dokter Umum)");
                 }
             }
             return;
@@ -65,22 +75,22 @@ public class DataSeeder implements CommandLineRunner {
         Poliklinik poliUgd = poliklinikRepository.save(Poliklinik.builder().namaPoli("Unit Tindakan & Emergency").deskripsi("Pertolongan pertama gawat darurat ringan, jahit luka, dan tindakan darurat 24 jam").ruangan("Ruang Tindakan (Lantai 1)").build());
 
         // 2. Dokter (12 Dokter terbagi 3 Shift 24 Jam)
-        Dokter drArisandy = dokterRepository.save(Dokter.builder().userId(6L).namaDokter("dr. Arisandy Pratama, M.Ked").sip("SIP-2026/001/UMUM").spesialisasi("Dokter Umum").poliklinik(poliUmum).statusDuty("ON_DUTY").build());
-        Dokter drSabrina = dokterRepository.save(Dokter.builder().userId(7L).namaDokter("dr. Sabrina Prameshwari").sip("SIP-2026/002/UMUM").spesialisasi("Dokter Umum").poliklinik(poliUmum).statusDuty("ON_DUTY").build());
-        Dokter drGhazi = dokterRepository.save(Dokter.builder().userId(8L).namaDokter("dr. Ghazi Al-Fatih").sip("SIP-2026/003/UMUM").spesialisasi("Dokter Umum").poliklinik(poliUmum).statusDuty("ON_DUTY").build());
+        Dokter drArisandy = dokterRepository.save(Dokter.builder().userId(8L).namaDokter("dr. Arisandy Pratama, M.Ked").sip("SIP-2026/001/UMUM").spesialisasi("Dokter Umum").poliklinik(poliUmum).statusDuty("ON_DUTY").build());
+        Dokter drSabrina = dokterRepository.save(Dokter.builder().userId(9L).namaDokter("dr. Sabrina Prameshwari").sip("SIP-2026/002/UMUM").spesialisasi("Dokter Umum").poliklinik(poliUmum).statusDuty("ON_DUTY").build());
+        Dokter drGhazi = dokterRepository.save(Dokter.builder().userId(10L).namaDokter("dr. Ghazi Al-Fatih").sip("SIP-2026/003/UMUM").spesialisasi("Dokter Umum").poliklinik(poliUmum).statusDuty("ON_DUTY").build());
 
-        Dokter drgMahendra = dokterRepository.save(Dokter.builder().userId(9L).namaDokter("drg. Mahendra Varian, Sp.KG").sip("SIP-2026/004/GIGI").spesialisasi("Dokter Gigi Konservasi").poliklinik(poliGigi).statusDuty("ON_DUTY").build());
-        Dokter drgZhafira = dokterRepository.save(Dokter.builder().userId(10L).namaDokter("drg. Zhafira Amalia").sip("SIP-2026/005/GIGI").spesialisasi("Dokter Gigi Umum").poliklinik(poliGigi).statusDuty("ON_DUTY").build());
+        Dokter drgMahendra = dokterRepository.save(Dokter.builder().userId(11L).namaDokter("drg. Mahendra Varian, Sp.KG").sip("SIP-2026/004/GIGI").spesialisasi("Dokter Gigi Konservasi").poliklinik(poliGigi).statusDuty("ON_DUTY").build());
+        Dokter drgZhafira = dokterRepository.save(Dokter.builder().userId(12L).namaDokter("drg. Zhafira Amalia").sip("SIP-2026/005/GIGI").spesialisasi("Dokter Gigi Umum").poliklinik(poliGigi).statusDuty("ON_DUTY").build());
 
-        Dokter drKalila = dokterRepository.save(Dokter.builder().userId(11L).namaDokter("dr. Kalila Kirana, Dip.Derm").sip("SIP-2026/006/KIA").spesialisasi("Dokter KIA & Estetika").poliklinik(poliKia).statusDuty("ON_DUTY").build());
-        Dokter drNaura = dokterRepository.save(Dokter.builder().userId(12L).namaDokter("dr. Naura Danendra").sip("SIP-2026/007/KIA").spesialisasi("Dokter KIA & Kebidanan").poliklinik(poliKia).statusDuty("ON_DUTY").build());
+        Dokter drKalila = dokterRepository.save(Dokter.builder().userId(13L).namaDokter("dr. Kalila Kirana, Dip.Derm").sip("SIP-2026/006/KIA").spesialisasi("Dokter KIA & Estetika").poliklinik(poliKia).statusDuty("ON_DUTY").build());
+        Dokter drNaura = dokterRepository.save(Dokter.builder().userId(14L).namaDokter("dr. Naura Danendra").sip("SIP-2026/007/KIA").spesialisasi("Dokter KIA & Kebidanan").poliklinik(poliKia).statusDuty("ON_DUTY").build());
 
-        Dokter drAurelia = dokterRepository.save(Dokter.builder().userId(13L).namaDokter("dr. Aurelia Savitri, Sp.A").sip("SIP-2026/008/ANAK").spesialisasi("Dokter Spesialis Anak").poliklinik(poliAnak).statusDuty("ON_DUTY").build());
-        Dokter drTristan = dokterRepository.save(Dokter.builder().userId(14L).namaDokter("dr. Tristan Alamsyah, Sp.A").sip("SIP-2026/009/ANAK").spesialisasi("Dokter Spesialis Anak").poliklinik(poliAnak).statusDuty("ON_DUTY").build());
+        Dokter drAurelia = dokterRepository.save(Dokter.builder().userId(15L).namaDokter("dr. Aurelia Savitri, Sp.A").sip("SIP-2026/008/ANAK").spesialisasi("Dokter Spesialis Anak").poliklinik(poliAnak).statusDuty("ON_DUTY").build());
+        Dokter drTristan = dokterRepository.save(Dokter.builder().userId(16L).namaDokter("dr. Tristan Alamsyah, Sp.A").sip("SIP-2026/009/ANAK").spesialisasi("Dokter Spesialis Anak").poliklinik(poliAnak).statusDuty("ON_DUTY").build());
 
-        Dokter drRaditya = dokterRepository.save(Dokter.builder().userId(15L).namaDokter("dr. Raditya Mahesa").sip("SIP-2026/010/UGD").spesialisasi("Dokter Emergency").poliklinik(poliUgd).statusDuty("ON_DUTY").build());
-        Dokter drDarren = dokterRepository.save(Dokter.builder().userId(16L).namaDokter("dr. Darren Valerius").sip("SIP-2026/011/UGD").spesialisasi("Dokter Emergency").poliklinik(poliUgd).statusDuty("ON_DUTY").build());
-        Dokter drClarissa = dokterRepository.save(Dokter.builder().userId(17L).namaDokter("dr. Clarissa Elvina").sip("SIP-2026/012/UGD").spesialisasi("Dokter Emergency").poliklinik(poliUgd).statusDuty("ON_DUTY").build());
+        Dokter drRaditya = dokterRepository.save(Dokter.builder().userId(17L).namaDokter("dr. Raditya Mahesa").sip("SIP-2026/010/UGD").spesialisasi("Dokter Emergency").poliklinik(poliUgd).statusDuty("ON_DUTY").build());
+        Dokter drDarren = dokterRepository.save(Dokter.builder().userId(18L).namaDokter("dr. Darren Valerius").sip("SIP-2026/011/UGD").spesialisasi("Dokter Emergency").poliklinik(poliUgd).statusDuty("ON_DUTY").build());
+        Dokter drClarissa = dokterRepository.save(Dokter.builder().userId(19L).namaDokter("dr. Clarissa Elvina").sip("SIP-2026/012/UGD").spesialisasi("Dokter Emergency").poliklinik(poliUgd).statusDuty("ON_DUTY").build());
 
         // 3. Jadwal Dokter (3 Shift 24 Jam: Pagi 07-15, Sore 15-23, Malam 23-07)
         jadwalDokterRepository.saveAll(List.of(

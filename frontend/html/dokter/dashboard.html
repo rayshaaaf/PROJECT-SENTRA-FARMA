@@ -409,10 +409,14 @@
                         const dokters = await API.get('/clinic/dokter');
                         if (Array.isArray(dokters) && dokters.length > 0) {
                             const uName = (user.namaLengkap || '').toLowerCase().trim();
-                            const found = dokters.find(d =>
-                                (d.userId && d.userId === user.id) ||
-                                (d.namaDokter && (d.namaDokter.toLowerCase().includes(uName) || uName.includes(d.namaDokter.toLowerCase())))
-                            );
+                            const uClean = uName.replace(/^drg?\.\s*/i, '').trim();
+                            const found = dokters.find(d => {
+                                const dName = (d.namaDokter || '').toLowerCase().trim();
+                                const dClean = dName.replace(/^drg?\.\s*/i, '').trim();
+                                return (d.userId && d.userId === user.id) ||
+                                       (dName && uName && (dName.includes(uName) || uName.includes(dName))) ||
+                                       (dClean && uClean && (dClean.includes(uClean) || uClean.includes(dClean)));
+                            });
                             if (found) currentDoctor = found;
                         }
                     } catch(e) {}
@@ -487,7 +491,7 @@
                 const seen = new Set();
                 allCombined.forEach(item => {
                     if (!item) return;
-                    const key = item.id || item.nomorAntrian;
+                    const key = item.nomorAntrian ? item.nomorAntrian.toUpperCase().trim() : String(item.id);
                     if (key && !seen.has(key)) {
                         seen.add(key);
                         uniqueList.push(item);
@@ -498,25 +502,25 @@
                     uniqueList = QueueSync.filterValidQueues(uniqueList);
                 }
 
-                if (currentDoctor && currentDoctor.id) {
+                if (currentDoctor) {
+                    const docId = currentDoctor.id;
                     const docName = (currentDoctor.namaDokter || '').toLowerCase().trim();
+                    const docClean = docName.replace(/^drg?\.\s*/i, '').trim();
                     const docPoli = (currentDoctor.poliklinik?.namaPoli || '').toLowerCase().trim();
 
-                    const docFiltered = uniqueList.filter(a => {
+                    uniqueList = uniqueList.filter(a => {
                         const aDocId = a.dokter?.id || a.dokterId;
                         const aDocName = (a.dokter?.namaDokter || a.namaDokter || '').toLowerCase().trim();
+                        const aDocClean = aDocName.replace(/^drg?\.\s*/i, '').trim();
                         const aPoliName = (a.poliklinik?.namaPoli || a.namaPoli || '').toLowerCase().trim();
 
-                        const isDocMatch = (aDocId && aDocId == currentDoctor.id) ||
-                                           (docName && aDocName && (docName.includes(aDocName) || aDocName.includes(docName)));
+                        const isDocMatch = (aDocId && docId && aDocId == docId) ||
+                                           (docName && aDocName && (docName.includes(aDocName) || aDocName.includes(docName))) ||
+                                           (docClean && aDocClean && (docClean.includes(aDocClean) || aDocClean.includes(docClean)));
                         const isPoliMatch = docPoli && aPoliName && (docPoli.includes(aPoliName) || aPoliName.includes(docPoli) || (docPoli.includes('emergency') && aPoliName.includes('emergency')));
 
                         return isDocMatch || isPoliMatch;
                     });
-
-                    if (docFiltered.length > 0) {
-                        uniqueList = docFiltered;
-                    }
                 }
 
                 const tbody = document.getElementById('antrian-list');

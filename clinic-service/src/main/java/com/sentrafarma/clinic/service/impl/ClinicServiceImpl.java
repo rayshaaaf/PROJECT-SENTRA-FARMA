@@ -247,31 +247,6 @@ public class ClinicServiceImpl implements ClinicService {
         tandaVitalRepository.deleteAll();
         rekamMedisRepository.deleteAll();
         antrianRepository.deleteAll();
-
-        List<Pasien> pasiens = pasienRepository.findAll();
-        List<Dokter> dokters = dokterRepository.findAll();
-        if (!pasiens.isEmpty() && !dokters.isEmpty()) {
-            String today = java.time.LocalDate.now().toString();
-            for (int i = 0; i < pasiens.size(); i++) {
-                Pasien p = pasiens.get(i);
-                Dokter d = dokters.get(i % dokters.size());
-                Poliklinik poli = d.getPoliklinik();
-
-                String prefix = (poli != null && poli.getNamaPoli() != null && poli.getNamaPoli().length() >= 6)
-                        ? poli.getNamaPoli().substring(5, 6).toUpperCase()
-                        : "A";
-
-                antrianRepository.save(Antrian.builder()
-                        .nomorAntrian(String.format("%s-%02d", prefix, i + 1))
-                        .pasien(p)
-                        .dokter(d)
-                        .poliklinik(poli)
-                        .tanggalBerobat(today)
-                        .status(i < 5 ? "MENUNGGU" : (i < 10 ? "DIPANGGIL" : "SELESAI"))
-                        .tipe(i % 2 == 0 ? "ONLINE" : "OFFLINE")
-                        .build());
-            }
-        }
     }
 
     // --- Rekam Medis & Tanda Vital ---
