@@ -132,26 +132,6 @@ public class DataSeeder implements CommandLineRunner {
         );
         List<Pasien> savedPasiens = pasienRepository.saveAll(pasiens);
 
-        // 5. Antrian Dummy Awal (20 Antrian)
-        String today = java.time.LocalDate.now().toString();
-        List<Dokter> allDokters = List.of(drArisandy, drSabrina, drGhazi, drgMahendra, drgZhafira, drKalila, drNaura, drAurelia, drTristan, drRaditya, drDarren, drClarissa);
-
-        for (int i = 0; i < savedPasiens.size(); i++) {
-            Pasien p = savedPasiens.get(i);
-            Dokter d = allDokters.get(i % allDokters.size());
-            Poliklinik poli = d.getPoliklinik();
-
-            antrianRepository.save(Antrian.builder()
-                    .nomorAntrian(String.format("%s-%02d", poli.getNamaPoli().substring(5, 6).toUpperCase(), i + 1))
-                    .pasien(p)
-                    .dokter(d)
-                    .poliklinik(poli)
-                    .tanggalBerobat(today)
-                    .status(i < 5 ? "MENUNGGU" : (i < 10 ? "DIPANGGIL" : "SELESAI"))
-                    .tipe(i % 2 == 0 ? "ONLINE" : "OFFLINE")
-                    .build());
-        }
-
-        log.info("Clinic Service: Berhasil menyimpan data 5 Poliklinik, 12 Dokter (3-Shift 24Jam), 20 Pasien, & 20 Antrian!");
+        log.info("Clinic Service: Berhasil menyimpan data 5 Poliklinik, 12 Dokter (3-Shift 24Jam), & 20 Pasien!");
     }
 }
