@@ -275,7 +275,7 @@
                             <div>
                                 <label class="block font-extrabold text-slate-700 uppercase tracking-wider mb-1.5">Pilih
                                     Sesi Jam Konsultasi *</label>
-                                <select id="booking-jam-select"
+                                <select id="booking-jam-select" onchange="onPoliChanged()"
                                     class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-brand-500 cursor-pointer">
                                     <option value="09:00 - 10:00 WIB">Pagi: 09:00 - 10:00 WIB</option>
                                     <option value="10:00 - 11:00 WIB">Pagi: 10:00 - 11:00 WIB</option>
@@ -435,6 +435,7 @@
                 descEl.innerText = "Pilih Tanggal, Sesi Jam & Dokter Konsultasi Masa Depan";
                 submitText.innerText = "Booking Janji Temu & Dapatkan Pass QR";
             }
+            onPoliChanged();
         }
 
         function handleLogout() {
@@ -534,6 +535,61 @@
             `;
         }
 
+        const DOCTOR_DUTY_ROSTER = {
+            'arisandy': { shiftName: 'Shift Pagi', start: 7, end: 15, jam: '07:00 - 15:00 WIB' },
+            'sabrina': { shiftName: 'Shift Sore', start: 15, end: 23, jam: '15:00 - 23:00 WIB' },
+            'ghazi': { shiftName: 'Shift Malam', start: 23, end: 7, jam: '23:00 - 07:00 WIB' },
+            'mahendra': { shiftName: 'Shift Pagi', start: 8, end: 15, jam: '08:00 - 15:00 WIB' },
+            'zhafira': { shiftName: 'Shift Sore', start: 15, end: 21, jam: '15:00 - 21:00 WIB' },
+            'kalila': { shiftName: 'Shift Pagi', start: 8, end: 14, jam: '08:00 - 14:00 WIB' },
+            'naura': { shiftName: 'Shift Sore', start: 14, end: 20, jam: '14:00 - 20:00 WIB' },
+            'aurelia': { shiftName: 'Shift Pagi', start: 8, end: 14, jam: '08:00 - 14:00 WIB' },
+            'tristan': { shiftName: 'Shift Sore', start: 14, end: 20, jam: '14:00 - 20:00 WIB' },
+            'raditya': { shiftName: 'Shift Pagi', start: 7, end: 15, jam: '07:00 - 15:00 WIB' },
+            'darren': { shiftName: 'Shift Sore', start: 15, end: 23, jam: '15:00 - 23:00 WIB' },
+            'clarissa': { shiftName: 'Shift Malam', start: 23, end: 7, jam: '23:00 - 07:00 WIB' }
+        };
+
+        const FALLBACK_DOKTERS = [
+            { id: 1, namaDokter: 'dr. Arisandy Pratama, M.Ked', spesialisasi: 'Dokter Umum', poliklinik: { id: 1, namaPoli: 'Poli Umum' } },
+            { id: 2, namaDokter: 'dr. Sabrina Prameshwari', spesialisasi: 'Dokter Umum', poliklinik: { id: 1, namaPoli: 'Poli Umum' } },
+            { id: 3, namaDokter: 'dr. Ghazi Al-Fatih', spesialisasi: 'Dokter Umum', poliklinik: { id: 1, namaPoli: 'Poli Umum' } },
+            { id: 4, namaDokter: 'drg. Mahendra Varian, Sp.KG', spesialisasi: 'Dokter Gigi Konservasi', poliklinik: { id: 2, namaPoli: 'Poli Gigi & Mulut' } },
+            { id: 5, namaDokter: 'drg. Zhafira Amalia', spesialisasi: 'Dokter Gigi Umum', poliklinik: { id: 2, namaPoli: 'Poli Gigi & Mulut' } },
+            { id: 6, namaDokter: 'dr. Kalila Kirana, Dip.Derm', spesialisasi: 'Dokter KIA & Estetika', poliklinik: { id: 3, namaPoli: 'Poli KIA' } },
+            { id: 7, namaDokter: 'dr. Naura Danendra', spesialisasi: 'Dokter KIA & Kebidanan', poliklinik: { id: 3, namaPoli: 'Poli KIA' } },
+            { id: 8, namaDokter: 'dr. Aurelia Savitri, Sp.A', spesialisasi: 'Dokter Spesialis Anak', poliklinik: { id: 4, namaPoli: 'Poli Anak' } },
+            { id: 9, namaDokter: 'dr. Tristan Alamsyah, Sp.A', spesialisasi: 'Dokter Spesialis Anak', poliklinik: { id: 4, namaPoli: 'Poli Anak' } },
+            { id: 10, namaDokter: 'dr. Raditya Mahesa', spesialisasi: 'Dokter Emergency', poliklinik: { id: 5, namaPoli: 'UGD Emergency' } },
+            { id: 11, namaDokter: 'dr. Darren Valerius', spesialisasi: 'Dokter Emergency', poliklinik: { id: 5, namaPoli: 'UGD Emergency' } },
+            { id: 12, namaDokter: 'dr. Clarissa Elvina', spesialisasi: 'Dokter Emergency', poliklinik: { id: 5, namaPoli: 'UGD Emergency' } }
+        ];
+
+        function isDoctorOnDuty(namaDokter, targetHour) {
+            const nameLower = (namaDokter || '').toLowerCase();
+            const key = Object.keys(DOCTOR_DUTY_ROSTER).find(k => nameLower.includes(k));
+            if (!key) return { isOnDuty: false, roster: null };
+            const roster = DOCTOR_DUTY_ROSTER[key];
+            let isOnDuty = false;
+            if (roster.start < roster.end) {
+                isOnDuty = targetHour >= roster.start && targetHour < roster.end;
+            } else {
+                isOnDuty = targetHour >= roster.start || targetHour < roster.end;
+            }
+            return { isOnDuty, roster };
+        }
+
+        function getTargetHourForAntrian() {
+            if (activeTabMode === 'booking') {
+                const jamVal = document.getElementById('booking-jam-select')?.value || '';
+                const match = jamVal.match(/^(\d{2}):(\d{2})/);
+                if (match) {
+                    return parseInt(match[1], 10);
+                }
+            }
+            return new Date().getHours();
+        }
+
         async function onPoliChanged() {
             const poliId = document.getElementById('daftar-poli-select').value;
             const container = document.getElementById('dokter-assigned-container');
@@ -546,25 +602,48 @@
                 return;
             }
 
+            const targetHour = getTargetHourForAntrian();
+            let dokters = [];
+
             try {
-                const dokters = await API.get(`/clinic/dokter?poliId=${poliId}`);
-                if (dokters && dokters.length > 0) {
-                    const activeDoc = dokters[0];
-                    selectedDokterId = activeDoc.id;
-                    const selPoli = document.getElementById('daftar-poli-select');
-                    const poliName = selPoli.options[selPoli.selectedIndex].text;
-                    nameEl.innerText = activeDoc.namaDokter;
-                    specEl.innerText = `${activeDoc.spesialisasi || 'Dokter Jaga'} • ${poliName}`;
-                    container.classList.remove('hidden');
-                    return;
+                const res = await API.get(`/clinic/dokter?poliId=${poliId}`);
+                if (Array.isArray(res) && res.length > 0) {
+                    dokters = res;
                 }
             } catch (e) { }
 
-            selectedDokterId = 1;
+            if (!dokters || dokters.length === 0) {
+                dokters = FALLBACK_DOKTERS.filter(d => (d.poliklinik && d.poliklinik.id == poliId) || (d.poliklinik && String(d.poliklinik.id) === String(poliId)));
+                if (dokters.length === 0) dokters = FALLBACK_DOKTERS;
+            }
+
+            let assignedDoc = null;
+            let assignedRoster = null;
+
+            for (const d of dokters) {
+                const check = isDoctorOnDuty(d.namaDokter, targetHour);
+                if (check.isOnDuty) {
+                    assignedDoc = d;
+                    assignedRoster = check.roster;
+                    break;
+                }
+            }
+
+            if (!assignedDoc) {
+                assignedDoc = dokters[0];
+                const check = isDoctorOnDuty(assignedDoc.namaDokter, targetHour);
+                assignedRoster = check.roster;
+            }
+
+            selectedDokterId = assignedDoc.id;
             const selPoli = document.getElementById('daftar-poli-select');
-            const poliName = selPoli.options[selPoli.selectedIndex]?.text || 'Poli Umum';
-            nameEl.innerText = 'dr. Arisandy Pratama, M.Ked';
-            specEl.innerText = `Dokter Jaga • ${poliName}`;
+            const poliName = selPoli.options[selPoli.selectedIndex]?.text || 'Poliklinik';
+
+            nameEl.innerText = assignedDoc.namaDokter;
+            const checkDuty = isDoctorOnDuty(assignedDoc.namaDokter, targetHour);
+            const statusTag = checkDuty.isOnDuty ? ' • 🟢 JAGA SEKARANG' : '';
+            const jamLabel = assignedRoster ? ` (${assignedRoster.shiftName}: ${assignedRoster.jam})` : '';
+            specEl.innerText = `${assignedDoc.spesialisasi || 'Dokter Jaga'} • ${poliName}${statusTag}${jamLabel}`;
             container.classList.remove('hidden');
         }
 
