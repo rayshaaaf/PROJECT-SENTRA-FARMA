@@ -1,42 +1,64 @@
 # Sentra Farma — Sistem Manajemen Klinik & Apotek Terintegrasi
 
-Platform Sistem Manajemen Klinik dan Apotek Terintegrasi Berbasis Web dengan Arsitektur **Microservices Monorepo** (Java 17 Spring Boot, PostgreSQL, Tailwind CSS, Vanilla JS).
+## Deskripsi Aplikasi
+
+**Sentra Farma** adalah platform Sistem Manajemen Klinik dan Apotek Terintegrasi berbasis web yang dirancang menggunakan arsitektur **Microservices Monorepo**. Platform ini menghubungkan alur operasional klinik secara *end-to-end*, mulai dari pendaftaran antrean pasien, konsultasi rekam medis dokter, penerbitan e-resep digital, pengelolaan inventaris apotek, hingga transaksi kasir (Point of Sale) dan manajemen master data oleh Administrator.
 
 ---
 
-## 📋 Fitur Utama System
+## Teknologi yang Digunakan
 
-1. **Multi-Role Based Access Control (RBAC 5 Role)**:
-   - **Pasien**: Portal Bento Grid (Tanda Vital, Live Queue Tracker, Timeline Medis, Katalog Apotek, Live Chat Dokter, Profil QR Code).
-   - **Dokter**: Queue Antrian Poli, Input Rekam Medis & Tanda Vital (ICD-10), Penerbitan E-Resep Digital, Consultation Chat.
-   - **Apoteker**: Penebusan E-Resep & Potong Stok Otomatis, Transaksi Penjualan Obat Bebas Kasir (POS), Inventory Management (Soft Delete, Low Stock Alert).
-   - **Resepsionis**: Pendaftaran Pasien Walk-in (Offline), Pemanggilan & Status Antrian, Kelola Jadwal Dokter Jaga.
-   - **Admin**: Master Data CRUD Users & RBAC, Reports Analytics & Export Laporan (PDF/Excel).
+### Backend & Microservices
+- **Java 17** & **Spring Boot 3**
+- **Spring Cloud Gateway** (API Gateway, Router, & CORS Management)
+- **Spring Security** & **JWT (JSON Web Token)** (Otentikasi & Otorisasi RBAC)
+- **Spring Data JPA / Hibernate** (Object-Relational Mapping & Persistence)
+- **Springdoc OpenAPI / Swagger UI** (Dokumentasi API Interaktif)
 
-2. **Compliance Ketentuan S1**:
-   - Arsitektur Monorepo Microservices (`api-gateway`, `auth-service`, `clinic-service`, `pharmacy-service`, `frontend`).
-   - Struktur Package Standar: `entity` (Persistence Domain Entities) & `payload` (Request/Response Transfer Objects).
-   - PostgreSQL Database (`db_sentra`) dengan 6+ Tabel Utama, 5 Jenis Relasi (1:1, 1:N, N:1, N:N), Timestamps `created_at` & `updated_at`, dan Soft Delete pada 3 tabel (`users`, `rekam_medis`, `obat`).
-   - Seeding Data Awal otomatis (20+ data per tabel utama).
-   - Real-time Search, Filter, Sort, & Pagination bekerja simultan.
-   - Global Exception Handling (JSON standar 400, 401, 403, 404, 422, 500) + Halaman Error Fallback.
-   - Toast Notification & Validasi Form Real-time.
+### Database
+- **PostgreSQL** (Relational Database System)
 
----
+### Frontend
+- **HTML5** & **Vanilla JavaScript** (ES6+)
+- **Tailwind CSS** (Styling & Modern UI Framework)
 
-## 🔑 Kredensial Akun Demo (All Password: `password123`)
-
-| Role | Email Demo | Password |
-|---|---|---|
-| **Admin** | `admin@sentrafarma.com` | `password123` |
-| **Dokter** | `dr.hendra@sentrafarma.com` | `password123` |
-| **Apoteker** | `apoteker@sentrafarma.com` | `password123` |
-| **Resepsionis** | `resepsionis@sentrafarma.com` | `password123` |
-| **Pasien** | `pasien1@gmail.com` | `password123` |
+### Tooling & Build System
+- **Apache Maven** (Dependency Management & Build Tool)
 
 ---
 
-## 📂 Struktur Folder Projek Monorepo
+## Fitur Utama
+
+1. **Portal Pasien**
+   - Live Queue Tracker (Monitoring status antrean secara real-time).
+   - Bento Grid Dashboard (Informasi tanda vital, histori pemeriksaan, & QR Code Profil).
+   - Katalog Apotek & Pencarian Obat.
+   - Konsultasi / Live Chat Dokter.
+
+2. **Portal Dokter**
+   - Manajemen Queue Antrean Poliklinik.
+   - Input Rekam Medis & Tanda Vital Pasien (Diagnosis berbasis standar ICD-10).
+   - Penerbitan E-Resep Digital terintegrasi langsung dengan modul Apotek.
+   - Chat Konsultasi Pasien.
+
+3. **Portal Apoteker & Kasir (POS)**
+   - Penebusan E-Resep & pemotongan stok obat secara otomatis.
+   - Kasir / Point of Sale (POS) untuk transaksi penjualan obat bebas.
+   - Inventory Management (Pengelolaan stok obat, alert stok menipis, & soft delete data).
+
+4. **Portal Resepsionis**
+   - Pendaftaran Pasien Walk-in (Pendaftaran offline).
+   - Pemanggilan & pembaruan status antrean pasien.
+   - Pengelolaan jadwal dokter jaga.
+
+5. **Portal Administrator (Admin)**
+   - Master Data Management (CRUD Pengguna, Dokter, Pasien, Obat, & Poliklinik).
+   - Multi-Role Based Access Control (RBAC 5 Role).
+   - Analytics Dashboard & Export Laporan (PDF/Excel).
+
+---
+
+## Struktur Folder Monorepo
 
 ```
 PROJECT SENTRA FARMA/
@@ -70,7 +92,7 @@ PROJECT SENTRA FARMA/
 │   │   ├── apoteker/     # Portal Apoteker & Kasir
 │   │   ├── resepsionis/  # Portal Resepsionis
 │   │   ├── admin/        # Portal Admin Master Data
-│   │   └── errors/       # 401, 403, 404, 500 Error Pages
+│   │   └── errors/       # Error Pages (401, 403, 404, 500)
 │   └── js/               # API Client, Toast System, Auth Guard
 ├── flowchart.md          # Dokumentasi Diagram Flowchart Sistem
 └── README.md             # Dokumen Petunjuk Utama
@@ -78,53 +100,47 @@ PROJECT SENTRA FARMA/
 
 ---
 
-## 🛠️ Cara Instalasi & Menjalankan Aplikasi
+## Cara Instalasi & Menjalankan Aplikasi
 
-### 1. Prasyarat System:
-- Java JDK 17 atau lebih baru
-- Apache Maven 3.x
-- PostgreSQL Database Engine (Port default: `5433` atau `5432`)
+### 1. Prasyarat Sistem
+- **Java JDK 17** atau versi terbaru
+- **Apache Maven 3.x**
+- **PostgreSQL Database Engine**
 
-### 2. Konfigurasi Database PostgreSQL:
+### 2. Konfigurasi Database PostgreSQL
 Buat database bernama `db_sentra` di PostgreSQL:
 ```sql
 CREATE DATABASE db_sentra;
 ```
 
-### 3. Menjalankan Microservices Backend:
-Buka terminal terpisah untuk setiap service dan jalankan perintah:
+### 3. Menjalankan Microservices Backend
+Buka terminal terpisah untuk setiap service dan jalankan perintah berikut secara berurutan:
 
-- **Auth Service (Port 8081)**:
-  ```bash
-  cd auth-service
-  mvn spring-boot:run
-  ```
-- **Clinic Service (Port 8082)**:
-  ```bash
-  cd clinic-service
-  mvn spring-boot:run
-  ```
-- **Pharmacy Service (Port 8083)**:
-  ```bash
-  cd pharmacy-service
-  mvn spring-boot:run
-  ```
-- **API Gateway (Port 8080)**:
-  ```bash
-  cd api-gateway
-  mvn spring-boot:run
-  ```
+1. **Auth Service (Port 8081)**:
+   ```bash
+   cd auth-service
+   mvn spring-boot:run
+   ```
+2. **Clinic Service (Port 8082)**:
+   ```bash
+   cd clinic-service
+   mvn spring-boot:run
+   ```
+3. **Pharmacy Service (Port 8083)**:
+   ```bash
+   cd pharmacy-service
+   mvn spring-boot:run
+   ```
+4. **API Gateway (Port 8080)**:
+   ```bash
+   cd api-gateway
+   mvn spring-boot:run
+   ```
 
-*Saat microservices pertama kali menyala, Hibernate akan otomatis membuat skema tabel PostgreSQL dan `DataSeeder` akan mengisi 20+ data awal per tabel utama!*
+*Saat microservices pertama kali dijalankan, Hibernate akan membuat skema tabel PostgreSQL secara otomatis dan Seeder data akan mengisi data awal secara otomatis.*
 
-### 4. Menjalankan Frontend UI:
-Buka file `frontend/html/auth/login.html` di browser Anda (atau gunakan live server / web server pada port `8084`).
+### 4. Menjalankan Frontend UI
+Buka file `frontend/html/auth/login.html` pada browser Anda (atau gunakan HTTP Server / Live Server).
 
 ---
 
-## 📖 Swagger / OpenAPI Documentation
-
-Setiap service dilengkapi dengan Swagger UI yang dapat diakses di:
-- Auth Service: `http://localhost:8081/swagger-ui.html`
-- Clinic Service: `http://localhost:8082/swagger-ui.html`
-- Pharmacy Service: `http://localhost:8083/swagger-ui.html`
