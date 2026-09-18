@@ -302,16 +302,55 @@
                     selPasien.innerHTML += `<option value="${p.id}">${p.namaLengkap} (NIK: ${p.nik || '-'})</option>`;
                 });
 
-                const polis = await API.get('/clinic/poliklinik');
-                const selPoli = document.getElementById('select-poli');
-                selPoli.innerHTML = '<option value="">-- Pilih Poliklinik --</option>';
-                if (Array.isArray(polis)) {
-                    polis.forEach(p => {
-                        selPoli.innerHTML += `<option value="${p.id}">${p.namaPoli}</option>`;
-                    });
+                allDokters = await API.get('/clinic/dokter');
+                if (!Array.isArray(allDokters) || allDokters.length === 0) {
+                    allDokters = [
+                        { id: 1, namaDokter: 'dr. Arisandy Pratama, M.Ked', spesialisasi: 'Dokter Umum', poliklinik: { id: 1, namaPoli: 'Poli Umum' } },
+                        { id: 2, namaDokter: 'dr. Sabrina Prameshwari', spesialisasi: 'Dokter Umum', poliklinik: { id: 1, namaPoli: 'Poli Umum' } },
+                        { id: 3, namaDokter: 'dr. Ghazi Al-Fatih', spesialisasi: 'Dokter Umum', poliklinik: { id: 1, namaPoli: 'Poli Umum' } },
+                        { id: 4, namaDokter: 'drg. Mahendra Varian, Sp.KG', spesialisasi: 'Dokter Gigi Konservasi', poliklinik: { id: 2, namaPoli: 'Poli Gigi & Mulut' } },
+                        { id: 5, namaDokter: 'drg. Zhafira Amalia', spesialisasi: 'Dokter Gigi Umum', poliklinik: { id: 2, namaPoli: 'Poli Gigi & Mulut' } },
+                        { id: 6, namaDokter: 'dr. Kalila Kirana, Dip.Derm', spesialisasi: 'Dokter KIA & Estetika', poliklinik: { id: 3, namaPoli: 'Poli KIA' } },
+                        { id: 7, namaDokter: 'dr. Naura Danendra', spesialisasi: 'Dokter KIA & Kebidanan', poliklinik: { id: 3, namaPoli: 'Poli KIA' } },
+                        { id: 8, namaDokter: 'dr. Aurelia Savitri, Sp.A', spesialisasi: 'Dokter Spesialis Anak', poliklinik: { id: 4, namaPoli: 'Poli Anak' } },
+                        { id: 9, namaDokter: 'dr. Tristan Alamsyah, Sp.A', spesialisasi: 'Dokter Spesialis Anak', poliklinik: { id: 4, namaPoli: 'Poli Anak' } },
+                        { id: 10, namaDokter: 'dr. Raditya Mahesa', spesialisasi: 'Dokter Emergency', poliklinik: { id: 5, namaPoli: 'UGD Emergency' } },
+                        { id: 11, namaDokter: 'dr. Darren Valerius', spesialisasi: 'Dokter Emergency', poliklinik: { id: 5, namaPoli: 'UGD Emergency' } },
+                        { id: 12, namaDokter: 'dr. Clarissa Elvina', spesialisasi: 'Dokter Emergency', poliklinik: { id: 5, namaPoli: 'UGD Emergency' } }
+                    ];
                 }
 
-                allDokters = await API.get('/clinic/dokter');
+                let polis = await API.get('/clinic/poliklinik');
+                if (!Array.isArray(polis) || polis.length === 0) {
+                    polis = [
+                        { id: 1, namaPoli: 'Poli Umum' },
+                        { id: 2, namaPoli: 'Poli Gigi & Mulut' },
+                        { id: 3, namaPoli: 'Poli KIA' },
+                        { id: 4, namaPoli: 'Poli Anak (Pediatri)' },
+                        { id: 5, namaPoli: 'UGD Emergency' }
+                    ];
+                }
+
+                const currentHour = new Date().getHours();
+                const activePolis = polis.filter(p => {
+                    const poliDocs = allDokters.filter(d => {
+                        if (d.poliklinik && d.poliklinik.id) return String(d.poliklinik.id) === String(p.id);
+                        if (d.poliklinikId) return String(d.poliklinikId) === String(p.id);
+                        const docPoliName = (d.poliklinik?.namaPoli || d.spesialisasi || '').toLowerCase();
+                        const pName = (p.namaPoli || '').toLowerCase();
+                        return docPoliName.includes(pName) || pName.includes(docPoliName);
+                    });
+                    return poliDocs.some(d => isDoctorOnDuty(d.namaDokter, currentHour));
+                });
+
+                const finalPolis = activePolis.length > 0 ? activePolis : polis.filter(p => p.id == 1 || p.id == 5);
+
+                const selPoli = document.getElementById('select-poli');
+                selPoli.innerHTML = '<option value="">-- Pilih Poliklinik --</option>';
+                finalPolis.forEach(p => {
+                    selPoli.innerHTML += `<option value="${p.id}">${p.namaPoli}</option>`;
+                });
+
                 populateDokterSelect(allDokters);
             } catch(e) {}
         }

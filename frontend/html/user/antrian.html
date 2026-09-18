@@ -275,7 +275,7 @@
                             <div>
                                 <label class="block font-extrabold text-slate-700 uppercase tracking-wider mb-1.5">Pilih
                                     Sesi Jam Konsultasi *</label>
-                                <select id="booking-jam-select" onchange="onPoliChanged()"
+                                <select id="booking-jam-select" onchange="onBookingJamOrTabChanged()"
                                     class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-brand-500 cursor-pointer">
                                     <option value="09:00 - 10:00 WIB">Pagi: 09:00 - 10:00 WIB</option>
                                     <option value="10:00 - 11:00 WIB">Pagi: 10:00 - 11:00 WIB</option>
@@ -435,7 +435,7 @@
                 descEl.innerText = "Pilih Tanggal, Sesi Jam & Dokter Konsultasi Masa Depan";
                 submitText.innerText = "Booking Janji Temu & Dapatkan Pass QR";
             }
-            onPoliChanged();
+            onBookingJamOrTabChanged();
         }
 
         function handleLogout() {
@@ -517,22 +517,68 @@
 
         async function loadPoliList() {
             const selPoli = document.getElementById('daftar-poli-select');
+            const targetHour = getTargetHourForAntrian();
+
+            let polis = [];
+            let dokters = [];
+
             try {
-                const polis = await API.get('/clinic/poliklinik');
-                if (polis && (Array.isArray(polis) ? polis.length > 0 : (polis.content && polis.content.length > 0))) {
-                    selPoli.innerHTML = '<option value="">-- Pilih Poliklinik --</option>';
-                    const items = Array.isArray(polis) ? polis : polis.content;
-                    items.forEach(p => selPoli.innerHTML += `<option value="${p.id}">${p.namaPoli}</option>`);
-                    return;
+                const resPoli = await API.get('/clinic/poliklinik');
+                if (resPoli && (Array.isArray(resPoli) ? resPoli.length > 0 : (resPoli.content && resPoli.content.length > 0))) {
+                    polis = Array.isArray(resPoli) ? resPoli : resPoli.content;
                 }
             } catch (e) { }
 
-            selPoli.innerHTML = `
-                <option value="">-- Pilih Poliklinik --</option>
-                <option value="1">Poli Umum</option>
-                <option value="2">Poli Gigi & Mulut</option>
-                <option value="3">Poli Anak (Pediatri)</option>
-            `;
+            try {
+                const resDoc = await API.get('/clinic/dokter');
+                if (Array.isArray(resDoc) && resDoc.length > 0) {
+                    dokters = resDoc;
+                }
+            } catch (e) { }
+
+            if (!dokters || dokters.length === 0) {
+                dokters = FALLBACK_DOKTERS;
+            }
+
+            if (!polis || polis.length === 0) {
+                polis = [
+                    { id: 1, namaPoli: 'Poli Umum' },
+                    { id: 2, namaPoli: 'Poli Gigi & Mulut' },
+                    { id: 3, namaPoli: 'Poli KIA' },
+                    { id: 4, namaPoli: 'Poli Anak (Pediatri)' },
+                    { id: 5, namaPoli: 'UGD Emergency' }
+                ];
+            }
+
+            // Filter polikliniks to ONLY those that have at least one doctor ON DUTY at targetHour!
+            const activePolis = polis.filter(p => {
+                const poliDocs = dokters.filter(d => {
+                    if (d.poliklinik && d.poliklinik.id) return String(d.poliklinik.id) === String(p.id);
+                    if (d.poliklinikId) return String(d.poliklinikId) === String(p.id);
+                    const docPoliName = (d.poliklinik?.namaPoli || d.spesialisasi || '').toLowerCase();
+                    const pName = (p.namaPoli || '').toLowerCase();
+                    return docPoliName.includes(pName) || pName.includes(docPoliName);
+                });
+
+                return poliDocs.some(d => isDoctorOnDuty(d.namaDokter, targetHour).isOnDuty);
+            });
+
+            const finalPolis = activePolis.length > 0 ? activePolis : polis.filter(p => p.id == 1 || p.id == 5);
+
+            const prevValue = selPoli.value;
+            selPoli.innerHTML = '<option value="">-- Pilih Poliklinik --</option>';
+            finalPolis.forEach(p => {
+                selPoli.innerHTML += `<option value="${p.id}">${p.namaPoli}</option>`;
+            });
+
+            if (prevValue && finalPolis.some(p => String(p.id) === String(prevValue))) {
+                selPoli.value = prevValue;
+            } else {
+                selPoli.value = '';
+                const container = document.getElementById('dokter-assigned-container');
+                if (container) container.classList.add('hidden');
+                selectedDokterId = null;
+            }
         }
 
         const DOCTOR_DUTY_ROSTER = {
@@ -588,6 +634,11 @@
                 }
             }
             return new Date().getHours();
+        }
+
+        async function onBookingJamOrTabChanged() {
+            await loadPoliList();
+            await onPoliChanged();
         }
 
         async function onPoliChanged() {
