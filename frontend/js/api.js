@@ -10,13 +10,7 @@ const API = {
         const userStr = localStorage.getItem('user_data');
         if (!userStr) return null;
         try {
-            const u = JSON.parse(userStr);
-            const deletedEmails = ['faridmuhamad439@gmail.com', 'geminihpro1@gmail.com', 'andin@gmail.com'];
-            if (u && u.email && deletedEmails.includes(u.email.toLowerCase().trim())) {
-                this.clearSession();
-                return null;
-            }
-            return u;
+            return JSON.parse(userStr);
         } catch(e) {
             return null;
         }
