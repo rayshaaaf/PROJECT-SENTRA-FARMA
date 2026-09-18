@@ -209,8 +209,8 @@ const QueueSync = (function () {
         return item;
     }
 
-    function callNext() {
-        const list = getAllQueues();
+    function callNext(customList = null) {
+        const list = (Array.isArray(customList) && customList.length > 0) ? customList : getAllQueues();
         const waiting = list.find(q => q.status === 'MENUNGGU');
 
         if (!waiting) {
@@ -220,7 +220,7 @@ const QueueSync = (function () {
             return null;
         }
 
-        return callQueue(waiting.id);
+        return callQueue(waiting.id || waiting.nomorAntrian, waiting);
     }
 
     function callRepeat() {

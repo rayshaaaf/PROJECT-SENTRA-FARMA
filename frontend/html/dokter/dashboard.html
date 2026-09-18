@@ -403,6 +403,20 @@
                     const doc = await API.get(`/clinic/dokter/user/${user.id}`);
                     if (doc && doc.id) currentDoctor = doc;
                 } catch(e) {}
+
+                if (!currentDoctor) {
+                    try {
+                        const dokters = await API.get('/clinic/dokter');
+                        if (Array.isArray(dokters) && dokters.length > 0) {
+                            const uName = (user.namaLengkap || '').toLowerCase().trim();
+                            const found = dokters.find(d =>
+                                (d.userId && d.userId === user.id) ||
+                                (d.namaDokter && (d.namaDokter.toLowerCase().includes(uName) || uName.includes(d.namaDokter.toLowerCase())))
+                            );
+                            if (found) currentDoctor = found;
+                        }
+                    } catch(e) {}
+                }
             }
 
             if (!currentDoctor) {
@@ -444,8 +458,7 @@
             try {
                 let antrianList = [];
                 try {
-                    const docIdParam = currentDoctor ? `?dokterId=${currentDoctor.id}` : '';
-                    const res = await API.get(`/clinic/antrian/hari-ini${docIdParam}`);
+                    const res = await API.get('/clinic/antrian/hari-ini');
                     if (Array.isArray(res)) antrianList = res;
                 } catch(e) {}
 
@@ -470,6 +483,27 @@
 
                 if (typeof QueueSync !== 'undefined') {
                     uniqueList = QueueSync.filterValidQueues(uniqueList);
+                }
+
+                if (currentDoctor && currentDoctor.id) {
+                    const docName = (currentDoctor.namaDokter || '').toLowerCase().trim();
+                    const docPoli = (currentDoctor.poliklinik?.namaPoli || '').toLowerCase().trim();
+
+                    const docFiltered = uniqueList.filter(a => {
+                        const aDocId = a.dokter?.id || a.dokterId;
+                        const aDocName = (a.dokter?.namaDokter || a.namaDokter || '').toLowerCase().trim();
+                        const aPoliName = (a.poliklinik?.namaPoli || a.namaPoli || '').toLowerCase().trim();
+
+                        const isDocMatch = (aDocId && aDocId == currentDoctor.id) ||
+                                           (docName && aDocName && (docName.includes(aDocName) || aDocName.includes(docName)));
+                        const isPoliMatch = docPoli && aPoliName && (docPoli.includes(aPoliName) || aPoliName.includes(docPoli) || (docPoli.includes('emergency') && aPoliName.includes('emergency')));
+
+                        return isDocMatch || isPoliMatch;
+                    });
+
+                    if (docFiltered.length > 0) {
+                        uniqueList = docFiltered;
+                    }
                 }
 
                 const tbody = document.getElementById('antrian-list');

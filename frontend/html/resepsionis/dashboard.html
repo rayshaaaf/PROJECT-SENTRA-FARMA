@@ -418,11 +418,17 @@
             }
         }
 
+        function isNumericDbId(id) {
+            if (id === null || id === undefined) return false;
+            const num = parseInt(id, 10);
+            return !isNaN(num) && num > 0 && num < 100000000000;
+        }
+
         async function panggilAntrianBerikutnya() {
-            const result = QueueSync.callNext();
+            const result = QueueSync.callNext(currentAntrianList);
             if (result) {
-                if (result.id && (typeof result.id !== 'number' || result.id < 100000000000)) {
-                    await API.patch(`/clinic/antrian/${result.id}/status?status=DIPANGGIL`, { status: 'DIPANGGIL' }).catch(() => {});
+                if (isNumericDbId(result.id)) {
+                    await API.patch(`/clinic/antrian/${parseInt(result.id, 10)}/status?status=DIPANGGIL`, { status: 'DIPANGGIL' }).catch(() => {});
                 }
                 loadAntrianLive();
             }
@@ -435,8 +441,8 @@
         async function selesaikanAntrianAktif() {
             const active = QueueSync.getActiveCalling();
             const result = QueueSync.completeActive();
-            if (active && active.id && (typeof active.id !== 'number' || active.id < 100000000000)) {
-                await API.patch(`/clinic/antrian/${active.id}/status?status=SELESAI`, { status: 'SELESAI' }).catch(() => {});
+            if (active && isNumericDbId(active.id)) {
+                await API.patch(`/clinic/antrian/${parseInt(active.id, 10)}/status?status=SELESAI`, { status: 'SELESAI' }).catch(() => {});
             }
             if (result) loadAntrianLive();
         }
@@ -451,8 +457,8 @@
         async function panggilSpesifik(id) {
             const foundItem = currentAntrianList.find(a => a.id == id || String(a.id) === String(id) || a.nomorAntrian === id);
             QueueSync.callQueue(id, foundItem);
-            if (foundItem && foundItem.id && (typeof foundItem.id !== 'number' || foundItem.id < 100000000000)) {
-                await API.patch(`/clinic/antrian/${foundItem.id}/status?status=DIPANGGIL`, { status: 'DIPANGGIL' }).catch(() => {});
+            if (foundItem && isNumericDbId(foundItem.id)) {
+                await API.patch(`/clinic/antrian/${parseInt(foundItem.id, 10)}/status?status=DIPANGGIL`, { status: 'DIPANGGIL' }).catch(() => {});
             }
             loadAntrianLive();
         }

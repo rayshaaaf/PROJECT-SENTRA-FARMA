@@ -1324,11 +1324,15 @@
 
                 const map = new Map();
                 [...apiRes, ...localRes, ...patientTickets].forEach(a => {
-                    if (a) {
-                        const key = a.id ? `id_${a.id}` : `${a.nomorAntrian}_${(a.pasien?.namaLengkap || a.namaPasien || '').toLowerCase().trim()}`;
-                        if (!map.has(key)) map.set(key, a);
-                        else {
-                            if (a.status === 'DIPANGGIL' || a.status === 'DIPERIKSA') map.set(key, a);
+                    if (a && a.nomorAntrian) {
+                        const poliName = (a.poliklinik?.namaPoli || a.namaPoli || '').toLowerCase().trim();
+                        const key = `${a.nomorAntrian}_${poliName}`;
+                        if (!map.has(key)) {
+                            map.set(key, { ...a });
+                        } else {
+                            const existing = map.get(key);
+                            const activeStatus = (a.status === 'DIPANGGIL' || a.status === 'DIPERIKSA') ? a.status : (existing.status === 'DIPANGGIL' || existing.status === 'DIPERIKSA' ? existing.status : a.status);
+                            map.set(key, { ...existing, ...a, status: activeStatus });
                         }
                     }
                 });
