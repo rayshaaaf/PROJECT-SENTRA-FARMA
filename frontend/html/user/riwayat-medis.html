@@ -437,6 +437,39 @@
             }
         }
 
+        async function ensurePasienId() {
+            if (currentPasienId) return currentPasienId;
+            const user = API.getUser();
+            if (!user) return 1;
+
+            try {
+                const p = await API.get(`/clinic/pasien/user/${user.id}`);
+                if (p && p.id) {
+                    currentPasienId = p.id;
+                    return currentPasienId;
+                }
+            } catch (e) { }
+
+            try {
+                const allP = await API.get('/clinic/pasien');
+                const items = Array.isArray(allP) ? allP : (allP?.content || []);
+                if (items.length > 0) {
+                    const found = items.find(x =>
+                        (x.userId && x.userId === user.id) ||
+                        (x.email && x.email.toLowerCase() === user.email.toLowerCase()) ||
+                        (x.namaLengkap && x.namaLengkap.toLowerCase() === user.namaLengkap.toLowerCase())
+                    );
+                    if (found && found.id) {
+                        currentPasienId = found.id;
+                        return currentPasienId;
+                    }
+                }
+            } catch (e) { }
+
+            currentPasienId = user.id || 1;
+            return currentPasienId;
+        }
+
         async function initUserData() {
             const user = API.getUser();
             if (user) {
@@ -444,18 +477,16 @@
                 document.getElementById('user-name-badge').innerText = name;
                 document.getElementById('user-avatar-initials').innerText = name.charAt(0).toUpperCase();
 
-                try {
-                    const p = await API.get(`/clinic/pasien/user/${user.id}`);
-                    if (p && p.id) currentPasienId = p.id;
-                } catch (e) { }
+                await ensurePasienId();
             }
         }
 
         async function loadLatestVitals() {
             try {
-                if (!currentPasienId) return;
+                const pid = await ensurePasienId();
+                if (!pid) return;
 
-                const rmList = await API.get(`/clinic/rekam-medis/pasien/${currentPasienId}`);
+                const rmList = await API.get(`/clinic/rekam-medis/pasien/${pid}`);
                 if (!rmList || !Array.isArray(rmList) || rmList.length === 0) {
                     document.getElementById('vital-bp-val').innerHTML = `- / - <span class="text-xs font-normal text-slate-500">mmHg</span>`;
                     document.getElementById('vital-bp-status').innerText = '● Belum Ada Data';
@@ -488,9 +519,10 @@
             if (!user) return;
 
             try {
+                const pid = await ensurePasienId();
                 let records = [];
-                if (currentPasienId) {
-                    records = await API.get(`/clinic/rekam-medis/pasien/${currentPasienId}`);
+                if (pid) {
+                    records = await API.get(`/clinic/rekam-medis/pasien/${pid}`);
                 }
 
                 if (!records || records.length === 0) {
